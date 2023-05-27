@@ -719,25 +719,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@trezystudios/bsky-filter@workspace:packages/filter":
-  version: 0.0.0-use.local
-  resolution: "@trezystudios/bsky-filter@workspace:packages/filter"
-  dependencies:
-    "@atproto/api": ^0.3.7
-    "@atproto/lexicon": ^0.1.0
-    "@atproto/repo": ^0.1.0
-    "@atproto/uri": ^0.0.2
-    "@atproto/xrpc-server": ^0.2.0
-    "@trezystudios/bsky-lib": "workspace:*"
-    "@types/node": ^20.1.2
-    better-docs: ^2.7.2
-    dotenv: ^16.0.3
-    multiformats: ^9.9.0
-    nodemon: ^2.0.22
-    typescript: ^5.0.4
-  languageName: unknown
-  linkType: soft
-
 "@trezystudios/bsky-lib@workspace:*, @trezystudios/bsky-lib@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "@trezystudios/bsky-lib@workspace:packages/lib"

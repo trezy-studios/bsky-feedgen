@@ -1,5 +1,5 @@
 {
-  "name": "@trezystudios/bsky-filter",
+  "name": "@trezystudios/bsky-sieve",
   "version": "1.0.0",
   "description": "Watches the bsky firehose and filters posts into the database.",
   "main": "./src/index.js",

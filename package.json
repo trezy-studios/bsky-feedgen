@@ -6,18 +6,18 @@
   },
   "workspaces": [
     "./packages/api",
-    "./packages/filter",
+    "./packages/sieve",
     "./packages/lib"
   ],
   "scripts": {
     "build:lib": "yarn workspace @trezystudios/bsky-lib build",
-    "build:filter": "yarn build:lib",
-    "dev:filter": "yarn workspace @trezystudios/bsky-filter dev",
+    "build:sieve": "yarn build:lib",
+    "dev:sieve": "yarn workspace @trezystudios/bsky-sieve dev",
     "generate-types:lib": "yarn workspace @trezystudios/bsky-lib generate-types",
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
-    "lint:filter": "yarn workspace @trezystudios/bsky-filter eslint ./src/",
     "lint:lib": "yarn workspace @trezystudios/bsky-lib eslint ./src/",
-    "start:filter": "yarn workspace @trezystudios/bsky-filter start",
+    "lint:sieve": "yarn workspace @trezystudios/bsky-sieve eslint ./src/",
+    "start:sieve": "yarn workspace @trezystudios/bsky-sieve start",
     "publishFeed": "ts-node scripts/publishFeedGen.ts"
   },
   "devDependencies": {
