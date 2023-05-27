@@ -1,5 +1,9 @@
 {
   "private": true,
+  "packageManager": "yarn@3.5.1",
+  "engines": {
+    "node": ">=20"
+  },
   "workspaces": [
     "./packages/api",
     "./packages/filter",
@@ -11,7 +15,8 @@
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
     "lint:filter": "yarn workspace @trezystudios/bsky-filter eslint ./src/",
     "lint:lib": "yarn workspace @trezystudios/bsky-lib eslint ./src/",
-    "start:filter": "yarn workspace @trezystudios/bsky-filter start"
+    "start:filter": "yarn workspace @trezystudios/bsky-filter start",
+    "publishFeed": "ts-node scripts/publishFeedGen.ts"
   },
   "devDependencies": {
     "better-docs": "^2.7.2",
@@ -28,6 +33,5 @@
     "eslint-plugin-security": "^1.7.1",
     "eslint-plugin-sort-class-members": "^1.17.1",
     "eslint-plugin-unused-imports": "^2.0.0"
-  },
-  "packageManager": "yarn@3.5.1"
+  }
 }
