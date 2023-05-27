@@ -12,11 +12,13 @@
   "scripts": {
     "build:lib": "yarn workspace @trezystudios/bsky-lib build",
     "build:sieve": "yarn build:lib",
+    "dev:api": "yarn workspace @trezystudios/bsky-api dev",
     "dev:sieve": "yarn workspace @trezystudios/bsky-sieve dev",
     "generate-types:lib": "yarn workspace @trezystudios/bsky-lib generate-types",
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
     "lint:lib": "yarn workspace @trezystudios/bsky-lib eslint ./src/",
     "lint:sieve": "yarn workspace @trezystudios/bsky-sieve eslint ./src/",
+    "start:api": "yarn workspace @trezystudios/bsky-api start",
     "start:sieve": "yarn workspace @trezystudios/bsky-sieve start",
     "publishFeed": "ts-node scripts/publishFeedGen.ts"
   },
