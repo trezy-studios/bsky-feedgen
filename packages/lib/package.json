@@ -1,0 +1,34 @@
+{
+  "name": "@trezystudios/bsky-lib",
+  "version": "1.0.0",
+  "description": "A collection of bsky tools.",
+  "main": "./src/index.js",
+  "repository": "git@github.com:trezy-studios/bsky-feedgen.git",
+  "author": "Trezy <t@trezy.codes>",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "generate-types": "tsc --project tsconfig.json",
+    "lint": "eslint ./src/"
+  },
+  "dependencies": {
+    "@atproto/api": "^0.3.7",
+    "@atproto/did-resolver": "^0.1.0",
+    "@atproto/lexicon": "^0.1.0",
+    "@atproto/repo": "^0.1.0",
+    "@atproto/uri": "^0.0.2",
+    "@atproto/xrpc-server": "^0.2.0",
+    "@prisma/client": "4.14.1",
+    "dotenv": "^16.0.3",
+    "multiformats": "^9.9.0",
+    "prisma": "^4.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.2",
+    "better-docs": "^2.7.2",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "packageManager": "yarn@3.5.1"
+}
