@@ -8,6 +8,7 @@
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
+    "build": "yarn prisma generate",
     "dev": "nodemon -r dotenv/config src/index.js",
     "start": "node -r dotenv/config src/index.js"
   },
