@@ -1,0 +1,23 @@
+{
+  "name": "@trezystudios/bsky-api",
+  "description": "An API for bsky interactions.",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "lint": "eslint ./src/",
+    "start": "node ./src/index.js"
+  },
+  "dependencies": {
+    "@trezystudios/bsky-lib": "workspace:*",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.2",
+    "better-docs": "^2.7.2",
+    "nodemon": "^2.0.22"
+  },
+  "packageManager": "yarn@3.5.1"
+}
