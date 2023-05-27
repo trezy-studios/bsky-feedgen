@@ -10,7 +10,8 @@
     "./packages/lib"
   ],
   "scripts": {
-    "build:filter": "yarn workspace @trezystudios/bsky-filter build",
+    "build:lib": "yarn workspace @trezystudios/bsky-lib build",
+    "build:filter": "yarn build:lib",
     "dev:filter": "yarn workspace @trezystudios/bsky-filter dev",
     "generate-types:lib": "yarn workspace @trezystudios/bsky-lib generate-types",
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",

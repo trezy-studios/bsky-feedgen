@@ -9,6 +9,7 @@
   "type": "module",
   "types": "./types/index.d.ts",
   "scripts": {
+    "build": "yarn prisma generate",
     "generate-types": "tsc --project tsconfig.json",
     "lint": "eslint ./src/"
   },

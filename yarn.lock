@@ -728,14 +728,12 @@ __metadata:
     "@atproto/repo": ^0.1.0
     "@atproto/uri": ^0.0.2
     "@atproto/xrpc-server": ^0.2.0
-    "@prisma/client": 4.14.1
     "@trezystudios/bsky-lib": "workspace:*"
     "@types/node": ^20.1.2
     better-docs: ^2.7.2
     dotenv: ^16.0.3
     multiformats: ^9.9.0
     nodemon: ^2.0.22
-    prisma: ^4.14.1
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
