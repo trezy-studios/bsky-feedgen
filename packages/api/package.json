@@ -6,15 +6,22 @@
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
+    "dev": "nodemon -r dotenv/config src/index.js",
     "lint": "eslint ./src/",
-    "start": "node ./src/index.js"
+    "start": "node -r dotenv/config src/index.js"
   },
   "dependencies": {
+    "@koa/cors": "^3.4.3",
     "@trezystudios/bsky-lib": "workspace:*",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "koa": "^2.14.2",
+    "koa-body": "^5.0.0",
+    "koa-compress": "^5.1.1",
+    "koa-no-trailing-slash": "^2.1.0",
+    "koa-router": "^12.0.0"
   },
   "devDependencies": {
+    "@types/koa": "^2.13.6",
     "@types/node": "^20.1.2",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
