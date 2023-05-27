@@ -772,7 +772,24 @@ __metadata:
     multiformats: ^9.9.0
     nodemon: ^2.0.22
     prisma: ^4.14.1
-    typescript: ^5.0.4
+  languageName: unknown
+  linkType: soft
+
+"@trezystudios/bsky-sieve@workspace:packages/sieve":
+  version: 0.0.0-use.local
+  resolution: "@trezystudios/bsky-sieve@workspace:packages/sieve"
+  dependencies:
+    "@atproto/api": ^0.3.7
+    "@atproto/lexicon": ^0.1.0
+    "@atproto/repo": ^0.1.0
+    "@atproto/uri": ^0.0.2
+    "@atproto/xrpc-server": ^0.2.0
+    "@trezystudios/bsky-lib": "workspace:*"
+    "@types/node": ^20.1.2
+    better-docs: ^2.7.2
+    dotenv: ^16.0.3
+    multiformats: ^9.9.0
+    nodemon: ^2.0.22
   languageName: unknown
   linkType: soft
 
@@ -5254,6 +5271,7 @@ __metadata:
     eslint-plugin-security: ^1.7.1
     eslint-plugin-sort-class-members: ^1.17.1
     eslint-plugin-unused-imports: ^2.0.0
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 

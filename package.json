@@ -2,7 +2,7 @@
   "private": true,
   "packageManager": "yarn@3.5.1",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.2.0"
   },
   "workspaces": [
     "./packages/api",
@@ -36,6 +36,7 @@
     "eslint-plugin-react-prefer-function-component": "^3.1.0",
     "eslint-plugin-security": "^1.7.1",
     "eslint-plugin-sort-class-members": "^1.17.1",
-    "eslint-plugin-unused-imports": "^2.0.0"
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "typescript": "^5.0.4"
   }
 }

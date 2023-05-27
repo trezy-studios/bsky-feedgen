@@ -24,8 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.1.2",
     "better-docs": "^2.7.2",
-    "nodemon": "^2.0.22",
-    "typescript": "^5.0.4"
+    "nodemon": "^2.0.22"
   },
   "packageManager": "yarn@3.5.1"
 }
