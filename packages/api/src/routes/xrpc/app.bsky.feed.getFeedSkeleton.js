@@ -28,7 +28,7 @@ export const route = new Route({
 			orderBy: {
 				indexedAt: 'desc',
 			},
-			take: Number(limit),
+			take: Number(limit ?? 20),
 		}
 
 		if (cursor) {
