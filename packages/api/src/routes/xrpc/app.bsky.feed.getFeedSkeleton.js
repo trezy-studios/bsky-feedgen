@@ -19,7 +19,6 @@ export const route = new Route({
 	 * @param {import('koa').Context} context The request context.
 	 */
 	async handler(context) {
-		const uri = `at://${process.env.FEEDGEN_SERVICE_DID}/app.bsky.feed.generator/${process.env.FEED_RECORD_NAME}`
 		const {
 			cursor,
 			limit,
