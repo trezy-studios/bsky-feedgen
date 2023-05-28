@@ -741,7 +741,9 @@ __metadata:
     "@koa/cors": ^3.4.3
     "@trezystudios/bsky-lib": "workspace:*"
     "@types/koa": ^2.13.6
+    "@types/koa-compress": ^4.0.3
     "@types/koa-router": ^7.4.4
+    "@types/koa__cors": ^4.0.0
     "@types/node": ^20.1.2
     better-docs: ^2.7.2
     dotenv: ^16.0.3
@@ -926,6 +928,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/koa-compress@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@types/koa-compress@npm:4.0.3"
+  dependencies:
+    "@types/koa": "*"
+    "@types/node": "*"
+  checksum: 6f09e4ad8160204fbee9d0a452b83ba62fec503a2eec60cf41fc67a032971027b6858e0b90c6e05bf1ad3b006f7c7a2d02922db4d159d223ab8d33eeeb108757
+  languageName: node
+  linkType: hard
+
 "@types/koa-router@npm:^7.4.4":
   version: 7.4.4
   resolution: "@types/koa-router@npm:7.4.4"
@@ -948,6 +960,15 @@ __metadata:
     "@types/koa-compose": "*"
     "@types/node": "*"
   checksum: a4061c2e29cd4ccb65a704fe3ef6868eac82558856c7c00a5bcc0f9fdf18c595e0156c52508eb8ba926a9108d9cf5c9a1a1b73cccf50e29b37ea1154323d0b26
+  languageName: node
+  linkType: hard
+
+"@types/koa__cors@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@types/koa__cors@npm:4.0.0"
+  dependencies:
+    "@types/koa": "*"
+  checksum: 0a7f8c2ab9b957befbbe31b9293af05a95282fb984b8468b0c0a0a0101beefe2663ce716ca56fbf4e5ec5ca2d89193ee7d635ee84bb8b5d718df01149286f4d2
   languageName: node
   linkType: hard
 

@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@types/koa": "^2.13.6",
+    "@types/koa-compress": "^4.0.3",
+    "@types/koa__cors": "^4.0.0",
     "@types/node": "^20.1.2",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
