@@ -18,7 +18,7 @@ export const route = new Route({
 	 *
 	 * @param {import('koa').Context} context The request context.
 	 */
-	async handler(context) {
+	handler(context) {
 		const {
 			cursor,
 			limit,
@@ -37,7 +37,7 @@ export const route = new Route({
 		}
 
 		context.body = {
-			did: null,
+			did: process.env.FEEDGEN_SERVICE_DID,
 			feeds: [
 				{ uri },
 			],
