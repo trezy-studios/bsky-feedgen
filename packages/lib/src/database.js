@@ -24,7 +24,10 @@ export function createSkeet(data) {
 }
 
 export function createSkeets(dataArray) {
-	return prisma.skeet.createMany({ data: dataArray.map(parseSkeet) })
+	return prisma.skeet.createMany({
+		data: dataArray.map(parseSkeet),
+		skipDuplicates: true,
+	})
 }
 
 export function deleteSkeets(skeetURIs) {
