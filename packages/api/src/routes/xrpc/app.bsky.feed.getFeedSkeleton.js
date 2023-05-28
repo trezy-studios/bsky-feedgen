@@ -29,7 +29,7 @@ export const route = new Route({
 			orderBy: {
 				indexedAt: 'desc',
 			},
-			take: limit,
+			take: Number(limit),
 		}
 
 		if (cursor) {
