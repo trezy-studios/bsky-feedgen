@@ -2,7 +2,7 @@
   "private": true,
   "packageManager": "yarn@3.5.1",
   "engines": {
-    "node": ">=20.2.0"
+    "node": ">=18.16.0"
   },
   "workspaces": [
     "./packages/api",
