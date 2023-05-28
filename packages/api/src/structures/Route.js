@@ -4,6 +4,7 @@
 export class Route {
 	defaultOptions = {
 		methods: ['get'],
+		middlewares: [],
 	}
 
 	/**
@@ -11,6 +12,7 @@ export class Route {
 	 *
 	 * @param {object} options All options.
 	 * @param {Function} options.handler The function to be executed when this route is accessed.
+	 * @param {Function[]} [options.middlewares] Additional middlewares.
 	 * @param {string} options.route The path at which this route will be mounted.
 	 */
 	constructor(options) {
@@ -42,6 +44,7 @@ export class Route {
 	mount(router) {
 		const {
 			handler,
+			middlewares,
 			route,
 		} = this.options
 
@@ -52,7 +55,7 @@ export class Route {
 		}
 
 		methods.forEach(method => {
-			router[method](route, handler)
+			router[method](route, ...middlewares, handler)
 		})
 	}
 }

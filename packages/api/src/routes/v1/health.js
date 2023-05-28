@@ -1,4 +1,5 @@
 // Local imports
+import { bodyBuilder } from '../../middleware/bodyBuilder.js'
 import { Route } from '../../structures/Route.js'
 
 
@@ -16,5 +17,6 @@ export const route = new Route({
 			status: 'healthy',
 		}
 	},
+	middlewares: [bodyBuilder],
 	route: '/v1/health',
 })

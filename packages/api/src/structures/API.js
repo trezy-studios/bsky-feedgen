@@ -68,7 +68,6 @@ class APIClass {
 		this.#client.use(cors())
 		this.#client.use(body())
 		this.#client.use(statusCodeGenerator)
-		this.#client.use(bodyBuilder)
 	}
 
 	/**
