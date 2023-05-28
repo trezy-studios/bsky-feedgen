@@ -19,10 +19,8 @@ export const route = new Route({
 	 * @param {import('koa').Context} context The request context.
 	 */
 	async handler(context) {
-		const {
-			cursor,
-			limit,
-		} = context.query
+		const { limit } = context.query
+		let { cursor } = context.query
 
 		const query = {
 			orderBy: {
@@ -32,7 +30,13 @@ export const route = new Route({
 		}
 
 		if (cursor) {
-			query.cursor = { cid: cursor }
+			if (Array.isArray(cursor)) {
+				cursor = cursor.at(-1)
+			}
+
+			query.cursor = {
+				uri: Buffer.from(cursor, 'base64').toString('ascii')
+			}
 			query.skip = 1
 		}
 
@@ -43,7 +47,7 @@ export const route = new Route({
 		}
 
 		if (skeets.length) {
-			body.cursor = skeets.at(-1)?.cid
+			body.cursor = Buffer.from(skeets.at(-1).uri).toString('base64')
 		}
 
 		context.body = body
