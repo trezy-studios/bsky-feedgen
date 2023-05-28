@@ -10,6 +10,7 @@
     "./packages/lib"
   ],
   "scripts": {
+    "build:api": "yarn build:lib",
     "build:lib": "yarn workspace @trezystudios/bsky-lib build",
     "build:sieve": "yarn build:lib",
     "dev:api": "yarn workspace @trezystudios/bsky-api dev",
