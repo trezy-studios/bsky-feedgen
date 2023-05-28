@@ -1,5 +1,5 @@
 // Local imports
-import { Route } from '../../../structures/Route.js'
+import { Route } from '../../structures/Route.js'
 
 
 
@@ -25,5 +25,5 @@ export const route = new Route({
 		}
 	},
 
-	route: '/v1/.well-known/did.json',
+	route: '/.well-known/did.json',
 })

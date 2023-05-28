@@ -13,7 +13,7 @@ import noTrailingSlash from 'koa-no-trailing-slash'
 // Local imports
 import { logger } from '../helpers/logger.js'
 import { route as describeFeedGeneratorRoute } from '../routes/v1/xrpc/app.bsky.feed.describeFeedGenerator.js'
-import { route as didJSONRoute } from '../routes/v1/.well-known/did.json.js'
+import { route as didJSONRoute } from '../routes/.well-known/did.json.js'
 import { route as getFeedSkeletonRoute } from '../routes/v1/xrpc/app.bsky.feed.getFeedSkeleton.js'
 import { route as healthCheckRoute } from '../routes/v1/health.js'
 import { statusCodeGenerator } from '../middleware/statusCodeGenerator.js'
