@@ -6,7 +6,7 @@ import { database } from '@trezystudios/bsky-lib'
 
 
 // Local imports
-import { Route } from '../../../structures/Route.js'
+import { Route } from '../../structures/Route.js'
 
 
 
@@ -48,5 +48,5 @@ export const route = new Route({
 		context.body = body
 	},
 
-	route: '/v1/xrpc/app.bsky.feed.getFeedSkeleton',
+	route: '/xrpc/app.bsky.feed.getFeedSkeleton',
 })

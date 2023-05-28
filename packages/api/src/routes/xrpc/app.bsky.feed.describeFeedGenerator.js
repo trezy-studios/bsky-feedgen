@@ -1,5 +1,5 @@
 // Local imports
-import { Route } from '../../../structures/Route.js'
+import { Route } from '../../structures/Route.js'
 
 
 
@@ -41,8 +41,12 @@ export const route = new Route({
 			feeds: [
 				{ uri },
 			],
+			// links: {
+			// 	privacyPolicy: '',
+			// 	termsOfService: '',
+			// },
 		}
 	},
 
-	route: '/v1/xrpc/app.bsky.feed.describeFeedGenerator',
+	route: '/xrpc/app.bsky.feed.describeFeedGenerator',
 })
