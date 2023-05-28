@@ -36,12 +36,14 @@ export const route = new Route({
 			query.skip = 1
 		}
 
-		const feed = await database.getSkeets(query)
+		const skeets = await database.getSkeets(query)
 
-		const body = { feed }
+		const body = {
+			feed: skeets.map(skeet => ({ post: skeet.uri })),
+		}
 
-		if (feed.length) {
-			body.cursor = feed.at(-1)?.cid
+		if (skeets.length) {
+			body.cursor = skeets.at(-1)?.cid
 		}
 
 		context.body = body
