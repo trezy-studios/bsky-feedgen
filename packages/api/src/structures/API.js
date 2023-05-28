@@ -11,9 +11,9 @@ import noTrailingSlash from 'koa-no-trailing-slash'
 
 
 // Local imports
-import { bodyBuilder } from '../middleware/bodyBuilder.js'
-import { route as healthCheckRoute } from '../routes/v1/health.js'
 import { logger } from '../helpers/logger.js'
+import { route as getFeedSkeletonRoute } from '../routes/v1/xrpc/app.bsky.feed.getFeedSkeleton.js'
+import { route as healthCheckRoute } from '../routes/v1/health.js'
 import { statusCodeGenerator } from '../middleware/statusCodeGenerator.js'
 
 
@@ -74,6 +74,7 @@ class APIClass {
 	 * Connects routes to the Koa router.
 	 */
 	#mountRoutes() {
+		getFeedSkeletonRoute.mount(this.#router)
 		healthCheckRoute.mount(this.#router)
 	}
 
