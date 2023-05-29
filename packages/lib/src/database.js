@@ -19,25 +19,41 @@ const prisma = new PrismaClient()
 
 
 
-export function createSkeet(data) {
-	return prisma.skeet.create({ data: parseSkeet(data) })
+export function createSkeet(skeet) {
+	return prisma.skeet.create({ data: parseSkeet(skeet) })
 }
 
-export function createSkeets(dataArray) {
-	return prisma.skeet.createMany({
-		data: dataArray.map(parseSkeet),
+export async function createSkeets(skeets) {
+	console.log(`Adding ${skeets.length} skeets to feed:`)
+
+	skeets.forEach(skeet => {
+		console.log(`↳ ${skeet.record.text}`)
+	})
+
+	const result = await prisma.skeet.createMany({
+		data: skeets.map(parseSkeet),
 		skipDuplicates: true,
 	})
+
+	console.log('Done.')
+
+	return result
 }
 
-export function deleteSkeets(skeetURIs) {
-	return prisma.skeet.deleteMany({
+export async function deleteSkeets(skeetURIs) {
+	console.log(`Deleting ${skeetURIs.length} skeets from feed...`)
+
+	const result = await prisma.skeet.deleteMany({
 		where: {
 			uri: {
 				in: skeetURIs,
 			},
 		},
 	})
+
+	console.log('Done.')
+
+	return result
 }
 
 export function getSkeets(query) {
