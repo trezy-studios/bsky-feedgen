@@ -9,6 +9,7 @@ import { database } from '@trezystudios/bsky-lib'
 
 
 // Local imports
+import { filterSkeets } from './filterSkeets.js'
 import { isCommit } from './isCommit.js'
 
 
@@ -24,16 +25,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const ops = await getOpsByType(event)
 
     const skeetsToDelete = ops.posts.deletes.map(skeet => skeet.uri)
-    const skeetsToCreate = ops.posts.creates.filter(skeet => /games?\s?(?:dev|design)/giu.test(skeet.record.text))
+    const skeetsToCreate = filterSkeets(ops.posts.creates)
 
     if (skeetsToDelete.length > 0) {
       await database.deleteSkeets(skeetsToDelete)
     }
 
     if (skeetsToCreate.length > 0) {
-      skeetsToCreate.forEach(skeet => {
-        console.log(skeet.record.text)
-      })
       await database.createSkeets(skeetsToCreate)
     }
   }
