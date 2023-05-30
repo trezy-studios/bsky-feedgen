@@ -1,34 +1,42 @@
 {
   "name": "@trezystudios/bsky-lib",
   "version": "1.0.0",
-  "description": "A collection of bsky tools.",
-  "main": "./src/index.js",
-  "repository": "git@github.com:trezy-studios/bsky-feedgen.git",
-  "author": "Trezy <t@trezy.codes>",
+  "main": "src/index.js",
   "license": "BSD-3-Clause",
+  "packageManager": "yarn@3.2.2",
   "type": "module",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "yarn prisma generate",
+    "dev": "nodemon ./src/index.js",
     "generate-types": "tsc --project tsconfig.json",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "start": "node ./src/index.js"
   },
   "dependencies": {
-    "@atproto/api": "^0.3.7",
-    "@atproto/did-resolver": "^0.1.0",
-    "@atproto/lexicon": "^0.1.0",
-    "@atproto/repo": "^0.1.0",
-    "@atproto/uri": "^0.0.2",
-    "@atproto/xrpc-server": "^0.2.0",
-    "@prisma/client": "4.14.1",
+    "@atproto/api": "^0.2.11",
+    "@atproto/xrpc": "^0.1.0",
+    "@ipld/car": "^5.1.1",
+    "@koa/cors": "^3.4.3",
+    "bufferutil": "^4.0.7",
+    "cbor-x": "^1.5.2",
+    "discord.js": "^14.10.2",
     "dotenv": "^16.0.3",
-    "multiformats": "^9.9.0",
-    "prisma": "^4.14.1"
+    "koa": "^2.14.2",
+    "koa-body": "^5.0.0",
+    "koa-compress": "^5.1.1",
+    "koa-no-trailing-slash": "^2.1.0",
+    "koa-router": "^12.0.0",
+    "multiformats": "^11.0.2",
+    "node-fetch": "^3.3.1",
+    "utf-8-validate": "^6.0.3",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@types/node": "^20.1.2",
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.4",
     "better-docs": "^2.7.2",
-    "nodemon": "^2.0.22"
-  },
-  "packageManager": "yarn@3.5.1"
+    "jsdoc": "^4.0.2",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  }
 }

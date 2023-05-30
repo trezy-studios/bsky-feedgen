@@ -1,27 +1,29 @@
 {
-  "name": "@trezystudios/bsky-sieve",
+  "name": "@trezystudios/bsky-common",
   "version": "1.0.0",
-  "description": "Watches the bsky firehose and filters posts into the database.",
+  "description": "A collection of common bsky tools.",
   "main": "./src/index.js",
   "repository": "git@github.com:trezy-studios/bsky-feedgen.git",
   "author": "Trezy <t@trezy.codes>",
   "license": "BSD-3-Clause",
   "type": "module",
+  "types": "./types/index.d.ts",
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/index.js",
-    "start": "node -r dotenv/config src/index.js"
+    "build": "yarn prisma generate",
+    "generate-types": "tsc --project tsconfig.json",
+    "lint": "eslint ./src/"
   },
   "dependencies": {
     "@atproto/api": "^0.3.7",
+    "@atproto/did-resolver": "^0.1.0",
     "@atproto/lexicon": "^0.1.0",
     "@atproto/repo": "^0.1.0",
     "@atproto/uri": "^0.0.2",
     "@atproto/xrpc-server": "^0.2.0",
-    "@trezystudios/bsky-common": "workspace:*",
-    "@trezystudios/bsky-lib": "workspace:*",
+    "@prisma/client": "4.14.1",
     "dotenv": "^16.0.3",
     "multiformats": "^9.9.0",
-    "winston": "^3.9.0"
+    "prisma": "^4.14.1"
   },
   "devDependencies": {
     "@types/node": "^20.1.2",

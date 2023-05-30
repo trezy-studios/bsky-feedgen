@@ -1,5 +1,5 @@
 // Module imports
-import { database } from '@trezystudios/bsky-lib'
+import { database } from '@trezystudios/bsky-common'
 
 
 

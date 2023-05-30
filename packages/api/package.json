@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@koa/cors": "^3.4.3",
-    "@trezystudios/bsky-lib": "workspace:*",
+    "@trezystudios/bsky-common": "workspace:*",
     "@types/koa-router": "^7.4.4",
     "dotenv": "^16.0.3",
     "koa": "^2.14.2",

@@ -6,21 +6,29 @@
   },
   "workspaces": [
     "./packages/api",
-    "./packages/sieve",
-    "./packages/lib"
+    "./packages/common",
+    "./packages/lib",
+    "./packages/sieve"
   ],
   "scripts": {
     "build:api": "yarn build:lib",
-    "build:lib": "yarn workspace @trezystudios/bsky-lib build",
+    "build:lib": "yarn workspace @trezystudios/bsky-common build",
     "build:sieve": "yarn build:lib",
+    "build": "yarn build:api && yarn build:lib, yarn build:sieve",
     "dev:api": "yarn workspace @trezystudios/bsky-api dev",
     "dev:sieve": "yarn workspace @trezystudios/bsky-sieve dev",
+    "dev": "yarn dev:api && yarn dev:sieve",
+    "generate-types:common": "yarn workspace @trezystudios/bsky-common generate-types",
     "generate-types:lib": "yarn workspace @trezystudios/bsky-lib generate-types",
+    "generate-types": "yarn generate-types:common && yarn generate-types:lib",
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
-    "lint:lib": "yarn workspace @trezystudios/bsky-lib eslint ./src/",
+    "lint:common": "yarn workspace @trezystudios/bsky-common eslint ./src/",
+    "lint:lib": "yarn workspace @trezystudios/bsky-common eslint ./src/",
     "lint:sieve": "yarn workspace @trezystudios/bsky-sieve eslint ./src/",
+    "lint": "yarn lint:api && yarn lint:common && yarn lint:lib && yarn lint:sieve",
     "start:api": "yarn workspace @trezystudios/bsky-api start",
     "start:sieve": "yarn workspace @trezystudios/bsky-sieve start",
+    "start": "yarn start:api && yarn start:sieve",
     "publishFeed": "ts-node scripts/publishFeedGen.ts"
   },
   "devDependencies": {
