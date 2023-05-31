@@ -1,3 +1,10 @@
+// Module imports
+import { FEED_RECORDS } from '@trezystudios/bsky-common'
+
+
+
+
+
 // Local imports
 import { Route } from '../../structures/Route.js'
 
@@ -6,7 +13,7 @@ import { Route } from '../../structures/Route.js'
 
 
 // Constants
-const uri = `at://${process.env.FEEDGEN_SERVICE_DID}/app.bsky.feed.generator/${process.env.FEED_RECORD_NAME}`
+const baseURI = `at://${process.env.FEEDGEN_SERVICE_DID}/app.bsky.feed.generator`
 
 
 
@@ -38,9 +45,7 @@ export const route = new Route({
 
 		context.body = {
 			did: process.env.FEEDGEN_SERVICE_DID,
-			feeds: [
-				{ uri },
-			],
+			feeds: FEED_RECORDS.map(feedRecord => ({ uri: `${baseURI}/${feedRecord.rkey}` })),
 			// links: {
 			// 	privacyPolicy: '',
 			// 	termsOfService: '',
