@@ -895,6 +895,7 @@ __metadata:
   dependencies:
     "@koa/cors": ^3.4.3
     "@trezystudios/bsky-common": "workspace:*"
+    "@trezystudios/bsky-lib": "workspace:*"
     "@types/koa": ^2.13.6
     "@types/koa-compress": ^4.0.3
     "@types/koa-router": ^7.4.4
