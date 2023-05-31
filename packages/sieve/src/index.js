@@ -7,7 +7,9 @@ import { Firehose } from '@trezystudios/bsky-lib'
 
 
 // Local imports
-import { filterSkeet } from './filterSkeets.js'
+import { isGameDevSkeet } from './isGameDevSkeet.js'
+import { isGameNewsSkeet } from './isGameNewsSkeet.js'
+import { isOptOutSkeet } from './isOptOutSkeet.js'
 import { logger } from './logger.js'
 
 
@@ -41,10 +43,20 @@ function handleFirehoseOpen(...args) {
 }
 
 async function handleSkeetCreate(skeet) {
-	if (filterSkeet(skeet)) {
+	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
 		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
 		await database.createSkeet({
 			cid: skeet.cid.toString(),
+			feedRecord: 'GAME_DEV',
+			replyParent: skeet.replyParent,
+			replyRoot: skeet.replyRoot,
+			uri: skeet.uri,
+		})
+	} else if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
+		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
+		await database.createSkeet({
+			cid: skeet.cid.toString(),
+			feedRecord: 'GAME_NEWS',
 			replyParent: skeet.replyParent,
 			replyRoot: skeet.replyRoot,
 			uri: skeet.uri,
