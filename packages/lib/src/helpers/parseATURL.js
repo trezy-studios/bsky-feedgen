@@ -1,12 +1,32 @@
 /**
+ * @typedef {object} ParsedATURL
+ * @property {string} did The decentralised ID.
+ * @property {string} nsid The namespace ID.
+ * @property {string} rkey The record key.
+ */
+
+/**
  * Parses an at:// URL and returns the important segments.
  *
  * @param {string} url The AT protocol URL to be parsed.
- * @returns {object} The segments that have been parsed from the URL.
+ * @returns {ParsedATURL | null} The segments that have been parsed from the URL.
  */
 export function parseATURL(url) {
-	const regex = /^at:\/\/(?<did>did:\w+:\w+)\/[\w.]+\/(?<rkey>\w+)$/giu
-	const result = regex.exec(url)
+	const regex = /^at:\/\/(?<did>did:\w+:\w+)\/(?<nsid>[\w.]+)\/(?<rkey>.+)$/giu
 
-	return result.groups
+	const {
+		did,
+		nsid,
+		rkey,
+	} = (regex.exec(url)?.groups ?? {})
+
+	if (!did || !nsid || !rkey) {
+		return null
+	}
+
+	return {
+		did,
+		nsid,
+		rkey,
+	}
 }
