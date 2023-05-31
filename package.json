@@ -11,10 +11,10 @@
     "./packages/sieve"
   ],
   "scripts": {
-    "build:api": "yarn build:lib",
-    "build:lib": "yarn workspace @trezystudios/bsky-common build",
-    "build:sieve": "yarn build:lib",
-    "build": "yarn build:api && yarn build:lib, yarn build:sieve",
+    "build:api": "yarn build:common",
+    "build:common": "yarn workspace @trezystudios/bsky-common build",
+    "build:sieve": "yarn build:common",
+    "build": "yarn build:api && yarn build:common && yarn build:sieve",
     "dev:api": "yarn workspace @trezystudios/bsky-api dev",
     "dev:sieve": "yarn workspace @trezystudios/bsky-sieve dev",
     "dev": "yarn dev:api && yarn dev:sieve",

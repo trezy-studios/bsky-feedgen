@@ -14,6 +14,13 @@ import { logger } from './logger.js'
 
 
 
+// Constants
+const firehose = new Firehose
+
+
+
+
+
 function parseSkeetForTerminal(text) {
 	const parsedText = text
 		.split('\n')
@@ -23,7 +30,10 @@ function parseSkeetForTerminal(text) {
 }
 
 function handleFirehoseError(error) {
-	logger.error(error)
+	logger.warn('encountered an error:')
+	logger.warn(error)
+	logger.warn('reconnecting...')
+	firehose.connect()
 }
 
 function handleFirehoseOpen(...args) {
@@ -46,8 +56,6 @@ function handleSkeetDelete(skeet) {
 	console.log(`🟥 Deleting skeet from feed: ${parseSkeetForTerminal(skeet.text)}`)
 	database.deleteSkeet(skeet.uri)
 }
-
-const firehose = new Firehose
 
 firehose.on('open', handleFirehoseOpen)
 firehose.on('error', handleFirehoseError)

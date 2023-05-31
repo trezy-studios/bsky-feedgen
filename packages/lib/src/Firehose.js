@@ -143,6 +143,10 @@ export class Firehose extends EventEmitter {
 	 * @param {string} [password] The password with which to authenticate. For now, this should be an app password.
 	*/
 	connect(username, password) {
+		if (this.#connection) {
+			this.#connection.terminate()
+		}
+
 		if (username && password) {
 			this.api.login(username, password)
 		}
