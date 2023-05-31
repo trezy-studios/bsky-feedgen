@@ -21,6 +21,11 @@ export const route = new Route({
 	async handler(context) {
 		const { limit } = context.query
 		let { cursor } = context.query
+		console.log('app.bsky.feed.getFeedSkeleton', {
+			headers: context.headers,
+			query: context.query,
+			href: context.href,
+		})
 
 		const query = {
 			where: {
