@@ -41,6 +41,12 @@ export const route = new Route({
 			'limit',
 		]
 
+		console.log({
+			headers: context.headers,
+			query: context.query,
+			url: context.url,
+		})
+
 		/** @type {QueryParams} */
 		const {
 			cursor,
