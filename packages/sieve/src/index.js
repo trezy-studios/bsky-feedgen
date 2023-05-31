@@ -1,5 +1,8 @@
 // Module imports
-import { database } from '@trezystudios/bsky-common'
+import {
+	database,
+	FEED_RECORDS_BY_ENUM,
+} from '@trezystudios/bsky-common'
 import { Firehose } from '@trezystudios/bsky-lib'
 
 
@@ -47,7 +50,7 @@ async function handleSkeetCreate(skeet) {
 		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
 		await database.createSkeet({
 			cid: skeet.cid.toString(),
-			feedRecord: 'GAME_DEV',
+			feedRecord: FEED_RECORDS_BY_ENUM.GAME_DEV.enum,
 			replyParent: skeet.replyParent,
 			replyRoot: skeet.replyRoot,
 			uri: skeet.uri,
@@ -56,7 +59,7 @@ async function handleSkeetCreate(skeet) {
 		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
 		await database.createSkeet({
 			cid: skeet.cid.toString(),
-			feedRecord: 'GAME_NEWS',
+			feedRecord: FEED_RECORDS_BY_ENUM.GAME_NEWS.enum,
 			replyParent: skeet.replyParent,
 			replyRoot: skeet.replyRoot,
 			uri: skeet.uri,
