@@ -23,6 +23,9 @@ export const route = new Route({
 		let { cursor } = context.query
 
 		const query = {
+			where: {
+				feedRecord: 'GAME_DEV',
+			},
 			orderBy: {
 				indexedAt: 'desc',
 			},
