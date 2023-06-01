@@ -1,8 +1,5 @@
 // Module imports
-import {
-	database,
-	FEED_RECORDS_BY_ENUM,
-} from '@trezystudios/bsky-common'
+import { database } from '@trezystudios/bsky-common'
 import { Firehose } from '@trezystudios/bsky-lib'
 
 
@@ -46,25 +43,29 @@ function handleFirehoseOpen(...args) {
 }
 
 async function handleSkeetCreate(skeet) {
+	const relevantFeeds = []
+
 	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
-		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
-		await database.createSkeet({
-			cid: skeet.cid.toString(),
-			feedRecord: FEED_RECORDS_BY_ENUM.GAME_DEV.enum,
-			replyParent: skeet.replyParent,
-			replyRoot: skeet.replyRoot,
-			uri: skeet.uri,
-		})
+		relevantFeeds.push('game-dev')
 	} else if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
-		logger.info(`🟩 Adding skeet to feed: ${parseSkeetForTerminal(skeet.text)}`)
-		await database.createSkeet({
-			cid: skeet.cid.toString(),
-			feedRecord: FEED_RECORDS_BY_ENUM.GAME_NEWS.enum,
-			replyParent: skeet.replyParent,
-			replyRoot: skeet.replyRoot,
-			uri: skeet.uri,
-		})
+		relevantFeeds.push('game-news')
 	}
+
+	if (!relevantFeeds.length) {
+		return
+	}
+
+	logger.info(`🟩 Adding skeet to feeds (${relevantFeeds.join(', ')}): ${parseSkeetForTerminal(skeet.text)}`)
+
+	await database.createSkeet({
+		cid: skeet.cid.toString(),
+		feeds: {
+			connect: relevantFeeds.map(feedRkey => ({ rkey: feedRkey })),
+		},
+		replyParent: skeet.replyParent,
+		replyRoot: skeet.replyRoot,
+		uri: skeet.uri,
+	})
 }
 
 function handleSkeetDelete(skeet) {
