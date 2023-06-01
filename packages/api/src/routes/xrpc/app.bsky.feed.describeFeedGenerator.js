@@ -1,5 +1,5 @@
 // Module imports
-import { FEED_RECORDS } from '@trezystudios/bsky-common'
+import { database } from '@trezystudios/bsky-common'
 
 
 
@@ -25,27 +25,12 @@ export const route = new Route({
 	 *
 	 * @param {import('koa').Context} context The request context.
 	 */
-	handler(context) {
-		const {
-			cursor,
-			limit,
-		} = context.query
-
-		const query = {
-			orderBy: {
-				indexedAt: 'desc',
-			},
-			take: limit,
-		}
-
-		if (cursor) {
-			query.cursor = { cid: cursor }
-			query.skip = 1
-		}
+	async handler(context) {
+		const feeds = await database.listFeeds()
 
 		context.body = {
 			did: process.env.FEEDGEN_SERVICE_DID,
-			feeds: FEED_RECORDS.map(feedRecord => ({ uri: `${baseURI}/${feedRecord.rkey}` })),
+			feeds: feeds.map(feed => ({ uri: `${baseURI}/${feed.rkey}` })),
 			// links: {
 			// 	privacyPolicy: '',
 			// 	termsOfService: '',

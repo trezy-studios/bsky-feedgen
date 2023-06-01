@@ -41,7 +41,7 @@ export function deleteSkeets(skeetURIs) {
 	})
 }
 
-export async function getFeed(rkey, options = {}) {
+export function getFeed(rkey, options = {}) {
 	const {
 		cursor,
 		limit = 30
@@ -69,6 +69,10 @@ export async function getFeed(rkey, options = {}) {
 			},
 			where: { rkey },
 		})
+}
+
+export function listFeeds() {
+	return prisma.feed.findMany()
 }
 
 export function getSkeets(query) {
