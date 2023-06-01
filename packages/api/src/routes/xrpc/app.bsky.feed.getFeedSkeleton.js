@@ -1,9 +1,5 @@
 // Module imports
-import {
-	database,
-	FEED_RECORDS,
-	FEED_RECORDS_BY_RKEY,
-} from '@trezystudios/bsky-common'
+import { database } from '@trezystudios/bsky-common'
 import { parseATURL } from '@trezystudios/bsky-lib'
 
 
@@ -79,7 +75,9 @@ export const route = new Route({
 			errors.push(`Invalid DID: ${parsedATURL.did}`)
 		}
 
-		if (!FEED_RECORDS.map(feedRecord => feedRecord.rkey).includes(parsedATURL.rkey)) {
+		const feeds = await database.listFeeds()
+
+		if (!feeds.map(feed => feed.rkey).includes(parsedATURL.rkey)) {
 			errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
 		}
 
