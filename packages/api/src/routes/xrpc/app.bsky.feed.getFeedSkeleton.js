@@ -80,7 +80,7 @@ export const route = new Route({
 		}
 
 		if (!FEED_RECORDS.map(feedRecord => feedRecord.rkey).includes(parsedATURL.rkey)) {
-			errors.push(`Invalid record: ${parsedATURL.rkey}`)
+			errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
 		}
 
 		if (errors.length) {
@@ -89,26 +89,10 @@ export const route = new Route({
 			return context
 		}
 
-		const feedRecord = FEED_RECORDS_BY_RKEY[parsedATURL.rkey]
-
-		const query = {
-			where: {
-				feedRecord: feedRecord.enum,
-			},
-			orderBy: {
-				indexedAt: 'desc',
-			},
-			take: Number(limit ?? 30),
-		}
-
-		if (cursor) {
-			query.cursor = {
-				uri: Buffer.from(cursor, 'base64').toString('ascii')
-			}
-			query.skip = 1
-		}
-
-		const skeets = await database.getSkeets(query)
+		const { skeets } = await database.getFeed(parsedATURL.rkey, {
+			cursor,
+			limit,
+		})
 
 		const body = {
 			feed: skeets.map(skeet => ({ post: skeet.uri })),
