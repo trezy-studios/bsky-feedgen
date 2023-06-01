@@ -8,16 +8,19 @@ datasource db {
   relationMode  = "prisma"
 }
 
-enum FeedRecord {
-  GAME_DEV
-  GAME_NEWS
+model Feed {
+  description String
+  name        String
+  ownerDID    String
+  rkey        String  @id @unique
+  skeets      Skeet[]
 }
 
 model Skeet {
   cid         String
-  feedRecord  FeedRecord  @default(GAME_DEV)
-  indexedAt   DateTime?   @default(now())
+  feeds       Feed[]
+  indexedAt   DateTime?     @default(now())
   replyParent String?
   replyRoot   String?
-  uri         String      @id @unique
+  uri         String        @id @unique
 }
