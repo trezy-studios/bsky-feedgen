@@ -47,7 +47,9 @@ async function handleSkeetCreate(skeet) {
 
 	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
 		relevantFeeds.push('game-dev')
-	} else if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
+	}
+
+	if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
 		relevantFeeds.push('game-news')
 	}
 
