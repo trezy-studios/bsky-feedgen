@@ -41,6 +41,36 @@ export function deleteSkeets(skeetURIs) {
 	})
 }
 
+export async function getFeed(rkey, options = {}) {
+	const {
+		cursor,
+		limit = 30
+	} = options
+
+	const query = {
+		/** @type {import('@prisma/client').Prisma.SkeetOrderByWithRelationInput} */
+		orderBy: {
+			indexedAt: 'desc',
+		},
+		take: Number(limit),
+	}
+
+	if (cursor) {
+		query.cursor = {
+			uri: Buffer.from(cursor, 'base64').toString('ascii')
+		}
+		query.skip = 1
+	}
+
+	return prisma.feed
+		.findUnique({
+			select: {
+				skeets: query,
+			},
+			where: { rkey },
+		})
+}
+
 export function getSkeets(query) {
 	return prisma.skeet.findMany(query)
 }
