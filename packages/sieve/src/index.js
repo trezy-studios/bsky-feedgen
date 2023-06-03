@@ -23,6 +23,13 @@ const firehose = new Firehose
 
 
 
+// Variables
+let timer = null
+
+
+
+
+
 function parseSkeetForTerminal(text) {
 	const parsedText = text
 		.split('\n')
@@ -32,17 +39,22 @@ function parseSkeetForTerminal(text) {
 }
 
 function handleFirehoseError(error) {
-	logger.warn('encountered an error:')
-	logger.warn(error)
-	logger.warn('reconnecting...')
+	logger.error('Firehose connection encountered an error:')
+	logger.error(error)
+	logger.error('Attempting to reconnect...')
+	resetTimer()
 	firehose.connect()
 }
 
-function handleFirehoseOpen(...args) {
-	console.log('firehose::open', ...args)
+function handleFirehoseOpen() {
+	logger.info('🟩 Firehose connection established.')
+	resetTimer()
 }
 
 async function handleSkeetCreate(skeet) {
+	logger.verbose('🟦 Received skeet...')
+	logger.silly(`Skeet content: ${parseSkeetForTerminal(skeet.text)}`)
+
 	const relevantFeeds = []
 
 	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
@@ -54,6 +66,7 @@ async function handleSkeetCreate(skeet) {
 	}
 
 	if (!relevantFeeds.length) {
+		logger.verbose('Skeet is irrelevant; skipping.')
 		return
 	}
 
@@ -71,12 +84,24 @@ async function handleSkeetCreate(skeet) {
 }
 
 function handleSkeetDelete(skeet) {
-	console.log(`🟥 Deleting skeet from feed: ${parseSkeetForTerminal(skeet.text)}`)
+	logger.info(`🟥 Deleting skeet from feed: ${parseSkeetForTerminal(skeet.text)}`)
 	database.deleteSkeet(skeet.uri)
 }
 
-firehose.on('open', handleFirehoseOpen)
-firehose.on('error', handleFirehoseError)
+function resetTimer() {
+	if (timer) {
+		clearTimeout(timer)
+	}
+
+	timer = setTimeout(() => {
+		logger.info('🟨 Firehose hasn\'t sent any messages recently; re-establishing connection...')
+		firehose.connect()
+	}, 60 * 1000)
+}
+
+firehose.on('connection::opened', handleFirehoseOpen)
+firehose.on('connection::error', handleFirehoseError)
+firehose.on('message::raw', resetTimer)
 firehose.on('app.bsky.feed.post::create', handleSkeetCreate)
 firehose.on('app.bsky.feed.post::delete', handleSkeetDelete)
 
