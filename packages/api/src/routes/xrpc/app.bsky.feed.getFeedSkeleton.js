@@ -7,6 +7,7 @@ import { parseATURL } from '@trezystudios/bsky-lib'
 
 
 // Local imports
+import { logger } from '../../helpers/logger.js'
 import { Route } from '../../structures/Route.js'
 
 
@@ -36,6 +37,12 @@ export const route = new Route({
 			'feed',
 			'limit',
 		]
+
+		logger.info(`received request: ${JSON.stringify({
+			headers: context.headers,
+			query: context.query,
+			url: context.url,
+		}, null, 2)}`)
 
 		/** @type {QueryParams} */
 		const {
