@@ -139,10 +139,18 @@ export class Firehose extends EventEmitter {
 	/**
 	 * Initialises the firehose connection.
 	 *
-	 * @param {string} [username] The username with which to authenticate. This is the same as the user's handle.
-	 * @param {string} [password] The password with which to authenticate. For now, this should be an app password.
+	 * @param {object} [options] All options.
+	 * @param {string} [options.cursor] A cursor if resuming the connection.
+	 * @param {string} [options.password] The password with which to authenticate. For now, this should be an app password.
+	 * @param {string} [options.username] The username with which to authenticate. This is the same as the user's handle.
 	*/
-	connect(username, password) {
+	connect(options = {}) {
+		const {
+			cursor,
+			password,
+			username,
+		} = options
+
 		if (this.#connection) {
 			this.#connection.terminate()
 		}
@@ -151,7 +159,13 @@ export class Firehose extends EventEmitter {
 			this.api.login(username, password)
 		}
 
-		this.#connection = new WebSocket(`wss://${BSKY_SERVICE_URL}/xrpc/com.atproto.sync.subscribeRepos`)
+		const socketURL = new URL('/xrpc/com.atproto.sync.subscribeRepos', `wss://${BSKY_SERVICE_URL}`)
+
+		if (cursor) {
+			socketURL.searchParams.append('cursor', cursor)
+		}
+
+		this.#connection = new WebSocket(socketURL)
 		this.#connection.on('message', (...args) => this.#handleFirehoseMessage(...args))
 		this.#connection.on('error', (...args) => this.#handleFirehoseError(...args))
 		this.#connection.on('open', (...args) => this.#handleFirehoseOpen(...args))
