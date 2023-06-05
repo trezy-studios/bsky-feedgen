@@ -24,11 +24,22 @@ const firehose = new Firehose
 
 
 // Variables
+let cursor = null
 let timer = null
 
 
 
 
+
+function connectFirehose() {
+	const options = {}
+
+	if (cursor) {
+		options.cursor = cursor
+	}
+
+	firehose.connect(options)
+}
 
 function parseSkeetForTerminal(text) {
 	const parsedText = text
@@ -43,12 +54,16 @@ function handleFirehoseError(error) {
 	logger.error(error)
 	logger.error('Attempting to reconnect...')
 	resetTimer()
-	firehose.connect()
+	connectFirehose()
 }
 
 function handleFirehoseOpen() {
 	logger.info('🟩 Firehose connection established.')
 	resetTimer()
+}
+
+function handleParsedMessage(message) {
+	cursor = message.sequentialID
 }
 
 async function handleSkeetCreate(skeet) {
@@ -95,14 +110,15 @@ function resetTimer() {
 
 	timer = setTimeout(() => {
 		logger.info('🟨 Firehose hasn\'t sent any messages recently; re-establishing connection...')
-		firehose.connect()
+		connectFirehose()
 	}, 60 * 1000)
 }
 
 firehose.on('connection::opened', handleFirehoseOpen)
 firehose.on('connection::error', handleFirehoseError)
 firehose.on('message::raw', resetTimer)
+firehose.on('message::parsed', handleParsedMessage)
 firehose.on('app.bsky.feed.post::create', handleSkeetCreate)
 firehose.on('app.bsky.feed.post::delete', handleSkeetDelete)
 
-firehose.connect()
+connectFirehose()
