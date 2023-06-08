@@ -21,6 +21,7 @@
     "@trezystudios/bsky-lib": "workspace:*",
     "dotenv": "^16.0.3",
     "multiformats": "^9.9.0",
+    "newrelic": "^10.2.0",
     "winston": "^3.9.0"
   },
   "devDependencies": {
