@@ -20,10 +20,10 @@
     "@atproto/repo": "^0.1.0",
     "@atproto/uri": "^0.0.2",
     "@atproto/xrpc-server": "^0.2.0",
-    "@prisma/client": "4.14.1",
+    "@prisma/client": "4.15.0",
     "dotenv": "^16.0.3",
     "multiformats": "^9.9.0",
-    "prisma": "^4.14.1"
+    "prisma": "^4.15.0"
   },
   "devDependencies": {
     "@types/node": "^20.1.2",

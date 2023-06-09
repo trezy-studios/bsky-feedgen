@@ -1,14 +1,11 @@
 {
   "private": true,
   "packageManager": "yarn@3.5.1",
-  "engines": {
-    "node": ">=18.16.0"
-  },
   "workspaces": [
-    "./packages/api",
-    "./packages/common",
-    "./packages/lib",
-    "./packages/sieve"
+    "packages/api",
+    "packages/common",
+    "packages/lib",
+    "packages/sieve"
   ],
   "scripts": {
     "build:api": "yarn build:common",
