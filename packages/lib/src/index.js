@@ -6,6 +6,7 @@ export { SessionData } from './types/SessionData.js'
 // Structures
 export { API } from './API.js'
 export { AppBskyFeedLikeEvent } from './AppBskyFeedLikeEvent.js'
+export { AppBskyFeedPostEvent } from './AppBskyFeedPostEvent.js'
 export { EventEmitter } from './EventEmitter.js'
 export { Firehose } from './Firehose.js'
 export { FirehoseMessage } from './FirehoseMessage.js'

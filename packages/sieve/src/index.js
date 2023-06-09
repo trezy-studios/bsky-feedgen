@@ -7,6 +7,7 @@ import { Firehose } from '@trezystudios/bsky-lib'
 
 
 // Local imports
+import { createEventLogger } from './createEventLogger.js'
 import { isGameDevSkeet } from './isGameDevSkeet.js'
 import { isGameNewsSkeet } from './isGameNewsSkeet.js'
 import { isOptOutSkeet } from './isOptOutSkeet.js'
@@ -31,6 +32,16 @@ let timer = null
 
 
 
+/** @typedef {import('@trezystudios/bsky-lib').AppBskyFeedPostEvent} AppBskyFeedPostEvent */
+/** @typedef {import('@trezystudios/bsky-lib').FirehoseMessage} FirehoseMessage */
+
+
+
+
+
+/**
+ * Attempts to establish a connection to the firehose.
+ */
 function connectFirehose() {
 	const options = {}
 
@@ -41,75 +52,114 @@ function connectFirehose() {
 	firehose.connect(options)
 }
 
-function parseSkeetForTerminal(text) {
-	const parsedText = text
-		.split('\n')
-		.join('\n\t')
-
-	return `\n\t${parsedText}\n`
-}
-
+/**
+ * Fired when the firehose emits an error.
+ *
+ * @param {Error} error The error emitted by the firehose.
+ */
 function handleFirehoseError(error) {
-	logger.error('Firehose connection encountered an error:')
-	logger.error(error)
-	logger.error('Attempting to reconnect...')
+	const createEventLog = createEventLogger('firehose error')
+
+	logger.error(createEventLog({ error }))
+
 	resetTimer()
 	connectFirehose()
 }
 
+/**
+ * Fired when the firehose connection is opened successfully.
+ */
 function handleFirehoseOpen() {
-	logger.info('🟩 Firehose connection established.')
+	const createEventLog = createEventLogger('firehose connection')
+
+	logger.info(createEventLog({  eventSubType: 'connection established' }))
+
 	resetTimer()
 }
 
+/**
+ * Fired when a parsed message is emitted from the firehose.
+ * @param {FirehoseMessage} message The parsed message.
+ */
 function handleParsedMessage(message) {
 	cursor = message.sequentialID
 }
 
+/**
+ * Fired when a new skeet is created.
+ *
+ * @param {AppBskyFeedPostEvent} skeet The newly created skeet.
+ * @returns {Promise<void>}
+ */
 async function handleSkeetCreate(skeet) {
-	logger.verbose('🟦 Received skeet...')
-	logger.silly(`Skeet content: ${parseSkeetForTerminal(skeet.text)}`)
+	const createEventLog = createEventLogger('skeet created')
 
-	const relevantFeeds = []
+	logger.debug(createEventLog({
+		eventSubType: 'skeet received',
+		uri: skeet.uri,
+	}))
+
+	logger.silly(createEventLog({
+		eventSubType: 'skeet text',
+		text: skeet.text,
+	}))
+
+	const feeds = []
 
 	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
-		relevantFeeds.push('game-dev')
+		feeds.push('game-dev')
 	}
 
 	if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
-		relevantFeeds.push('game-news')
+		feeds.push('game-news')
 	}
 
-	if (!relevantFeeds.length) {
-		logger.verbose('Skeet is irrelevant; skipping.')
+	if (!feeds.length) {
+		logger.verbose(createEventLog({ eventSubType: 'skeet is irrelevant' }))
 		return
 	}
 
-	logger.info(`🟩 Adding skeet to feeds (${relevantFeeds.join(', ')}): ${parseSkeetForTerminal(skeet.text)}`)
+	logger.silly(createEventLog({ eventSubType: 'store is relevant' }))
 
 	await database.createSkeet({
 		cid: skeet.cid.toString(),
-		feeds: {
-			connect: relevantFeeds.map(feedRkey => ({ rkey: feedRkey })),
-		},
+		feeds,
 		replyParent: skeet.replyParent,
 		replyRoot: skeet.replyRoot,
 		uri: skeet.uri,
 	})
 }
 
+/**
+ * Fired when a skeet is deleted.
+ * @param {AppBskyFeedPostEvent} skeet The skeet being deleted.
+ */
 function handleSkeetDelete(skeet) {
-	logger.info(`🟥 Deleting skeet from feed: ${parseSkeetForTerminal(skeet.text)}`)
+	const createEventLog = createEventLogger('skeet deleted')
+
+	logger.debug(createEventLog({ uri: skeet.uri }))
+
+	logger.silly(createEventLog({
+		eventSubType: 'skeet text',
+		text: skeet.text,
+	}))
+
 	database.deleteSkeet(skeet.uri)
 }
 
+/**
+ * Resets the reconnection timer.
+ */
 function resetTimer() {
 	if (timer) {
 		clearTimeout(timer)
 	}
 
 	timer = setTimeout(() => {
-		logger.info('🟨 Firehose hasn\'t sent any messages recently; re-establishing connection...')
+		const createEventLog = createEventLogger('firehose connection')
+
+		logger.info(createEventLog({ eventSubType: 'resetting connection' }))
+
 		connectFirehose()
 	}, 60 * 1000)
 }
