@@ -25,8 +25,9 @@ const firehose = new Firehose
 
 
 // Variables
-let cursor = 36068926
-let timer = null
+let cursor = 0
+let cursorUpdateIntervalID = null
+let timerID = null
 
 
 
@@ -42,7 +43,14 @@ let timer = null
 /**
  * Attempts to establish a connection to the firehose.
  */
-function connectFirehose() {
+async function connectFirehose() {
+	const dbCursor = await database.getCursor()
+
+	if (dbCursor) {
+		cursor = dbCursor.seq
+	}
+
+
 	firehose.connect({ cursor })
 }
 
@@ -69,6 +77,8 @@ function handleFirehoseOpen() {
 	logger.info(createEventLog({ eventSubType: 'connection established' }))
 
 	resetTimer()
+
+	cursorUpdateIntervalID = setInterval(() => database.updateCursor(cursor), 10000)
 }
 
 /**
@@ -145,15 +155,16 @@ function handleSkeetDelete(skeet) {
  * Resets the reconnection timer.
  */
 function resetTimer() {
-	if (timer) {
-		clearTimeout(timer)
+	if (timerID) {
+		clearTimeout(timerID)
 	}
 
-	timer = setTimeout(() => {
+	timerID = setTimeout(() => {
 		const createEventLog = createEventLogger('firehose connection')
 
 		logger.info(createEventLog({ eventSubType: 'resetting connection' }))
 
+		clearInterval(cursorUpdateIntervalID)
 		connectFirehose()
 	}, 60 * 1000)
 }

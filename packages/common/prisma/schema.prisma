@@ -16,6 +16,10 @@ model Feed {
   skeets      Skeet[]
 }
 
+model FirehoseCursor {
+  seq         Int     @id @unique
+}
+
 model Skeet {
   cid         String
   feeds       Feed[]

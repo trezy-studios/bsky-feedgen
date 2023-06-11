@@ -48,6 +48,10 @@ export function deleteSkeets(skeetURIs) {
 	})
 }
 
+export function getCursor() {
+	return prisma.firehoseCursor.findFirst()
+}
+
 export function getFeed(rkey, options = {}) {
 	const {
 		cursor,
@@ -78,10 +82,19 @@ export function getFeed(rkey, options = {}) {
 		})
 }
 
+export function getSkeets(query) {
+	return prisma.skeet.findMany(query)
+}
+
 export function listFeeds() {
 	return prisma.feed.findMany()
 }
 
-export function getSkeets(query) {
-	return prisma.skeet.findMany(query)
+export async function updateCursor(seq) {
+	return prisma.$transaction([
+		prisma.firehoseCursor.deleteMany(),
+		prisma.firehoseCursor.create({
+			data: { seq },
+		}),
+	])
 }

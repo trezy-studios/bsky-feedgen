@@ -140,7 +140,7 @@ export class Firehose extends EventEmitter {
 	 * Initialises the firehose connection.
 	 *
 	 * @param {object} [options] All options.
-	 * @param {number | string} [options.cursor] A cursor if resuming the connection.
+	 * @param {number} [options.cursor] A cursor if resuming the connection.
 	 * @param {string} [options.password] The password with which to authenticate. For now, this should be an app password.
 	 * @param {string} [options.username] The username with which to authenticate. This is the same as the user's handle.
 	*/
