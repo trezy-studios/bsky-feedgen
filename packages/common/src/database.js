@@ -13,7 +13,14 @@ const prisma = new PrismaClient()
 
 
 export function createSkeet(skeet) {
-	return prisma.skeet.create({ data: skeet })
+	return prisma.skeet.create({
+		data: {
+			...skeet,
+			feeds: {
+				connect: skeet.feeds.map(rkey => ({ rkey })),
+			},
+		},
+	})
 }
 
 export async function createSkeets(skeets) {

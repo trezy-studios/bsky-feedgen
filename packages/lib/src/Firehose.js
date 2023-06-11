@@ -140,7 +140,7 @@ export class Firehose extends EventEmitter {
 	 * Initialises the firehose connection.
 	 *
 	 * @param {object} [options] All options.
-	 * @param {string} [options.cursor] A cursor if resuming the connection.
+	 * @param {number | string} [options.cursor] A cursor if resuming the connection.
 	 * @param {string} [options.password] The password with which to authenticate. For now, this should be an app password.
 	 * @param {string} [options.username] The username with which to authenticate. This is the same as the user's handle.
 	*/
@@ -162,7 +162,7 @@ export class Firehose extends EventEmitter {
 		const socketURL = new URL('/xrpc/com.atproto.sync.subscribeRepos', `wss://${BSKY_SERVICE_URL}`)
 
 		if (cursor) {
-			socketURL.searchParams.append('cursor', cursor)
+			socketURL.searchParams.append('cursor', String(cursor))
 		}
 
 		this.#connection = new WebSocket(socketURL)

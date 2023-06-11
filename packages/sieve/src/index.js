@@ -25,7 +25,7 @@ const firehose = new Firehose
 
 
 // Variables
-let cursor = null
+let cursor = 0
 let timer = null
 
 
@@ -43,13 +43,7 @@ let timer = null
  * Attempts to establish a connection to the firehose.
  */
 function connectFirehose() {
-	const options = {}
-
-	if (cursor) {
-		options.cursor = cursor
-	}
-
-	firehose.connect(options)
+	firehose.connect({ cursor })
 }
 
 /**
@@ -72,7 +66,7 @@ function handleFirehoseError(error) {
 function handleFirehoseOpen() {
 	const createEventLog = createEventLogger('firehose connection')
 
-	logger.info(createEventLog({  eventSubType: 'connection established' }))
+	logger.info(createEventLog({ eventSubType: 'connection established' }))
 
 	resetTimer()
 }
@@ -119,7 +113,7 @@ async function handleSkeetCreate(skeet) {
 		return
 	}
 
-	logger.silly(createEventLog({ eventSubType: 'store is relevant' }))
+	logger.silly(createEventLog({ eventSubType: 'skeet is relevant' }))
 
 	await database.createSkeet({
 		cid: skeet.cid.toString(),
