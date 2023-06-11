@@ -25,7 +25,7 @@ const firehose = new Firehose
 
 
 // Variables
-let cursor = 0
+let cursor = 36068926
 let timer = null
 
 
