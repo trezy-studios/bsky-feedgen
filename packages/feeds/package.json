@@ -1,0 +1,25 @@
+{
+  "name": "@trezystudios/bsky-feeds",
+  "version": "1.0.0",
+  "description": "All Trezy Studios feeds.",
+  "main": "./src/index.js",
+  "repository": "git@github.com:trezy-studios/bsky-feedgen.git",
+  "author": "Trezy <t@trezy.codes>",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "generate-types": "tsc --project tsconfig.json",
+    "lint": "eslint ./src/"
+  },
+  "dependencies": {
+    "@trezystudios/bsky-common": "workspace:*",
+    "@trezystudios/bsky-lib": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.2",
+    "better-docs": "^2.7.2",
+    "nodemon": "^2.0.22"
+  },
+  "packageManager": "yarn@3.5.1"
+}

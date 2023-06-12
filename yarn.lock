@@ -985,6 +985,7 @@ __metadata:
   dependencies:
     "@koa/cors": ^3.4.3
     "@trezystudios/bsky-common": "workspace:*"
+    "@trezystudios/bsky-feeds": "workspace:*"
     "@trezystudios/bsky-lib": "workspace:*"
     "@types/koa": ^2.13.6
     "@types/koa-compress": ^4.0.3
@@ -1021,6 +1022,18 @@ __metadata:
     multiformats: ^9.9.0
     nodemon: ^2.0.22
     prisma: ^4.15.0
+  languageName: unknown
+  linkType: soft
+
+"@trezystudios/bsky-feeds@workspace:*, @trezystudios/bsky-feeds@workspace:packages/feeds":
+  version: 0.0.0-use.local
+  resolution: "@trezystudios/bsky-feeds@workspace:packages/feeds"
+  dependencies:
+    "@trezystudios/bsky-common": "workspace:*"
+    "@trezystudios/bsky-lib": "workspace:*"
+    "@types/node": ^20.1.2
+    better-docs: ^2.7.2
+    nodemon: ^2.0.22
   languageName: unknown
   linkType: soft
 
@@ -1061,6 +1074,7 @@ __metadata:
     "@atproto/uri": ^0.0.2
     "@atproto/xrpc-server": ^0.2.0
     "@trezystudios/bsky-common": "workspace:*"
+    "@trezystudios/bsky-feeds": "workspace:*"
     "@trezystudios/bsky-lib": "workspace:*"
     "@types/node": ^20.1.2
     better-docs: ^2.7.2

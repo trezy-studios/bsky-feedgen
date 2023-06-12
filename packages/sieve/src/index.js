@@ -1,5 +1,6 @@
 // Module imports
 import { database } from '@trezystudios/bsky-common'
+import * as feeds from '@trezystudios/bsky-feeds'
 import { Firehose } from '@trezystudios/bsky-lib'
 
 
@@ -41,6 +42,15 @@ let timerID = null
 
 
 /**
+ * Binds events for each feed.
+ *
+ * @param {import('@trezystudios/bsky-common').Feed} feed
+ */
+function bindFeed(feed) {
+	feed.bindFirehoseEvents(firehose)
+}
+
+/**
  * Attempts to establish a connection to the firehose.
  */
 async function connectFirehose() {
@@ -49,7 +59,6 @@ async function connectFirehose() {
 	if (dbCursor) {
 		cursor = dbCursor.seq
 	}
-
 
 	firehose.connect({ cursor })
 }
@@ -175,5 +184,7 @@ firehose.on('message::raw', resetTimer)
 firehose.on('message::parsed', handleParsedMessage)
 firehose.on('app.bsky.feed.post::create', handleSkeetCreate)
 firehose.on('app.bsky.feed.post::delete', handleSkeetDelete)
+
+Object.values(feeds).forEach(bindFeed)
 
 connectFirehose()

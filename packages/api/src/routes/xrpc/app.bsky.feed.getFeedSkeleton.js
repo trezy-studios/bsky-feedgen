@@ -1,6 +1,6 @@
 // Module imports
-import { database } from '@trezystudios/bsky-common'
 import { parseATURL } from '@trezystudios/bsky-lib'
+import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 
@@ -82,9 +82,10 @@ export const route = new Route({
 			errors.push(`Invalid DID: ${parsedATURL.did}`)
 		}
 
-		const feeds = await database.listFeeds()
+		const feeds = Object.values(feedMap)
+		const feedKeys = feeds.map(feed => feed.rkey)
 
-		if (!feeds.map(feed => feed.rkey).includes(parsedATURL.rkey)) {
+		if (!feedKeys.includes(parsedATURL.rkey)) {
 			errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
 		}
 
@@ -94,20 +95,9 @@ export const route = new Route({
 			return context
 		}
 
-		const { skeets } = await database.getFeed(parsedATURL.rkey, {
-			cursor,
-			limit,
-		})
+		const feedController = feeds.find(feed => feed.rkey === parsedATURL.rkey)
 
-		const body = {
-			feed: skeets.map(skeet => ({ post: skeet.uri })),
-		}
-
-		if (skeets.length) {
-			body.cursor = Buffer.from(skeets.at(-1).uri).toString('base64')
-		}
-
-		context.body = body
+		context.body = await feedController.generateFeed(cursor, limit)
 	},
 
 	route: '/xrpc/app.bsky.feed.getFeedSkeleton',

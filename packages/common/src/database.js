@@ -13,13 +13,17 @@ const prisma = new PrismaClient()
 
 
 export function createSkeet(skeet) {
-	return prisma.skeet.create({
-		data: {
-			...skeet,
-			feeds: {
-				connect: skeet.feeds.map(rkey => ({ rkey })),
-			},
+	const feeds = { connect: skeet.feeds.map(rkey => ({ rkey })) }
+
+	return prisma.skeet.upsert({
+		where: {
+			uri: skeet.uri,
 		},
+		create: {
+			...skeet,
+			feeds,
+		},
+		update: { feeds },
 	})
 }
 
@@ -84,10 +88,6 @@ export function getFeed(rkey, options = {}) {
 
 export function getSkeets(query) {
 	return prisma.skeet.findMany(query)
-}
-
-export function listFeeds() {
-	return prisma.feed.findMany()
 }
 
 export async function updateCursor(seq) {

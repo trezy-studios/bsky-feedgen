@@ -18,6 +18,7 @@
     "@atproto/uri": "^0.0.2",
     "@atproto/xrpc-server": "^0.2.0",
     "@trezystudios/bsky-common": "workspace:*",
+    "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
     "dotenv": "^16.0.3",
     "multiformats": "^9.9.0",
