@@ -67,7 +67,7 @@ export const GameDevFeed = new class extends Feed {
 			return Promise.resolve(false)
 		}
 
-		return Promise.resolve(/games?\s?(?:dev|design)/giu.test(skeet.text))
+		return Promise.resolve(/(?:games?\s?(?:art|dev|design|lighting|writing)|screenshot\s?saturday)/giu.test(skeet.text))
 	}
 
 
