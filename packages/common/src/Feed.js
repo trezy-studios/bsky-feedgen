@@ -63,6 +63,16 @@ export class Feed {
 		return Promise.resolve({ feed: [] })
 	}
 
+	/**
+	 * Determines whether a skeet is relevant or not.
+	 *
+	 * @param {import('@trezystudios/bsky-lib').Skeet} skeet The skeet to be tested.
+	 * @returns {Promise<boolean>} Whether the skeet is relevant to the feed.
+	 */
+	testSkeet(skeet) {
+		return Promise.resolve(false)
+	}
+
 
 
 

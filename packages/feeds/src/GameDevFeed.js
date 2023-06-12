@@ -18,23 +18,15 @@ export const GameDevFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		const feeds = [this.rkey]
-
-		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
-			return
+		if (this.testSkeet(skeet)) {
+			await database.createSkeet({
+				cid: skeet.cid.toString(),
+				feeds: [this.rkey],
+				replyParent: skeet.replyParent,
+				replyRoot: skeet.replyRoot,
+				uri: skeet.uri,
+			})
 		}
-
-		if (!/games?\s?(?:dev|design)/giu.test(skeet.text)) {
-			return
-		}
-
-		await database.createSkeet({
-			cid: skeet.cid.toString(),
-			feeds,
-			replyParent: skeet.replyParent,
-			replyRoot: skeet.replyRoot,
-			uri: skeet.uri,
-		})
 	}
 
 
@@ -71,7 +63,8 @@ export const GameDevFeed = new class extends Feed {
 	}
 
 	testSkeet(skeet) {
-
+		return !/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)
+			&& /games?\s?(?:dev|design)/giu.test(skeet.text)
 	}
 
 

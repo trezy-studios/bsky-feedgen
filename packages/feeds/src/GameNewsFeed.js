@@ -18,23 +18,15 @@ export const GameNewsFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		const feeds = [this.rkey]
-
-		if (/#nogamenews/giu.test(skeet.text)) {
-			return
+		if (this.testSkeet(skeet)) {
+			await database.createSkeet({
+				cid: skeet.cid.toString(),
+				feeds: [this.rkey],
+				replyParent: skeet.replyParent,
+				replyRoot: skeet.replyRoot,
+				uri: skeet.uri,
+			})
 		}
-
-		if (!/#gamenews/giu.test(skeet.text)) {
-			return
-		}
-
-		await database.createSkeet({
-			cid: skeet.cid.toString(),
-			feeds,
-			replyParent: skeet.replyParent,
-			replyRoot: skeet.replyRoot,
-			uri: skeet.uri,
-		})
 	}
 
 
@@ -68,6 +60,11 @@ export const GameNewsFeed = new class extends Feed {
 		}
 
 		return result
+	}
+
+	testSkeet(skeet) {
+		return !/#nogamenews/giu.test(skeet.text)
+			&& /#gamenews/giu.test(skeet.text)
 	}
 
 
