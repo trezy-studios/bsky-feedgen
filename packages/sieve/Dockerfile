@@ -12,16 +12,18 @@ COPY yarn.lock .yarnrc.yml /app/
 COPY .yarn /app/.yarn
 
 # Local dependencies
-COPY packages/lib/package.json /app/packages/lib/
 COPY packages/common/package.json /app/packages/common/
+COPY packages/feeds/package.json /app/packages/feeds/
+COPY packages/lib/package.json /app/packages/lib/
 COPY packages/sieve/package.json /app/packages/sieve/
 RUN yarn workspaces focus @trezystudios/bsky-sieve
 
 FROM dependencies AS application
 
 # Load application and local dependencies
-COPY packages/lib/ /app/packages/lib/
 COPY packages/common/ /app/packages/common/
+COPY packages/feeds/ /app/packages/feeds/
+COPY packages/lib/ /app/packages/lib/
 COPY packages/sieve/ /app/packages/sieve/
 
 # Build the common lib
