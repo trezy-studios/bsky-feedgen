@@ -18,7 +18,7 @@ export const GameNewsFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		const feeds = []
+		const feeds = [this.rkey]
 
 		if (/#nogamenews/giu.test(skeet.text)) {
 			return

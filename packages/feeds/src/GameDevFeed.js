@@ -18,7 +18,7 @@ export const GameDevFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		const feeds = []
+		const feeds = [this.rkey]
 
 		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
 			return
@@ -68,6 +68,10 @@ export const GameDevFeed = new class extends Feed {
 		}
 
 		return result
+	}
+
+	testSkeet(skeet) {
+
 	}
 
 
