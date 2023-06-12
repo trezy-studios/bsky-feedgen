@@ -9,9 +9,6 @@ import { Firehose } from '@trezystudios/bsky-lib'
 
 // Local imports
 import { createEventLogger } from './createEventLogger.js'
-import { isGameDevSkeet } from './isGameDevSkeet.js'
-import { isGameNewsSkeet } from './isGameNewsSkeet.js'
-import { isOptOutSkeet } from './isOptOutSkeet.js'
 import { logger } from './logger.js'
 
 
@@ -117,30 +114,28 @@ async function handleSkeetCreate(skeet) {
 		text: skeet.text,
 	}))
 
-	const feeds = []
+	const feedsArray = Object.values(feeds)
+	const relevantFeeds = []
 
-	if (isGameDevSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamedev', 'idontwantto(?:be|get)fired'])) {
-		feeds.push('game-dev')
+	let feedIndex = 0
+
+	while (feedIndex < feedsArray.length) {
+		const feed = feedsArray[feedIndex]
+		const isRelevantSkeet = await feed.testSkeet(skeet)
+
+		if (isRelevantSkeet) {
+			relevantFeeds.push(feed.rkey)
+		}
+
+		feedIndex += 1
 	}
 
-	if (isGameNewsSkeet(skeet) && !isOptOutSkeet(skeet, ['nogamenews'])) {
-		feeds.push('game-news')
-	}
-
-	if (!feeds.length) {
+	if (!relevantFeeds.length) {
 		logger.verbose(createEventLog({ eventSubType: 'skeet is irrelevant' }))
 		return
 	}
 
-	logger.silly(createEventLog({ eventSubType: 'skeet is relevant' }))
-
-	await database.createSkeet({
-		cid: skeet.cid.toString(),
-		feeds,
-		replyParent: skeet.replyParent,
-		replyRoot: skeet.replyRoot,
-		uri: skeet.uri,
-	})
+	logger.silly(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
 }
 
 /**

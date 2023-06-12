@@ -18,7 +18,7 @@ export const GameNewsFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		if (this.testSkeet(skeet)) {
+		if (await this.testSkeet(skeet)) {
 			await database.createSkeet({
 				cid: skeet.cid.toString(),
 				feeds: [this.rkey],
@@ -63,8 +63,11 @@ export const GameNewsFeed = new class extends Feed {
 	}
 
 	testSkeet(skeet) {
-		return !/#nogamenews/giu.test(skeet.text)
-			&& /#gamenews/giu.test(skeet.text)
+		if (/#nogamenews/giu.test(skeet.text)) {
+			return Promise.resolve(false)
+		}
+
+		return Promise.resolve(/#gamenews/giu.test(skeet.text))
 	}
 
 

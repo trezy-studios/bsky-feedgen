@@ -18,7 +18,7 @@ export const GameDevFeed = new class extends Feed {
 	 * @returns {Promise<void>}
 	 */
 	async #handleSkeetCreate(skeet) {
-		if (this.testSkeet(skeet)) {
+		if (await this.testSkeet(skeet)) {
 			await database.createSkeet({
 				cid: skeet.cid.toString(),
 				feeds: [this.rkey],
@@ -63,8 +63,11 @@ export const GameDevFeed = new class extends Feed {
 	}
 
 	testSkeet(skeet) {
-		return !/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)
-			&& /games?\s?(?:dev|design)/giu.test(skeet.text)
+		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
+			return Promise.resolve(false)
+		}
+
+		return Promise.resolve(/games?\s?(?:dev|design)/giu.test(skeet.text))
 	}
 
 

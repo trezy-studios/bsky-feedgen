@@ -984,7 +984,6 @@ __metadata:
   resolution: "@trezystudios/bsky-api@workspace:packages/api"
   dependencies:
     "@koa/cors": ^3.4.3
-    "@trezystudios/bsky-common": "workspace:*"
     "@trezystudios/bsky-feeds": "workspace:*"
     "@trezystudios/bsky-lib": "workspace:*"
     "@types/koa": ^2.13.6
@@ -1016,6 +1015,7 @@ __metadata:
     "@atproto/uri": ^0.0.2
     "@atproto/xrpc-server": ^0.2.0
     "@prisma/client": 4.15.0
+    "@trezystudios/bsky-lib": "workspace:*"
     "@types/node": ^20.1.2
     better-docs: ^2.7.2
     dotenv: ^16.0.3
