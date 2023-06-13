@@ -1,5 +1,6 @@
 {
 	"name": "scripts",
+	"type": "module",
 	"private": true,
 	"scripts": {
 		"addDIDsToSkeets": "node -r dotenv/config ./src/addDIDsToSkeets.js"
