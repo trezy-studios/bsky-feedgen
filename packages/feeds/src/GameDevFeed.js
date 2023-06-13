@@ -6,6 +6,19 @@ import { Feed } from '@trezystudios/bsky-common'
 
 
 
+// Constants
+const rootSkeets = [
+	// Trezy's intros thread
+	'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3ju2fo5erfr2a',
+
+	// Rami's intros thread
+	'at://did:plc:jye22xkea3jqsabskhfec347/app.bsky.feed.post/3jufcwqil7q2t',
+]
+
+
+
+
+
 export const GameDevFeed = new class extends Feed {
 	/****************************************************************************\
 	 * Private instance methods
@@ -67,7 +80,11 @@ export const GameDevFeed = new class extends Feed {
 			return false
 		}
 
-		return /(?:games?\s?(?:art|audio|design|dev|lighting|music|writing)|screenshot\s?saturday)/giu.test(skeet.text)
+		if (/(?:games?\s?(?:art|audio|design|dev|lighting|music|writing)|screenshot\s?saturday)/giu.test(skeet.text)) {
+			return true
+		}
+
+		return rootSkeets.includes(skeet.replyRoot)
 	}
 
 
