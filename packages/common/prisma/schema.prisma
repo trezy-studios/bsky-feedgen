@@ -22,6 +22,7 @@ model FirehoseCursor {
 
 model Skeet {
   cid         String
+  did         String?
   feeds       Feed[]
   indexedAt   DateTime? @default(now())
   replyParent String?

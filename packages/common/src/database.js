@@ -1,4 +1,5 @@
 // Module imports
+import { parseATURL } from '@trezystudios/bsky-lib'
 import { PrismaClient } from '@prisma/client'
 
 
@@ -21,6 +22,7 @@ export function createSkeet(skeet) {
 		},
 		create: {
 			...skeet,
+			did: parseATURL(skeet.uri).did,
 			feeds,
 		},
 		update: { feeds },
@@ -97,4 +99,13 @@ export async function updateCursor(seq) {
 			data: { seq },
 		}),
 	])
+}
+
+export function updateSkeet(skeet) {
+	return prisma.skeet.updateMany({
+		data: skeet,
+		where: {
+			uri: skeet.uri,
+		},
+	})
 }

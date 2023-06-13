@@ -1,0 +1,12 @@
+{
+	"name": "scripts",
+	"private": true,
+	"scripts": {
+		"addDIDsToSkeets": "node -r dotenv/config ./src/addDIDsToSkeets.js"
+	},
+	"dependencies": {
+		"@trezystudios/bsky-common": "workspace:*",
+		"@trezystudios/bsky-lib": "workspace:*",
+		"dotenv": "^16.0.3"
+	}
+}

@@ -6,6 +6,7 @@
     "packages/common",
     "packages/feeds",
     "packages/lib",
+    "packages/scripts",
     "packages/sieve"
   ],
   "scripts": {
