@@ -20,6 +20,10 @@ model FirehoseCursor {
   seq         Int     @id @unique
 }
 
+model OptOut {
+  did         String  @id @unique
+}
+
 model Skeet {
   cid         String
   did         String?

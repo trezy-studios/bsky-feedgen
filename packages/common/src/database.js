@@ -13,6 +13,12 @@ const prisma = new PrismaClient()
 
 
 
+export function createOptOut(did) {
+	return prisma.optOut.create({
+		data: { did },
+	})
+}
+
 export function createSkeet(skeet) {
 	const feeds = { connect: skeet.feeds.map(rkey => ({ rkey })) }
 
