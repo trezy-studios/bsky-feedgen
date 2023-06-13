@@ -84,7 +84,7 @@ export const GameDevFeed = new class extends Feed {
 			return true
 		}
 
-		return rootSkeets.includes(skeet.replyRoot)
+		return rootSkeets.includes(skeet.replyParent)
 	}
 
 
