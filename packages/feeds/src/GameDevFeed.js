@@ -64,10 +64,10 @@ export const GameDevFeed = new class extends Feed {
 
 	testSkeet(skeet) {
 		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
-			return Promise.resolve(false)
+			return false
 		}
 
-		return Promise.resolve(/(?:games?\s?(?:art|audio|design|dev|lighting|music|writing)|screenshot\s?saturday)/giu.test(skeet.text))
+		return /(?:games?\s?(?:art|audio|design|dev|lighting|music|writing)|screenshot\s?saturday)/giu.test(skeet.text)
 	}
 
 

@@ -57,20 +57,20 @@ export class Feed {
 	 *
 	 * @param {string} [cursor] Pagination cursor.
 	 * @param {number} [limit = 30] The maximum number of feed items to return.
-	 * @returns {Promise<FeedObject>} The feed.
+	 * @returns {Promise<FeedObject> | FeedObject} The feed.
 	 */
 	generateFeed(cursor, limit = 30) {
-		return Promise.resolve({ feed: [] })
+		return { feed: [] }
 	}
 
 	/**
 	 * Determines whether a skeet is relevant or not.
 	 *
 	 * @param {import('@trezystudios/bsky-lib').Skeet} skeet The skeet to be tested.
-	 * @returns {Promise<boolean>} Whether the skeet is relevant to the feed.
+	 * @returns {Promise<boolean> | boolean} Whether the skeet is relevant to the feed.
 	 */
 	testSkeet(skeet) {
-		return Promise.resolve(false)
+		return false
 	}
 
 

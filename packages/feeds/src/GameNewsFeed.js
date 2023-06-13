@@ -64,10 +64,10 @@ export const GameNewsFeed = new class extends Feed {
 
 	testSkeet(skeet) {
 		if (/#nogamenews/giu.test(skeet.text)) {
-			return Promise.resolve(false)
+			return false
 		}
 
-		return Promise.resolve(/#gamenews/giu.test(skeet.text))
+		return /#gamenews/giu.test(skeet.text)
 	}
 
 
