@@ -51,7 +51,21 @@ function bindFeed(feed) {
  * Attempts to establish a connection to the firehose.
  */
 async function connectFirehose() {
-	const dbCursor = await database.getCursor()
+	const createEventLog = createEventLogger('connect firehose')
+
+	let dbCursor = null
+
+	try {
+		dbCursor = await database.getCursor()
+		logger.error(createEventLog({ eventSubType: 'connection established' }))
+	} catch (error) {
+		logger.error(createEventLog({
+			eventSubType: 'failed to retrieve cursor',
+			error,
+		}))
+		setTimeout(connectFirehose, 10000)
+		return
+	}
 
 	if (dbCursor) {
 		cursor = dbCursor.seq
@@ -80,7 +94,7 @@ function handleFirehoseError(error) {
 function handleFirehoseOpen() {
 	const createEventLog = createEventLogger('firehose connection')
 
-	logger.info(createEventLog({ eventSubType: 'connection established' }))
+	logger.info(createEventLog({ eventSubType: 'firehose open' }))
 
 	resetTimer()
 
