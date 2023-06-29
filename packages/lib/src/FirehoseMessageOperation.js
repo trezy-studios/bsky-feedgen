@@ -13,6 +13,7 @@ import {
 } from './helpers/messageGenerators.js'
 import { AppBskyFeedLikeEvent } from './AppBskyFeedLikeEvent.js'
 import { AppBskyFeedPostEvent } from './AppBskyFeedPostEvent.js'
+import { AppBskyGraphListItemEvent } from './AppBskyGraphListItemEvent.js'
 import { CID } from 'multiformats'
 import { FIREHOSE_EVENT_ACTION } from './helpers/eventNames.js'
 
@@ -270,6 +271,12 @@ export class FirehoseMessageOperation {
 			case 'follow':
 				return this.#parseAppBskyGraphFollowNamespace()
 
+			case 'list':
+				return this.#parseAppBskyGraphListNamespace()
+
+			case 'listitem':
+				return this.#parseAppBskyGraphListItemNamespace()
+
 			default:
 				throw new Error(UNRECOGNISED_NAMESPACE(this.serialisedNamespace))
 		}
@@ -279,14 +286,32 @@ export class FirehoseMessageOperation {
 	 * Parses the message using the app.bsky.graph.follow namespace.
 	 */
 	#parseAppBskyGraphBlockNamespace() {
-		// console.log(UNIMPLEMENTED_NAMESPACE(this.serialisedNamespace))
+		throw new Error(UNIMPLEMENTED_NAMESPACE(this.serialisedNamespace))
 	}
 
 	/**
 	 * Parses the message using the app.bsky.graph.follow namespace.
 	 */
 	#parseAppBskyGraphFollowNamespace() {
-		// console.log(UNIMPLEMENTED_NAMESPACE(this.serialisedNamespace))
+		throw new Error(UNIMPLEMENTED_NAMESPACE(this.serialisedNamespace))
+	}
+
+	/**
+	 * Parses the message using the app.bsky.graph.list namespace.
+	 */
+	#parseAppBskyGraphListNamespace() {
+		throw new Error(UNIMPLEMENTED_NAMESPACE(this.serialisedNamespace))
+	}
+
+	/**
+	 * Parses the message using the app.bsky.graph.listitem namespace.
+	 */
+	#parseAppBskyGraphListItemNamespace() {
+		this.#entity = new AppBskyGraphListItemEvent(this)
+
+		this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+
+		return this.#entity
 	}
 
 	/**

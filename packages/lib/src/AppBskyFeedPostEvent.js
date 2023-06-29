@@ -15,7 +15,7 @@ import { User } from './User.js'
  */
 export class AppBskyFeedPostEvent extends BaseFirehoseEvent {
 	/****************************************************************************\
-	 * Public instance methods
+	 * Private instance properties
 	\****************************************************************************/
 
 	/** @type {User} */
