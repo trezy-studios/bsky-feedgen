@@ -115,4 +115,17 @@ export class API {
 
 		return response.data
 	}
+
+
+
+
+
+	/****************************************************************************\
+	 * Public instance getters/setters
+	\****************************************************************************/
+
+	/** @returns {import('@atproto/api').BskyAgent} */
+	get agent() {
+		return this.#agent
+	}
 }
