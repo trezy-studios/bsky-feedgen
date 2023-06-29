@@ -27,7 +27,7 @@ export const GameDevFeed = new class extends Feed {
 	async generateFeed(cursor, limit = 30) {
 		const result = {}
 
-		const skeets = await database.getFeed(this.rkey, {
+		const { skeets } = await database.getFeed(this.rkey, {
 			cursor,
 			limit,
 		})
