@@ -57,7 +57,7 @@ async function connectFirehose() {
 
 	try {
 		dbCursor = await database.getCursor()
-		logger.error(createEventLog({ eventSubType: 'connection established' }))
+		logger.info(createEventLog({ eventSubType: 'connection established' }))
 	} catch (error) {
 		logger.error(createEventLog({
 			eventSubType: 'failed to retrieve cursor',
