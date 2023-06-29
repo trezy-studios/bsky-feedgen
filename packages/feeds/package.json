@@ -17,7 +17,7 @@
     "@trezystudios/bsky-lib": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^20.1.2",
+    "@types/node": "^20.3.2",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
   },

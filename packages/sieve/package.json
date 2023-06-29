@@ -12,7 +12,7 @@
     "start": "node -r dotenv/config src/index.js"
   },
   "dependencies": {
-    "@atproto/api": "^0.3.7",
+    "@atproto/api": "^0.3.13",
     "@atproto/lexicon": "^0.1.0",
     "@atproto/repo": "^0.1.0",
     "@atproto/uri": "^0.0.2",
@@ -20,13 +20,13 @@
     "@trezystudios/bsky-common": "workspace:*",
     "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "multiformats": "^9.9.0",
-    "newrelic": "^10.2.0",
+    "newrelic": "^10.3.2",
     "winston": "^3.9.0"
   },
   "devDependencies": {
-    "@types/node": "^20.1.2",
+    "@types/node": "^20.3.2",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
   },

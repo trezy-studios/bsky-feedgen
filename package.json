@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "better-docs": "^2.7.2",
-    "eslint": "^8.38.0",
-    "eslint-plugin-editorconfig": "^4.0.2",
-    "eslint-plugin-jsdoc": "^41.1.1",
+    "eslint": "^8.43.0",
+    "eslint-plugin-editorconfig": "^4.0.3",
+    "eslint-plugin-jsdoc": "^41.1.2",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-optimize-regex": "^1.2.1",
     "eslint-plugin-promise": "^6.1.1",
@@ -44,8 +44,8 @@
     "eslint-plugin-react-perf": "^3.3.1",
     "eslint-plugin-react-prefer-function-component": "^3.1.0",
     "eslint-plugin-security": "^1.7.1",
-    "eslint-plugin-sort-class-members": "^1.17.1",
+    "eslint-plugin-sort-class-members": "^1.18.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   }
 }

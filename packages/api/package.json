@@ -15,20 +15,20 @@
     "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
     "@types/koa-router": "^7.4.4",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "koa": "^2.14.2",
     "koa-body": "^5.0.0",
     "koa-compress": "^5.1.1",
     "koa-no-trailing-slash": "^2.1.0",
     "koa-router": "^12.0.0",
-    "newrelic": "^10.2.0",
+    "newrelic": "^10.3.2",
     "winston": "^3.9.0"
   },
   "devDependencies": {
     "@types/koa": "^2.13.6",
     "@types/koa-compress": "^4.0.3",
     "@types/koa__cors": "^4.0.0",
-    "@types/node": "^20.1.2",
+    "@types/node": "^20.3.2",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
   },
