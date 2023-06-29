@@ -144,7 +144,7 @@ export class Firehose extends EventEmitter {
 	 * @param {string} [options.password] The password with which to authenticate. For now, this should be an app password.
 	 * @param {string} [options.username] The username with which to authenticate. This is the same as the user's handle.
 	*/
-	connect(options = {}) {
+	async connect(options = {}) {
 		const {
 			cursor,
 			password,
@@ -156,7 +156,7 @@ export class Firehose extends EventEmitter {
 		}
 
 		if (username && password) {
-			this.api.login(username, password)
+			await this.api.login(username, password)
 		}
 
 		const socketURL = new URL('/xrpc/com.atproto.sync.subscribeRepos', `wss://${BSKY_SERVICE_URL}`)
