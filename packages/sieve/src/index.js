@@ -146,10 +146,17 @@ async function handleSkeetCreate(skeet) {
 
 	if (!relevantFeeds.length) {
 		logger.verbose(createEventLog({ eventSubType: 'skeet is irrelevant' }))
-		return
+	} else {
+		logger.silly(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
 	}
 
-	logger.silly(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
+	await database.createSkeet({
+		cid: skeet.cid.toString(),
+		feeds: relevantFeeds,
+		replyParent: skeet.replyParent,
+		replyRoot: skeet.replyRoot,
+		uri: skeet.uri,
+	})
 }
 
 /**
