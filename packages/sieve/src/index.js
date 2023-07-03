@@ -106,7 +106,9 @@ function handleFirehoseOpen() {
  * @param {FirehoseMessage} message The parsed message.
  */
 function handleParsedMessage(message) {
-	cursor = message.sequentialID
+	if (message.sequentialID) {
+		cursor = message.sequentialID
+	}
 }
 
 /**
