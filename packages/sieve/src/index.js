@@ -98,7 +98,7 @@ function handleFirehoseOpen() {
 
 	resetTimer()
 
-	cursorUpdateIntervalID = setInterval(() => database.updateCursor(cursor), 10000)
+	cursorUpdateIntervalID = setInterval(() => database.updateCursor(cursor), 30000)
 }
 
 /**
