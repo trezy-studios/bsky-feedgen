@@ -20,14 +20,14 @@
     "@atproto/repo": "^0.1.0",
     "@atproto/uri": "^0.0.2",
     "@atproto/xrpc-server": "^0.2.0",
-    "@prisma/client": "4.16.1",
+    "@prisma/client": "4.16.2",
     "@trezystudios/bsky-lib": "workspace:*",
     "dotenv": "^16.3.1",
     "multiformats": "^9.9.0",
-    "prisma": "^4.16.1"
+    "prisma": "^4.16.2"
   },
   "devDependencies": {
-    "@types/node": "^20.3.2",
+    "@types/node": "^20.3.3",
     "better-docs": "^2.7.2",
     "nodemon": "^2.0.22"
   },
