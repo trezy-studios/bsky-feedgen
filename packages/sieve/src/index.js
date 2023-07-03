@@ -193,7 +193,7 @@ function resetTimer() {
 
 		clearInterval(cursorUpdateIntervalID)
 		connectFirehose()
-	}, 60 * 1000)
+	}, 10000)
 }
 
 firehose.on('connection::opened', handleFirehoseOpen)
