@@ -16,6 +16,7 @@ import { route as didJSONRoute } from '../routes/.well-known/did.json.js'
 import { route as getFeedSkeletonRoute } from '../routes/xrpc/app.bsky.feed.getFeedSkeleton.js'
 import { route as healthCheckRoute } from '../routes/health.js'
 import { logger } from '../helpers/logger.js'
+import { loggerMiddleware } from '../middleware/logger.js'
 import { statusCodeGenerator } from '../middleware/statusCodeGenerator.js'
 
 
@@ -65,6 +66,7 @@ class APIClass {
 	 * Connects middleware to the Koa server.
 	 */
 	#mountMiddleware() {
+		this.#client.use(loggerMiddleware)
 		this.#client.use(noTrailingSlash())
 		this.#client.use(compress())
 		this.#client.use(cors())

@@ -39,12 +39,6 @@ export const route = new Route({
 			'limit',
 		]
 
-		logger.debug(JSON.stringify({
-			headers: context.headers,
-			query: context.query,
-			url: context.url,
-		}))
-
 		/** @type {QueryParams} */
 		const {
 			cursor,
