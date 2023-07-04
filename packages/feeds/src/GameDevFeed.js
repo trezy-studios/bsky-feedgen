@@ -50,7 +50,7 @@ export const GameDevFeed = new class extends Feed {
 			return false
 		}
 
-		if (/(?:games?\s?(?:art|audio|design|dev|jam|lighting|music|narr?ative|writing)|screenshot\s?saturday)/giu.test(skeet.text)) {
+		if (/games?\s?(?:art|audio|design|dev|jam|lighting|music|narr?ative|writing)|indie\s?dev\s?hour|screenshot\s?saturday|trailer\s?tuesday|unity\s?1\s?week|wishlist\s?wednesday/giu.test(skeet.text)) {
 			return true
 		}
 
