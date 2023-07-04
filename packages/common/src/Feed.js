@@ -9,6 +9,9 @@
  * @property {string} post The URI of the skeet.
  */
 
+/**
+ * Base Feed class.
+ */
 export class Feed {
 	/****************************************************************************\
 	 * Constructor
@@ -32,7 +35,7 @@ export class Feed {
 			throw new Error('`rkey` is required.')
 		}
 
-		if (typeof 'rkey' !== 'string') {
+		if (typeof this.rkey !== 'string') {
 			throw new Error('`rkey` must be a string.')
 		}
 	}
@@ -56,7 +59,7 @@ export class Feed {
 	 * Generate the feed.
 	 *
 	 * @param {string} [cursor] Pagination cursor.
-	 * @param {number} [limit = 30] The maximum number of feed items to return.
+	 * @param {number} [limit] The maximum number of feed items to return.
 	 * @returns {Promise<FeedObject> | FeedObject} The feed.
 	 */
 	generateFeed(cursor, limit = 30) {
@@ -66,7 +69,10 @@ export class Feed {
 	/**
 	 * Determines whether a skeet is relevant or not.
 	 *
-	 * @param {import('@trezystudios/bsky-lib').Skeet} skeet The skeet to be tested.
+	 * @param {{
+	 * 	text: string,
+	 * 	replyParent: string,
+	 * }} skeet The skeet to test.
 	 * @returns {Promise<boolean> | boolean} Whether the skeet is relevant to the feed.
 	 */
 	testSkeet(skeet) {

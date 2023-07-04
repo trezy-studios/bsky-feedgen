@@ -1,6 +1,8 @@
 // Module imports
-import { database } from '@trezystudios/bsky-common'
-import { Feed } from '@trezystudios/bsky-common'
+import {
+	database,
+	Feed,
+} from '@trezystudios/bsky-common'
 
 
 
@@ -19,11 +21,24 @@ const rootSkeets = [
 
 
 
-export const GameDevFeed = new class extends Feed {
+/**
+ * Handler for the game dev feed.
+ */
+class GameDevFeedClass extends Feed {
 	/****************************************************************************\
 	 * Public instance methods
 	\****************************************************************************/
 
+	/**
+	 * Generates the feed response for the API.
+	 *
+	 * @param {string} [cursor] A cursor for pagination.
+	 * @param {number} [limit] The number of skeets per page. Min 1, max 100.
+	 * @returns {Promise<{
+	 * 	cursor: string,
+	 * 	feed: object[],
+	 * }>} The generated feed.
+	 */
 	async generateFeed(cursor, limit = 30) {
 		const result = {}
 
@@ -45,6 +60,15 @@ export const GameDevFeed = new class extends Feed {
 		return result
 	}
 
+	/**
+	 * Tests a skeet to verify whether it's relevant for this feed.
+	 *
+	 * @param {{
+	 * 	text: string,
+	 * 	replyParent: string,
+	 * }} skeet The skeet to test.
+	 * @returns {boolean} Whether the skeet is relevant.
+	 */
 	testSkeet(skeet) {
 		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
 			return false
@@ -65,7 +89,10 @@ export const GameDevFeed = new class extends Feed {
 	 * Public instance getters/setters
 	\****************************************************************************/
 
+	/** @returns {string} The record key of the feed. */
 	get rkey() {
 		return 'game-dev'
 	}
 }
+
+export const GameDevFeed = new GameDevFeedClass
