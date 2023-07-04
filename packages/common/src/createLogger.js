@@ -38,7 +38,9 @@ export function createLogger(origin) {
 
 	return winston.createLogger({
 		defaultMeta: {
-			labels: { origin },
+			labels: {
+				job: origin,
+			},
 		},
 		level: process.env.LOG_LEVEL ?? 'info',
 		transports,
