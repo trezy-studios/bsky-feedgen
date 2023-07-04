@@ -11,11 +11,11 @@ import noTrailingSlash from 'koa-no-trailing-slash'
 
 
 // Local imports
-import { logger } from '../helpers/logger.js'
 import { route as describeFeedGeneratorRoute } from '../routes/xrpc/app.bsky.feed.describeFeedGenerator.js'
 import { route as didJSONRoute } from '../routes/.well-known/did.json.js'
 import { route as getFeedSkeletonRoute } from '../routes/xrpc/app.bsky.feed.getFeedSkeleton.js'
 import { route as healthCheckRoute } from '../routes/health.js'
+import { logger } from '../helpers/logger.js'
 import { statusCodeGenerator } from '../middleware/statusCodeGenerator.js'
 
 

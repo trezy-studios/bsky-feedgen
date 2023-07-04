@@ -26,6 +26,7 @@ import { Route } from '../../structures/Route.js'
 
 
 export const route = new Route({
+	// eslint-disable-next-line jsdoc/require-returns
 	/**
 	 * Handles this route when it's accessed.
 	 *
@@ -38,11 +39,11 @@ export const route = new Route({
 			'limit',
 		]
 
-		logger.info(`received request: ${JSON.stringify({
+		logger.debug(JSON.stringify({
 			headers: context.headers,
 			query: context.query,
 			url: context.url,
-		}, null, 2)}`)
+		}))
 
 		/** @type {QueryParams} */
 		const {
@@ -83,7 +84,7 @@ export const route = new Route({
 		}
 
 		const feeds = Object.values(feedMap)
-		const feedKeys = feeds.map(feed => feed.rkey)
+		const feedKeys = feeds.map(({ rkey }) => rkey)
 
 		if (!feedKeys.includes(parsedATURL.rkey)) {
 			errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
@@ -95,8 +96,9 @@ export const route = new Route({
 			return context
 		}
 
-		const feedController = feeds.find(feed => feed.rkey === parsedATURL.rkey)
+		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
+		// eslint-disable-next-line require-atomic-updates
 		context.body = await feedController.generateFeed(cursor, limit)
 	},
 

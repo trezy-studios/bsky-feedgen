@@ -24,7 +24,9 @@
     "@trezystudios/bsky-lib": "workspace:*",
     "dotenv": "^16.3.1",
     "multiformats": "^9.9.0",
-    "prisma": "^4.16.2"
+    "prisma": "^4.16.2",
+    "winston": "^3.9.0",
+    "winston-loki": "^6.0.6"
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
