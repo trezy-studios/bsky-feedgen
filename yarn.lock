@@ -2126,6 +2126,7 @@ __metadata:
     nodemon: ^2.0.22
     prisma: ^4.16.2
     winston: ^3.9.0
+    winston-logfmt: ^1.0.0
     winston-loki: ^6.0.6
   languageName: unknown
   linkType: soft
@@ -8710,6 +8711,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"winston-logfmt@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "winston-logfmt@npm:1.0.0"
+  dependencies:
+    winston: ^3.3.3
+  checksum: 0df2555207cbac80aece8f40250a2f6416299a6466f1a24917e743a2b353ee580bf9bcf555a49f7e4682d664285d663dc2a37158acb9c3ae758170e3950f8ecb
+  languageName: node
+  linkType: hard
+
 "winston-loki@npm:^6.0.6":
   version: 6.0.6
   resolution: "winston-loki@npm:6.0.6"
@@ -8737,7 +8747,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.9.0":
+"winston@npm:^3.3.3, winston@npm:^3.9.0":
   version: 3.9.0
   resolution: "winston@npm:3.9.0"
   dependencies:

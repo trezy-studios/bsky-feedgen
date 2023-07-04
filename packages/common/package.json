@@ -26,6 +26,7 @@
     "multiformats": "^9.9.0",
     "prisma": "^4.16.2",
     "winston": "^3.9.0",
+    "winston-logfmt": "^1.0.0",
     "winston-loki": "^6.0.6"
   },
   "devDependencies": {

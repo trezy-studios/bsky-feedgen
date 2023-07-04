@@ -91,7 +91,7 @@ async function handleListItemCreate(event) {
 
 	if (allBlockLists.includes(event.list)) {
 		logger.debug(createEventLog({
-			eventSubType: 'blocking user from feeds',
+			message: 'blocking user from feeds',
 			did: event.subject,
 		}))
 
@@ -100,15 +100,14 @@ async function handleListItemCreate(event) {
 		} catch (error) {
 			if (error.code === 'P2002') {
 				logger.silly(createEventLog({
-					eventSubType: 'failed to create block',
-					message: 'block may already exist',
+					message: 'failed to create block; block may already exist',
 				}))
 			} else {
 				console.error(error)
 			}
 		}
 	} else {
-		logger.debug(createEventLog({ eventSubType: 'list item is irrelevant' }))
+		logger.debug(createEventLog({ message: 'list item is irrelevant' }))
 	}
 }
 
@@ -125,7 +124,7 @@ async function handleListItemDelete(event) {
 
 		if (count > 0) {
 			logger.debug(createEventLog({
-				eventSubType: 'block deleted',
+				message: 'block deleted',
 				listOwner: event.listOwner,
 				listItemRkey: event.rkey,
 			}))
@@ -133,8 +132,7 @@ async function handleListItemDelete(event) {
 	} catch (error) {
 		if (error.code === 'P2025') {
 			logger.debug(createEventLog({
-				eventSubType: 'failed to delete block',
-				message: 'it may have already been deleted',
+				message: 'failed to delete block; it may have already been deleted',
 			}))
 		}
 	}
@@ -150,10 +148,10 @@ async function connectFirehose() {
 
 	try {
 		dbCursor = await database.getCursor()
-		logger.info(createEventLog({ eventSubType: 'connection established' }))
+		logger.info(createEventLog({ message: 'connection established' }))
 	} catch (error) {
 		logger.error(createEventLog({
-			eventSubType: 'failed to retrieve cursor',
+			message: 'failed to retrieve cursor',
 			error,
 		}))
 		setTimeout(connectFirehose, 10000)
@@ -161,7 +159,7 @@ async function connectFirehose() {
 	}
 
 	if (dbCursor) {
-		cursor = dbCursor.seq
+		cursor = dbCursor
 	}
 
 	await firehose.connect({
@@ -222,12 +220,12 @@ async function handleSkeetCreate(skeet) {
 	const createEventLog = createEventLogger('skeet created')
 
 	logger.debug(createEventLog({
-		eventSubType: 'skeet received',
+		message: 'skeet received',
 		uri: skeet.uri,
 	}))
 
 	logger.silly(createEventLog({
-		eventSubType: 'skeet text',
+		message: 'skeet text',
 		text: skeet.text,
 	}))
 
@@ -248,9 +246,12 @@ async function handleSkeetCreate(skeet) {
 	}
 
 	if (!relevantFeeds.length) {
-		logger.debug(createEventLog({ eventSubType: 'skeet is irrelevant' }))
+		logger.debug(createEventLog({ message: 'skeet is irrelevant' }))
 	} else {
-		logger.debug(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
+		logger.debug(createEventLog({
+			feeds: relevantFeeds,
+			message: 'skeet is relevant',
+		}))
 	}
 
 	await database.createSkeet({
@@ -273,7 +274,7 @@ async function handleSkeetDelete(skeet) {
 	logger.debug(createEventLog({ uri: skeet.uri }))
 
 	logger.silly(createEventLog({
-		eventSubType: 'skeet text',
+		message: 'skeet text',
 		text: skeet.text,
 	}))
 
@@ -282,8 +283,7 @@ async function handleSkeetDelete(skeet) {
 	} catch (error) {
 		if (error.code === 'P2025') {
 			logger.debug(createEventLog({
-				eventSubType: 'failed to delete skeet',
-				message: 'it may have already been deleted',
+				message: 'failed to delete skeet; it may have already been deleted',
 			}))
 		}
 	}
@@ -300,7 +300,7 @@ function resetTimer() {
 	reconnectionTimerID = setTimeout(() => {
 		const createEventLog = createEventLogger('firehose connection')
 
-		logger.info(createEventLog({ eventSubType: 'resetting connection' }))
+		logger.info(createEventLog({ message: 'resetting connection' }))
 
 		clearInterval(cursorUpdateIntervalID)
 		connectFirehose()
@@ -319,7 +319,11 @@ async function updateBlockLists() {
 		const blockListOwner = blockListOwners[blockListOwnersIndex]
 		const blockLists = blockListsMap[blockListOwner]
 
-		logger.debug(createEventLog({ eventSubType: `syncing block lists from ${blockListOwner}` }))
+		logger.debug(createEventLog({
+			message: 'syncing block lists',
+			owner: blockListOwner,
+			lists: blockLists,
+		}))
 
 		let blockListCursor = null
 		let shouldContinue = true
@@ -364,8 +368,8 @@ async function updateBlockLists() {
 
 					try {
 						logger.debug(createEventLog({
-							eventSubType: 'create block',
 							did: record.value.subject,
+							message: 'create block',
 						}))
 
 						await database.createBlock({
@@ -376,8 +380,7 @@ async function updateBlockLists() {
 					} catch (error) {
 						if (error.code === 'P2002') {
 							logger.silly(createEventLog({
-								eventSubType: 'failed to create block',
-								message: 'block may already exist',
+								message: 'failed to create block; block may already exist',
 							}))
 						} else {
 							console.error(error)

@@ -12,19 +12,20 @@ import { logger } from '../helpers/logger.js'
  * @param {Function} next The function to be executed when this middleware is ready to run the next middleware.
  */
 export async function loggerMiddleware(context, next) {
-	logger.debug(`Received request: ${JSON.stringify({
+	logger.debug({
+		message: 'Received request',
 		headers: context.headers,
 		method: context.method,
 		query: context.query,
 		url: context.url,
-	})}`)
+	})
 
 	await next()
 
-	logger.debug(`Sending response: ${JSON.stringify({
+	logger.debug({
+		message: 'Sending response',
 		body: context.response.body,
 		headers: context.response.headers,
-		message: context.response.message,
-		status: context.response.status,
-	})}`)
+		status: `${context.response.status} ${context.response.message}`,
+	})
 }

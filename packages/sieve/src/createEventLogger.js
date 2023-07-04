@@ -18,9 +18,9 @@ export function createEventLogger(eventType) {
 	 * Logs the passed data with the associated event ID.
 	 *
 	 * @param {object} [data] Additional data to be logged.
-	 * @returns {string} A JSON string.
+	 * @returns {object} A JSON string.
 	 */
-	return (data = {}) => JSON.stringify({
+	return (data = {}) => ({
 		...data,
 		eventID,
 		eventType,
