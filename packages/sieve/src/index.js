@@ -1,7 +1,10 @@
 // Module imports
+import {
+	Firehose,
+	parseATURL,
+} from '@trezystudios/bsky-lib'
 import { database } from '@trezystudios/bsky-common'
 import * as feeds from '@trezystudios/bsky-feeds'
-import { Firehose } from '@trezystudios/bsky-lib'
 
 
 
@@ -16,6 +19,35 @@ import { logger } from './logger.js'
 
 
 // Constants
+/** @type {{ [key: string]: string[] }} */
+const blockListsMap = {
+	'trezy.studio': [
+		// Game Feed Bans
+		'at://did:plc:pwsrgzcv426k7viyjl3ljdvb/app.bsky.graph.list/3jzcrcrh5b52h',
+	],
+
+	'skywatch.bsky.social': [
+		// Auto-Followers & Growth Hackers
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwchzmvjok25',
+
+		// Bots
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwduuvw35s25',
+
+		// Enlightened Centrists, Reply Trolls, Bigot Defenders
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwch3raivv2a',
+
+		// Far-Right Actors
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwch7xsmsu22',
+
+		// Hard Block
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwch67e2be22',
+
+		// Transphobes & TERFs
+		'at://did:plc:6gvzbq76altrlx2bvzgrh2l5/app.bsky.graph.list/3jwchbcv63v2j',
+	],
+}
+const allBlockLists = Object.values(blockListsMap).flat()
+const blockListOwners = Object.keys(blockListsMap)
 const firehose = new Firehose
 
 
@@ -25,13 +57,14 @@ const firehose = new Firehose
 // Variables
 let cursor = 0
 let cursorUpdateIntervalID = null
-let timerID = null
+let reconnectionTimerID = null
 
 
 
 
 
 /** @typedef {import('@trezystudios/bsky-lib').AppBskyFeedPostEvent} AppBskyFeedPostEvent */
+/** @typedef {import('@trezystudios/bsky-lib').AppBskyGraphListItemEvent} AppBskyGraphListItemEvent */
 /** @typedef {import('@trezystudios/bsky-lib').FirehoseMessage} FirehoseMessage */
 
 
@@ -45,6 +78,66 @@ let timerID = null
  */
 function bindFeed(feed) {
 	feed.bindFirehoseEvents(firehose)
+}
+
+/**
+ * Checks if mute list updates are in a list we're watching, then updates the
+ * database accordingly.
+ *
+ * @param {AppBskyGraphListItemEvent} event The list item create event.
+ */
+async function handleListItemCreate(event) {
+	const createEventLog = createEventLogger('list item created')
+
+	if (allBlockLists.includes(event.list)) {
+		logger.debug(createEventLog({
+			eventSubType: 'blocking user from feeds',
+			did: event.subject,
+		}))
+
+		try {
+			await database.createBlock(event)
+		} catch (error) {
+			if (error.code === 'P2002') {
+				logger.silly(createEventLog({
+					eventSubType: 'failed to create block',
+					message: 'block may already exist',
+				}))
+			} else {
+				console.error(error)
+			}
+		}
+	} else {
+		logger.debug(createEventLog({ eventSubType: 'list item is irrelevant' }))
+	}
+}
+
+/**
+ * Handles a user being removed from a list.
+ *
+ * @param {AppBskyGraphListItemEvent} event The list item create event.
+ */
+async function handleListItemDelete(event) {
+	const createEventLog = createEventLogger('list item deleted')
+
+	try {
+		const { count } = await database.deleteBlock(event)
+
+		if (count > 0) {
+			logger.debug(createEventLog({
+				eventSubType: 'block deleted',
+				listOwner: event.listOwner,
+				listItemRkey: event.rkey,
+			}))
+		}
+	} catch (error) {
+		if (error.code === 'P2025') {
+			logger.debug(createEventLog({
+				eventSubType: 'failed to delete block',
+				message: 'it may have already been deleted',
+			}))
+		}
+	}
 }
 
 /**
@@ -71,7 +164,11 @@ async function connectFirehose() {
 		cursor = dbCursor.seq
 	}
 
-	firehose.connect({ cursor })
+	await firehose.connect({
+		cursor,
+		password: process.env.BSKY_APP_PASSWORD,
+		username: process.env.BSKY_USERNAME,
+	})
 }
 
 /**
@@ -96,13 +193,17 @@ function handleFirehoseOpen() {
 
 	logger.info(createEventLog({ eventSubType: 'firehose open' }))
 
+	updateBlockLists()
 	resetTimer()
 
-	cursorUpdateIntervalID = setInterval(() => database.updateCursor(cursor), 30000)
+	cursorUpdateIntervalID = setInterval(async() => {
+		await database.updateCursor(cursor)
+	}, 30000)
 }
 
 /**
  * Fired when a parsed message is emitted from the firehose.
+ *
  * @param {FirehoseMessage} message The parsed message.
  */
 function handleParsedMessage(message) {
@@ -147,9 +248,9 @@ async function handleSkeetCreate(skeet) {
 	}
 
 	if (!relevantFeeds.length) {
-		logger.verbose(createEventLog({ eventSubType: 'skeet is irrelevant' }))
+		logger.debug(createEventLog({ eventSubType: 'skeet is irrelevant' }))
 	} else {
-		logger.silly(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
+		logger.debug(createEventLog({ eventSubType: `skeet is relevant to feeds: ${relevantFeeds.join(', ')}` }))
 	}
 
 	await database.createSkeet({
@@ -163,9 +264,10 @@ async function handleSkeetCreate(skeet) {
 
 /**
  * Fired when a skeet is deleted.
+ *
  * @param {AppBskyFeedPostEvent} skeet The skeet being deleted.
  */
-function handleSkeetDelete(skeet) {
+async function handleSkeetDelete(skeet) {
 	const createEventLog = createEventLogger('skeet deleted')
 
 	logger.debug(createEventLog({ uri: skeet.uri }))
@@ -175,18 +277,27 @@ function handleSkeetDelete(skeet) {
 		text: skeet.text,
 	}))
 
-	database.deleteSkeet(skeet.uri)
+	try {
+		await database.deleteSkeet(skeet.uri)
+	} catch (error) {
+		if (error.code === 'P2025') {
+			logger.debug(createEventLog({
+				eventSubType: 'failed to delete skeet',
+				message: 'it may have already been deleted',
+			}))
+		}
+	}
 }
 
 /**
  * Resets the reconnection timer.
  */
 function resetTimer() {
-	if (timerID) {
-		clearTimeout(timerID)
+	if (reconnectionTimerID) {
+		clearTimeout(reconnectionTimerID)
 	}
 
-	timerID = setTimeout(() => {
+	reconnectionTimerID = setTimeout(() => {
 		const createEventLog = createEventLogger('firehose connection')
 
 		logger.info(createEventLog({ eventSubType: 'resetting connection' }))
@@ -196,12 +307,100 @@ function resetTimer() {
 	}, 10000)
 }
 
+/**
+ * Updates the block lists.
+ */
+async function updateBlockLists() {
+	const createEventLog = createEventLogger('sync block lists')
+
+	let blockListOwnersIndex = 0
+
+	while (blockListOwnersIndex < blockListOwners.length) {
+		const blockListOwner = blockListOwners[blockListOwnersIndex]
+		const blockLists = blockListsMap[blockListOwner]
+
+		logger.debug(createEventLog({ eventSubType: `syncing block lists from ${blockListOwner}` }))
+
+		let blockListCursor = null
+		let shouldContinue = true
+
+		while (shouldContinue) {
+			const query = {
+				collection: 'app.bsky.graph.listitem',
+				limit: 100,
+				repo: blockListOwner,
+			}
+
+			if (blockListCursor) {
+				query.cursor = blockListCursor
+			}
+
+			const result = await firehose.api.agent.com.atproto.repo.listRecords(query)
+
+			if (result.data.cursor) {
+				blockListCursor = result.data.cursor
+			} else {
+				shouldContinue = false
+			}
+
+			let recordIndex = 0
+
+			while (recordIndex < result.data.records.length) {
+				/**
+				 * Override the type from the @atproto/api because the `value` isn't fleshed out.
+				 *
+				 * @type {{
+				 * 	uri: string,
+				 * 	value: {
+				 * 		list: string,
+				 * 		subject: string,
+				 * 	},
+				 * }}
+				 */
+				const record = /** @type {*} */ (result.data.records[recordIndex])
+
+				if (blockLists.includes(record.value.list)) {
+					const parsedATURL = parseATURL(record.uri)
+
+					try {
+						logger.debug(createEventLog({
+							eventSubType: 'create block',
+							did: record.value.subject,
+						}))
+
+						await database.createBlock({
+							subject: record.value.subject,
+							listOwner: parsedATURL.did,
+							rkey: parsedATURL.rkey,
+						})
+					} catch (error) {
+						if (error.code === 'P2002') {
+							logger.silly(createEventLog({
+								eventSubType: 'failed to create block',
+								message: 'block may already exist',
+							}))
+						} else {
+							console.error(error)
+						}
+					}
+				}
+
+				recordIndex += 1
+			}
+		}
+
+		blockListOwnersIndex += 1
+	}
+}
+
 firehose.on('connection::opened', handleFirehoseOpen)
 firehose.on('connection::error', handleFirehoseError)
 firehose.on('message::raw', resetTimer)
 firehose.on('message::parsed', handleParsedMessage)
 firehose.on('app.bsky.feed.post::create', handleSkeetCreate)
 firehose.on('app.bsky.feed.post::delete', handleSkeetDelete)
+firehose.on('app.bsky.graph.listitem::create', handleListItemCreate)
+firehose.on('app.bsky.graph.listitem::delete', handleListItemDelete)
 
 Object.values(feeds).forEach(bindFeed)
 

@@ -81,7 +81,6 @@ module.exports = {
 		'no-unused-vars': ['error', {
 			'argsIgnorePattern': '^_',
 		}],
-		'no-use-before-define': ['error'],
 		'no-useless-call': ['error'],
 		'no-useless-computed-key': ['error'],
 		'no-useless-concat': ['error'],

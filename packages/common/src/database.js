@@ -7,18 +7,56 @@ import { PrismaClient } from '@prisma/client'
 
 
 // Constants
-const prisma = new PrismaClient()
+const prisma = new PrismaClient
 
 
 
 
 
+/**
+ * Saves a block in the database.
+ *
+ * @param {{
+ * 	listOwner: string,
+ * 	rkey: string,
+ * 	subject: string,
+ * }} listItem The list item to be saved.
+ * @returns {Promise<object>} The newly created block.
+ */
+export function createBlock(listItem) {
+	return prisma.block.create({
+		data: {
+			did: listItem.subject,
+			listOwnerDID: listItem.listOwner,
+			rkey: listItem.rkey,
+		},
+	})
+}
+
+/**
+ * Creates a new opt-out.
+ *
+ * @param {string} did The dID of the user that is opting out.
+ * @returns {Promise<object>} The newly created opt-out.
+ */
 export function createOptOut(did) {
 	return prisma.optOut.create({
 		data: { did },
 	})
 }
 
+/**
+ * Creates a new skeet.
+ *
+ * @param {{
+ *	cid: string,
+ *	feeds: string[],
+ *	replyParent: string,
+ *	replyRoot: string,
+ *	uri: string,
+ * }} skeet The skeet to be created.
+ * @returns {Promise<object>} The newly created skeet.
+ */
 export function createSkeet(skeet) {
 	const feeds = { connect: skeet.feeds.map(rkey => ({ rkey })) }
 
@@ -35,13 +73,27 @@ export function createSkeet(skeet) {
 	})
 }
 
-export async function createSkeets(skeets) {
-	return prisma.skeet.createMany({
-		data: skeets,
-		skipDuplicates: true,
+/**
+ * Deletes a block from the database.
+ *
+ * @param {import('@trezystudios/bsky-lib').AppBskyGraphListItemEvent} listItem The list item to be saved.
+ * @returns {Promise<{ count: number }>} The newly created block.
+ */
+export function deleteBlock(listItem) {
+	return prisma.block.deleteMany({
+		where: {
+			listOwnerDID: listItem.listOwner,
+			rkey: listItem.rkey,
+		},
 	})
 }
 
+/**
+ * Deletes a skeet from the database.
+ *
+ * @param {string} skeetURI The URI of the skeet.
+ * @returns {Promise<object>} The deleted skeet.
+ */
 export function deleteSkeet(skeetURI) {
 	return prisma.skeet.delete({
 		where: {
@@ -50,32 +102,38 @@ export function deleteSkeet(skeetURI) {
 	})
 }
 
-export function deleteSkeets(skeetURIs) {
-	return prisma.skeet.deleteMany({
-		where: {
-			uri: {
-				in: skeetURIs,
-			},
-		},
-	})
+/**
+ * Retrieves the most recent firehose cursor fro mthe database.
+ *
+ * @returns {Promise<null | number>} The cursor.
+ */
+export async function getCursor() {
+	const result = await prisma.firehoseCursor.findFirst()
+	return result?.seq
 }
 
-export function getCursor() {
-	return prisma.firehoseCursor.findFirst()
-}
-
-export function getFeed(rkey, options = {}) {
+/**
+ * Gets a page of a feed.
+ *
+ * @param {string} rkey The record key of the feed.
+ * @param {{
+ * 	cursor: null | string,
+ * 	limit: null | number,
+ * }} options Pagination options.
+ * @returns {Promise<{ skeets: object[] }>} The skeets in the page.
+ */
+export function getFeed(rkey, options) {
 	const {
 		cursor,
-		limit = 30
-	} = options
+		limit = 30,
+	} = options ?? {}
 
 	const query = {
 		/** @type {import('@prisma/client').Prisma.SkeetOrderByWithRelationInput} */
 		orderBy: {
 			indexedAt: 'desc',
 		},
-		take: Number(limit),
+		take: Math.max(Math.min(Number(limit), 100), 1),
 	}
 
 	if (cursor) {
@@ -94,11 +152,23 @@ export function getFeed(rkey, options = {}) {
 		})
 }
 
+/**
+ * Retrieves skeets using an arbitrary query.
+ *
+ * @param {object} query The query to be used.
+ * @returns {Promise<object[]>} The results.
+ */
 export function getSkeets(query) {
 	return prisma.skeet.findMany(query)
 }
 
-export async function updateCursor(seq) {
+/**
+ * Updates the cursor in the database.
+ *
+ * @param {number} seq The most recent `seq` field from a message.
+ * @returns {Promise<object>} The updagted cursor.
+ */
+export function updateCursor(seq) {
 	return prisma.$transaction([
 		prisma.firehoseCursor.deleteMany(),
 		prisma.firehoseCursor.create({
@@ -107,6 +177,12 @@ export async function updateCursor(seq) {
 	])
 }
 
+/**
+ * Updates data for a skeet that's already in the database.
+ *
+ * @param {object} skeet The updated skeet data.
+ * @returns {Promise<object>} The updated skeet.
+ */
 export function updateSkeet(skeet) {
 	return prisma.skeet.updateMany({
 		data: skeet,

@@ -242,6 +242,8 @@ export class FirehoseMessageOperation {
 
 	/**
 	 * Parses the message using the app.bsky.feed.post namespace.
+	 *
+	 * @returns {object} The event entity.
 	 */
 	#parseAppBskyFeedPostNamespace() {
 		this.#entity = new AppBskyFeedPostEvent(this)
@@ -305,6 +307,8 @@ export class FirehoseMessageOperation {
 
 	/**
 	 * Parses the message using the app.bsky.graph.listitem namespace.
+	 *
+	 * @returns {object} The event entity.
 	 */
 	#parseAppBskyGraphListItemNamespace() {
 		this.#entity = new AppBskyGraphListItemEvent(this)
@@ -451,11 +455,9 @@ export class FirehoseMessageOperation {
 			return
 		}
 
-		if (!this.cid) {
-			return
+		if (this.cid) {
+			this.#record = await this.#getRecord(this.cid)
 		}
-
-		this.#record = await this.#getRecord(this.cid)
 
 		switch (this.namespace[0]) {
 			case 'app':
@@ -479,9 +481,7 @@ export class FirehoseMessageOperation {
 	 * @returns {object} A plain object representing the deserialised operation.
 	 */
 	valueOf() {
-		const result = { namespace: this.serialisedNamespace }
-
-		return result
+		return { namespace: this.serialisedNamespace }
 	}
 
 

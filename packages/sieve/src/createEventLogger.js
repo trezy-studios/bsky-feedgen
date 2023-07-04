@@ -15,7 +15,10 @@ export function createEventLogger(eventType) {
 	const eventID = randomUUID()
 
 	/**
+	 * Logs the passed data with the associated event ID.
+	 *
 	 * @param {object} [data] Additional data to be logged.
+	 * @returns {string} A JSON string.
 	 */
 	return (data = {}) => JSON.stringify({
 		...data,

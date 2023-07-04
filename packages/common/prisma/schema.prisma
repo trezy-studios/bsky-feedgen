@@ -8,6 +8,14 @@ datasource db {
   relationMode = "prisma"
 }
 
+model Block {
+  did          String // muted user's did
+  listOwnerDID String // list owner's did
+  rkey         String @id // rkey of the list item
+
+  @@unique([listOwnerDID, rkey])
+}
+
 model Feed {
   description String
   name        String
@@ -17,11 +25,11 @@ model Feed {
 }
 
 model FirehoseCursor {
-  seq         Int     @id @unique
+  seq Int @id @unique
 }
 
 model OptOut {
-  did         String  @id @unique
+  did String @id @unique
 }
 
 model Skeet {

@@ -27,11 +27,21 @@ export class AppBskyGraphListItemEvent extends BaseFirehoseEvent {
 
 	/** @returns {string} The AT URI of the list. */
 	get list() {
-		return this.operation.record.list
+		return this.operation.record?.list
+	}
+
+	/** @returns {string} The AT URI of the list. */
+	get listOwner() {
+		return this.operation.did
+	}
+
+	/** @returns {string} The rKey of the list item */
+	get rkey() {
+		return this.operation.rkey
 	}
 
 	/** @returns {string} The dID of the user. */
 	get subject() {
-		return this.operation.record.subject
+		return this.operation.record?.subject
 	}
 }
