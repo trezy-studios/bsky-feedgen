@@ -265,13 +265,20 @@ async function handleSkeetCreate(skeet) {
 		}))
 	}
 
-	await database.createSkeet({
-		cid: skeet.cid.toString(),
-		feeds: relevantFeeds,
-		replyParent: skeet.replyParent,
-		replyRoot: skeet.replyRoot,
-		uri: skeet.uri,
-	})
+	try {
+		await database.createSkeet({
+			cid: skeet.cid.toString(),
+			feeds: relevantFeeds,
+			replyParent: skeet.replyParent,
+			replyRoot: skeet.replyRoot,
+			uri: skeet.uri,
+		})
+	} catch (error) {
+		logger.debug(createEventLog({
+			error,
+			message: 'error saving skeet',
+		}))
+	}
 }
 
 /**
