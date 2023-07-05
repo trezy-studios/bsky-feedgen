@@ -32,7 +32,15 @@ export async function loggerMiddleware(context, next) {
 	logger.debug({
 		message: 'Sending response',
 		body: context.response.body,
-		headers: context.response.headers,
+		headers: Object.entries(context.response.headers).reduce((accumulator, [key, value]) => {
+			if (key === 'authorization') {
+				accumulator[key] = 'Bearer **********'
+			} else {
+				accumulator[key] = value
+			}
+
+			return accumulator
+		}, {}),
 		status: `${context.response.status} ${context.response.message}`,
 	})
 }
