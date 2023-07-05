@@ -1,5 +1,4 @@
 // Module imports
-import { logFmtFormat } from 'winston-logfmt'
 import LokiTransport from 'winston-loki'
 import winston from 'winston'
 
@@ -17,9 +16,9 @@ export function createLogger(origin) {
 	const transports = [
 		new winston.transports.Console({
 			format: winston.format.combine(
-				winston.format.colorize(),
 				winston.format.timestamp(),
-				logFmtFormat(),
+				winston.format.json(),
+				winston.format.prettyPrint({ colorize: true }),
 			),
 		}),
 	]
@@ -30,7 +29,7 @@ export function createLogger(origin) {
 			basicAuth: `${process.env.GRAFANA_USERNAME}:${process.env.GRAFANA_PASSWORD}`,
 			format: winston.format.combine(
 				winston.format.timestamp(),
-				logFmtFormat(),
+				winston.format.json(),
 			),
 			host: process.env.GRAFANA_HOST,
 		}))
