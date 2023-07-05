@@ -72,12 +72,34 @@ let reconnectionTimerID = null
 
 
 /**
- * Binds events for each feed.
- *
- * @param {import('@trezystudios/bsky-common').Feed} feed
+ * Attempts to establish a connection to the firehose.
  */
-function bindFeed(feed) {
-	feed.bindFirehoseEvents(firehose)
+async function connectFirehose() {
+	const createEventLog = createEventLogger('connect firehose')
+
+	let dbCursor = null
+
+	try {
+		dbCursor = await database.getCursor()
+		logger.info(createEventLog({ message: 'connection established' }))
+	} catch (error) {
+		logger.error(createEventLog({
+			message: 'failed to retrieve cursor',
+			error,
+		}))
+		setTimeout(connectFirehose, 10000)
+		return
+	}
+
+	if (dbCursor) {
+		cursor = dbCursor
+	}
+
+	await firehose.connect({
+		cursor,
+		password: process.env.BSKY_APP_PASSWORD,
+		username: process.env.BSKY_USERNAME,
+	})
 }
 
 /**
@@ -136,37 +158,6 @@ async function handleListItemDelete(event) {
 			}))
 		}
 	}
-}
-
-/**
- * Attempts to establish a connection to the firehose.
- */
-async function connectFirehose() {
-	const createEventLog = createEventLogger('connect firehose')
-
-	let dbCursor = null
-
-	try {
-		dbCursor = await database.getCursor()
-		logger.info(createEventLog({ message: 'connection established' }))
-	} catch (error) {
-		logger.error(createEventLog({
-			message: 'failed to retrieve cursor',
-			error,
-		}))
-		setTimeout(connectFirehose, 10000)
-		return
-	}
-
-	if (dbCursor) {
-		cursor = dbCursor
-	}
-
-	await firehose.connect({
-		cursor,
-		password: process.env.BSKY_APP_PASSWORD,
-		username: process.env.BSKY_USERNAME,
-	})
 }
 
 /**
@@ -404,7 +395,5 @@ firehose.on('app.bsky.feed.post::create', handleSkeetCreate)
 firehose.on('app.bsky.feed.post::delete', handleSkeetDelete)
 firehose.on('app.bsky.graph.listitem::create', handleListItemCreate)
 firehose.on('app.bsky.graph.listitem::delete', handleListItemDelete)
-
-Object.values(feeds).forEach(bindFeed)
 
 connectFirehose()

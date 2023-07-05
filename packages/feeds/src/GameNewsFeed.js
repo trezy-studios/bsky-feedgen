@@ -48,6 +48,22 @@ export const GameNewsFeed = new class extends Feed {
 	 * Public instance getters/setters
 	\****************************************************************************/
 
+	/** @returns {string} The description of the feed. */
+	get description() {
+		return 'Video game news and releases. Opt in with #GameNews, opt out with #NoFeed or #NoGameNews. Discuss at https://trezy.studio/discord.'
+	}
+
+	/** @returns {string} The display name of the feed. */
+	get name() {
+		return 'Game News'
+	}
+
+	/** @returns {string} The DID of the feed's owner. */
+	get ownerDID() {
+		return 'did:plc:4jrld6fwpnwqehtce56qshzv'
+	}
+
+	/** @returns {string} The record key of the feed. */
 	get rkey() {
 		return 'game-news'
 	}

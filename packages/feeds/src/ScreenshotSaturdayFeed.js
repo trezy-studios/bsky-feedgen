@@ -72,6 +72,21 @@ class ScreenshotSaturdayFeedClass extends Feed {
 	 * Public instance getters/setters
 	\****************************************************************************/
 
+	/** @returns {string} The description of the feed. */
+	get description() {
+		return 'Every Saturday, game devs the world over post screenshots of their games! Give feedback and let them know how excited you are about them!'
+	}
+
+	/** @returns {string} The display name of the feed. */
+	get name() {
+		return 'Screenshot Saturday'
+	}
+
+	/** @returns {string} The DID of the feed's owner. */
+	get ownerDID() {
+		return 'did:plc:4jrld6fwpnwqehtce56qshzv'
+	}
+
 	/** @returns {string} The record key of the feed. */
 	get rkey() {
 		return 'screenshot-saturday'

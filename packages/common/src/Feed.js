@@ -19,10 +19,6 @@ export class Feed {
 
 	/** Creates a new feed instance. */
 	constructor() {
-		if (('bindFirehoseEvents' in this) && (typeof this.bindFirehoseEvents !== 'function')) {
-			throw new Error('`bindFirehoseEvents` must be a function.')
-		}
-
 		if (!('generateFeed' in this)) {
 			throw new Error('`generateFeed` is required.')
 		}
@@ -47,13 +43,6 @@ export class Feed {
 	/****************************************************************************\
 	 * Public instance methods
 	\****************************************************************************/
-
-	/**
-	 * Bind events to the firehose. Useful for capturing events to be parsed.
-	 *
-	 * @param {import('@trezystudios/bsky-lib').Firehose} firehose The firehose to which these events will be bound.
-	 */
-	bindFirehoseEvents(firehose) {}
 
 	/**
 	 * Generate the feed.
@@ -86,6 +75,21 @@ export class Feed {
 	/****************************************************************************\
 	 * Public instance getters/setters
 	\****************************************************************************/
+
+	/** @returns {string} The description of the feed. */
+	get description() {
+		return ''
+	}
+
+	/** @returns {string} The display name of the feed. */
+	get name() {
+		return ''
+	}
+
+	/** @returns {string} The DID of the feed's owner. */
+	get ownerDID() {
+		return ''
+	}
 
 	/** @returns {string} The record key of the feed. */
 	get rkey() {
