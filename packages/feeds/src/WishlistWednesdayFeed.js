@@ -69,6 +69,6 @@ export const WishlistWednesdayFeed = new WishlistWednesdayFeedClass({
 	description: 'Every Wednesday, game devs the world over post links to their games\' store pages! Wishlisting is a great way to support the games you\'re excited about, so hit that wishlist button liberally!',
 	image: 'WishlistWednesdayFeed.png',
 	name: 'Wishlist Wednesday',
-	ownerDID: 'did:plc:4jrld6fwpnwqehtce56qshzv',
-	rkey: 'wishlist-wednesday',
+	ownerDID: 'did:web:bsky-feeds.trezy.studio',
+	rkey: 'wishlist-wed',
 })

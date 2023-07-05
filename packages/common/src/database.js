@@ -120,7 +120,7 @@ export async function getCursor() {
  * 	cursor: null | string,
  * 	limit: null | number,
  * }} options Pagination options.
- * @returns {Promise<{ skeets: object[] }>} The skeets in the page.
+ * @returns {Promise<{ skeets: { uri: string }[] }>} The skeets in the page.
  */
 export function getFeed(rkey, options) {
 	const {
@@ -169,12 +169,19 @@ export function getSkeets(query) {
  * @returns {Promise<object>} The updated feed.
  */
 export function saveFeed(feed) {
+	const feedData = {
+		description: feed.description,
+		name: feed.name,
+		ownerDID: feed.ownerDID,
+		rkey: feed.rkey,
+	}
+
 	return prisma.feed.upsert({
 		where: {
-			rkey: feed.feed,
+			rkey: feed.rkey,
 		},
-		create: feed,
-		update: feed,
+		create: feedData,
+		update: feedData,
 	})
 }
 

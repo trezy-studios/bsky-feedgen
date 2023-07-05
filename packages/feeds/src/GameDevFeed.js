@@ -86,6 +86,6 @@ export const GameDevFeed = new GameDevFeedClass({
 	description: 'Skeets about game development and design. Opt out with #nofeed or #nogamedev. Discuss at https://trezy.studio/discord.',
 	image: 'GameDevFeed.png',
 	name: 'Game Dev',
-	ownerDID: 'did:plc:4jrld6fwpnwqehtce56qshzv',
+	ownerDID: 'did:web:bsky-feeds.trezy.studio',
 	rkey: 'game-dev',
 })

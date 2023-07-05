@@ -4,7 +4,9 @@ import {
 	parseATURL,
 } from '@trezystudios/bsky-lib'
 import { database } from '@trezystudios/bsky-common'
-import * as feeds from '@trezystudios/bsky-feeds'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import * as feedsMap from '@trezystudios/bsky-feeds'
 
 
 
@@ -48,6 +50,7 @@ const blockListsMap = {
 }
 const allBlockLists = Object.values(blockListsMap).flat()
 const blockListOwners = Object.keys(blockListsMap)
+const feeds = Object.values(feedsMap)
 const firehose = new Firehose
 
 
@@ -57,6 +60,8 @@ const firehose = new Firehose
 // Variables
 let cursor = 0
 let cursorUpdateIntervalID = null
+let hasPublishedFeeds = false
+let isPublishingFeeds = false
 let reconnectionTimerID = null
 
 
@@ -188,6 +193,11 @@ function handleFirehoseOpen() {
 	cursorUpdateIntervalID = setInterval(async() => {
 		await database.updateCursor(cursor)
 	}, 30000)
+
+	if (!isPublishingFeeds && !hasPublishedFeeds) {
+		isPublishingFeeds = true
+		publishFeeds()
+	}
 }
 
 /**
@@ -220,13 +230,12 @@ async function handleSkeetCreate(skeet) {
 		text: skeet.text,
 	}))
 
-	const feedsArray = Object.values(feeds)
 	const relevantFeeds = []
 
 	let feedIndex = 0
 
-	while (feedIndex < feedsArray.length) {
-		const feed = feedsArray[feedIndex]
+	while (feedIndex < feeds.length) {
+		const feed = feeds[feedIndex]
 		const isRelevantSkeet = await feed.testSkeet(skeet)
 
 		if (isRelevantSkeet) {
@@ -278,6 +287,60 @@ async function handleSkeetDelete(skeet) {
 			}))
 		}
 	}
+}
+
+/**
+ * Loops over feeds and publishes them.
+ */
+async function publishFeeds() {
+	const bskyAgent = firehose.api.agent
+
+	let feedIndex = 0
+
+	try {
+		while (feedIndex < feeds.length) {
+			const feed = feeds[feedIndex]
+			const feedImagePath = path.resolve('../', 'feeds', 'images', feed.image)
+
+			let encoding
+
+			if (feedImagePath.endsWith('png')) {
+				encoding = 'image/png'
+			} else if (feedImagePath.endsWith('jpg') || feedImagePath.endsWith('jpeg')) {
+				encoding = 'image/jpeg'
+			} else {
+				throw new Error('expected png or jpeg')
+			}
+
+			// eslint-disable-next-line security/detect-non-literal-fs-filename
+			const image = await fs.readFile(feedImagePath)
+			const blobRes = await bskyAgent.api.com.atproto.repo.uploadBlob(image, { encoding })
+			const avatarRef = blobRes.data.blob
+
+			await bskyAgent.api.com.atproto.repo.putRecord({
+				repo: bskyAgent.session?.did ?? '',
+				collection: 'app.bsky.feed.generator', //ids.AppBskyFeedGenerator,
+				rkey: feed.rkey,
+				record: {
+					avatar: avatarRef,
+					createdAt: (new Date).toISOString(),
+					description: feed.description,
+					did: feed.ownerDID,
+					displayName: feed.name,
+				},
+			})
+
+			await database.saveFeed(feed)
+
+			feedIndex += 1
+		}
+
+		hasPublishedFeeds = true
+	} catch (error) {
+		console.log(error)
+	}
+
+	isPublishingFeeds = false
 }
 
 /**

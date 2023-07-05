@@ -69,6 +69,6 @@ export const ScreenshotSaturdayFeed = new ScreenshotSaturdayFeedClass({
 	description: 'Every Saturday, game devs the world over post screenshots of their games! Give feedback and let them know how excited you are about them!',
 	image: 'ScreenshotSaturdayFeed.png',
 	name: 'Screenshot Saturday',
-	ownerDID: 'did:plc:4jrld6fwpnwqehtce56qshzv',
-	rkey: 'screenshot-saturday',
+	ownerDID: 'did:web:bsky-feeds.trezy.studio',
+	rkey: 'screenshot-sat',
 })
