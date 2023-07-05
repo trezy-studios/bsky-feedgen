@@ -80,34 +80,12 @@ class GameDevFeedClass extends Feed {
 
 		return rootSkeets.includes(skeet.replyParent)
 	}
-
-
-
-
-
-	/****************************************************************************\
-	 * Public instance getters/setters
-	\****************************************************************************/
-
-	/** @returns {string} The description of the feed. */
-	get description() {
-		return 'Skeets about game development and design. Opt out with #nofeed or #nogamedev. Discuss at https://trezy.studio/discord.'
-	}
-
-	/** @returns {string} The display name of the feed. */
-	get name() {
-		return 'Game Dev'
-	}
-
-	/** @returns {string} The DID of the feed's owner. */
-	get ownerDID() {
-		return 'did:plc:4jrld6fwpnwqehtce56qshzv'
-	}
-
-	/** @returns {string} The record key of the feed. */
-	get rkey() {
-		return 'game-dev'
-	}
 }
 
-export const GameDevFeed = new GameDevFeedClass
+export const GameDevFeed = new GameDevFeedClass({
+	description: 'Skeets about game development and design. Opt out with #nofeed or #nogamedev. Discuss at https://trezy.studio/discord.',
+	image: 'GameDevFeed.png',
+	name: 'Game Dev',
+	ownerDID: 'did:plc:4jrld6fwpnwqehtce56qshzv',
+	rkey: 'game-dev',
+})

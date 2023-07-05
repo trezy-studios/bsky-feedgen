@@ -63,34 +63,12 @@ class WishlistWednesdayFeedClass extends Feed {
 
 		return /wishlist\s?wednesday/giu.test(skeet.text)
 	}
-
-
-
-
-
-	/****************************************************************************\
-	 * Public instance getters/setters
-	\****************************************************************************/
-
-	/** @returns {string} The description of the feed. */
-	get description() {
-		return 'Every Wednesday, game devs the world over post links to their games\' store pages! Wishlisting is a great way to support the games you\'re excited about, so hit that wishlist button liberally!'
-	}
-
-	/** @returns {string} The display name of the feed. */
-	get name() {
-		return 'Wishlist Wednesday'
-	}
-
-	/** @returns {string} The DID of the feed's owner. */
-	get ownerDID() {
-		return 'did:plc:4jrld6fwpnwqehtce56qshzv'
-	}
-
-	/** @returns {string} The record key of the feed. */
-	get rkey() {
-		return 'wishlist-wednesday'
-	}
 }
 
-export const WishlistWednesdayFeed = new WishlistWednesdayFeedClass
+export const WishlistWednesdayFeed = new WishlistWednesdayFeedClass({
+	description: 'Every Wednesday, game devs the world over post links to their games\' store pages! Wishlisting is a great way to support the games you\'re excited about, so hit that wishlist button liberally!',
+	image: 'WishlistWednesdayFeed.png',
+	name: 'Wishlist Wednesday',
+	ownerDID: 'did:plc:4jrld6fwpnwqehtce56qshzv',
+	rkey: 'wishlist-wednesday',
+})

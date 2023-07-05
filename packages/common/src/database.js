@@ -163,6 +163,22 @@ export function getSkeets(query) {
 }
 
 /**
+ * Creates or updates a feed in the database.
+ *
+ * @param {object} feed The feed data to be saved.
+ * @returns {Promise<object>} The updated feed.
+ */
+export function saveFeed(feed) {
+	return prisma.feed.upsert({
+		where: {
+			rkey: feed.feed,
+		},
+		create: feed,
+		update: feed,
+	})
+}
+
+/**
  * Updates the cursor in the database.
  *
  * @param {number} seq The most recent `seq` field from a message.
