@@ -6,6 +6,7 @@ import {
 import { database } from '@trezystudios/bsky-common'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import promClient from 'prom-client'
 import * as feedsMap from '@trezystudios/bsky-feeds'
 
 
@@ -478,3 +479,7 @@ firehose.on('app.bsky.graph.listitem::create', handleListItemCreate)
 firehose.on('app.bsky.graph.listitem::delete', handleListItemDelete)
 
 connectFirehose()
+
+promClient.collectDefaultMetrics({
+	labels: { job: 'sieve' },
+})
