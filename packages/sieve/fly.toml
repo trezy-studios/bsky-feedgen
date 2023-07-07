@@ -1,0 +1,18 @@
+# fly.toml app configuration file generated for bsky-feedgen-sieve on 2023-07-05T17:09:50-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "bsky-feedgen-sieve"
+primary_region = "ord"
+
+[env]
+  BSKY_USERNAME = "trezy.codes"
+  LOG_LEVEL = "silly"
+
+[build]
+  dockerfile = "./Dockerfile"
+
+[metrics]
+  path = "/metrics"
+  port = 9091
