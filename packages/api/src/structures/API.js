@@ -66,9 +66,9 @@ class APIClass {
 	 * Connects middleware to the Koa server.
 	 */
 	#mountMiddleware() {
-		this.#client.use(loggerMiddleware)
 		this.#client.use(noTrailingSlash())
 		this.#client.use(compress())
+		this.#client.use(loggerMiddleware)
 		this.#client.use(cors())
 		this.#client.use(body())
 		this.#client.use(statusCodeGenerator)
