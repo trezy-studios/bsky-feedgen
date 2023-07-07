@@ -25,7 +25,7 @@ export const route = new Route({
 	 *
 	 * @param {import('koa').Context} context The request context.
 	 */
-	async handler(context) {
+	handler(context) {
 		const feeds = Object.values(feedMap)
 			.map(feed => ({ uri: `${baseURI}/${feed.rkey}` }))
 
