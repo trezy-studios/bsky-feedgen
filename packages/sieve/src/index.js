@@ -338,7 +338,7 @@ async function publishFeeds() {
 
 			await bskyAgent.api.com.atproto.repo.putRecord({
 				repo: bskyAgent.session?.did ?? '',
-				collection: 'app.bsky.feed.generator', //ids.AppBskyFeedGenerator,
+				collection: 'app.bsky.feed.generator',
 				rkey: feed.rkey,
 				record: {
 					avatar: avatarRef,
