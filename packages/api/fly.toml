@@ -8,8 +8,9 @@ primary_region = "ord"
 
 [env]
   BSKY_USERNAME = "trezy.codes"
+  FEEDGEN_HOSTNAME = "bsky-feeds.trezy.studio"
   LOG_LEVEL = "silly"
-  OWNER_DID="did:plc:4jrld6fwpnwqehtce56qshzv"
+  OWNER_DID = "did:plc:4jrld6fwpnwqehtce56qshzv"
 
 [build]
   dockerfile = "./Dockerfile"
