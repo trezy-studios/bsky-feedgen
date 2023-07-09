@@ -1,5 +1,6 @@
 // Module imports
 import body from 'koa-body'
+import { collectDefaultMetrics } from 'prom-client'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
 import Koa from 'koa'
@@ -17,6 +18,8 @@ import { route as getFeedSkeletonRoute } from '../routes/xrpc/app.bsky.feed.getF
 import { route as healthCheckRoute } from '../routes/health.js'
 import { logger } from '../helpers/logger.js'
 import { loggerMiddleware } from '../middleware/logger.js'
+import { metricsMiddleware } from '../middleware/metricsMiddleware.js'
+import { route as metricsRoute } from '../routes/metrics.js'
 import { statusCodeGenerator } from '../middleware/statusCodeGenerator.js'
 
 
@@ -49,6 +52,9 @@ class APIClass {
 	 * Creates a new API.
 	 */
 	constructor() {
+		collectDefaultMetrics({
+			prefix: process.env.METRICS_PREFIX,
+		})
 		this.#mountMiddleware()
 		this.#mountRoutes()
 		this.#mountRouter()
@@ -66,6 +72,7 @@ class APIClass {
 	 * Connects middleware to the Koa server.
 	 */
 	#mountMiddleware() {
+		this.#client.use(metricsMiddleware)
 		this.#client.use(noTrailingSlash())
 		this.#client.use(compress())
 		this.#client.use(loggerMiddleware)
@@ -82,6 +89,7 @@ class APIClass {
 		didJSONRoute.mount(this.#router)
 		getFeedSkeletonRoute.mount(this.#router)
 		healthCheckRoute.mount(this.#router)
+		metricsRoute.mount(this.#router)
 	}
 
 	/**
