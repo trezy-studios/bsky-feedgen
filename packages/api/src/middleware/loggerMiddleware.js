@@ -29,11 +29,14 @@ export async function loggerMiddleware(context, next) {
 		value: performance.now() - now,
 	})
 
+	// eslint-disable-next-line require-atomic-updates
+	context.headers['x-response-generation-time'] = `${performance.now() - now}`
+
 	logger.debug({
 		message: 'Sending response',
 		body: context.response.body,
 		headers: Object.entries(context.response.headers).reduce((accumulator, [key, value]) => {
-			if (key === 'authorization') {
+			if (key.toLowerCase() === 'authorization') {
 				accumulator[key] = 'Bearer **********'
 			} else {
 				accumulator[key] = value
