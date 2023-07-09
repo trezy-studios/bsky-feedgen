@@ -1,4 +1,5 @@
 // Module imports
+import { Histogram } from 'prom-client'
 import { parseATURL } from '@trezystudios/bsky-lib'
 import * as feedMap from '@trezystudios/bsky-feeds'
 
@@ -8,6 +9,16 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 // Local imports
 import { Route } from '../../structures/Route.js'
+
+
+
+
+
+// Constants
+const feedgenTimer = new Histogram({
+	help: 'The time required to generate the feed response.',
+	name: `${process.env.METRICS_PREFIX}feedgen_timer`,
+})
 
 
 
@@ -91,8 +102,12 @@ export const route = new Route({
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
+		const endFeedgenTimer = feedgenTimer.startTimer()
+
 		// eslint-disable-next-line require-atomic-updates
 		context.body = await feedController.generateFeed(cursor, limit)
+
+		endFeedgenTimer()
 	},
 
 	route: '/xrpc/app.bsky.feed.getFeedSkeleton',
