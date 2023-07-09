@@ -29,9 +29,6 @@ export async function loggerMiddleware(context, next) {
 		value: performance.now() - now,
 	})
 
-	// eslint-disable-next-line require-atomic-updates
-	context.headers['x-response-generation-time'] = `${performance.now() - now}`
-
 	logger.debug({
 		message: 'Sending response',
 		body: context.response.body,

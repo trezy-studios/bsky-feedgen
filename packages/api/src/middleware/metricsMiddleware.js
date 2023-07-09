@@ -29,10 +29,15 @@ const responseTimer = new Histogram({
  * @param {Function} next The function to be executed when this middleware is ready to run the next middleware.
  */
 export async function metricsMiddleware(context, next) {
-	requestCounter.inc()
+	const now = performance.now()
+
 	const endResponseTimer = responseTimer.startTimer()
+	requestCounter.inc()
 
 	await next()
+
+	// eslint-disable-next-line require-atomic-updates
+	context.res.setHeader('x-response-generation-time', `${Math.round(performance.now() - now)}ms`)
 
 	endResponseTimer()
 }

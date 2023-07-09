@@ -7,7 +7,6 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 // Local imports
-import { logger } from '../../helpers/logger.js'
 import { Route } from '../../structures/Route.js'
 
 
