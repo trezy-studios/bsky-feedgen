@@ -6,6 +6,16 @@ import winston from 'winston'
 
 
 
+// Constants
+const formatters = [
+	winston.format.timestamp(),
+	winston.format.json(),
+]
+
+if (Number(process.env.PRETTY_LOGS)) {
+	formatters.push(winston.format.prettyPrint({ colorize: true }))
+}
+
 /**
  * Creates a new logger.
  *
@@ -15,11 +25,7 @@ import winston from 'winston'
 export function createLogger(origin) {
 	const transports = [
 		new winston.transports.Console({
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.json(),
-				winston.format.prettyPrint({ colorize: true }),
-			),
+			format: winston.format.combine(...formatters),
 		}),
 	]
 
@@ -27,10 +33,7 @@ export function createLogger(origin) {
 		// @ts-ignore
 		transports.push(new LokiTransport({
 			basicAuth: `${process.env.GRAFANA_USERNAME}:${process.env.GRAFANA_PASSWORD}`,
-			format: winston.format.combine(
-				winston.format.timestamp(),
-				winston.format.json(),
-			),
+			format: winston.format.combine(...formatters),
 			host: process.env.GRAFANA_HOST,
 		}))
 	}
