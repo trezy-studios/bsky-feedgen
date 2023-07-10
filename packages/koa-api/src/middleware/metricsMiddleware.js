@@ -1,5 +1,8 @@
 // Module imports
-import { promClient } from '@trezystudios/bsky-common'
+import {
+	Counter,
+	Histogram,
+} from 'prom-client'
 
 
 
@@ -7,11 +10,11 @@ import { promClient } from '@trezystudios/bsky-common'
 
 /** @returns {Function} The metrics middleware. */
 export function metricsMiddleware() {
-	const requestCounter = new promClient.Counter({
+	const requestCounter = new Counter({
 		name: `${process.env.METRICS_PREFIX}request_count`,
 		help: 'The number of requests that have been made received.',
 	})
-	const responseTimer = new promClient.Histogram({
+	const responseTimer = new Histogram({
 		name: `${process.env.METRICS_PREFIX}response_timer`,
 		help: 'The length of time required to generate a response.',
 	})

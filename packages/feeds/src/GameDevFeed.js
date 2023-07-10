@@ -2,8 +2,8 @@
 import {
 	database,
 	Feed,
-	promClient,
 } from '@trezystudios/bsky-common'
+import { Histogram } from 'prom-client'
 
 
 
@@ -11,7 +11,7 @@ import {
 
 // Constants
 const metricsPrefix = 'game_dev_feed_'
-const feedRetrievalTimer = new promClient.Histogram({
+const feedRetrievalTimer = new Histogram({
 	help: 'The length of time it takes for the database to return the feed response.',
 	name: `${metricsPrefix}feed_retrieval_timer`,
 })

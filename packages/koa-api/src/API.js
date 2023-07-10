@@ -1,7 +1,6 @@
 // Module imports
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
-import { promClient } from '@trezystudios/bsky-common'
 
 
 
@@ -9,12 +8,11 @@ import { promClient } from '@trezystudios/bsky-common'
 
 /**
  * @typedef {object} APIConfig
- * @property {boolean} [enableMetrics] Whether to enable collection of default metrics.
  * @property {object} [logger] A Winston-compatible logger.
- * @property {string} [metricsPrefix] A string to prefix all metrics names with.
  * @property {Function[]} [middleware] Default middleware to be run for every route.
- * @property {import('./Route.js').Route[]} [routes] Routes to be mounted.
+ * @property {Function} [onStart] A function to be called when the API has been started.
  * @property {number} [port] The port to bind the server to.
+ * @property {import('./Route.js').Route[]} [routes] Routes to be mounted.
  */
 
 
@@ -50,17 +48,17 @@ export class API {
 	 */
 	constructor(config = {}) {
 		const {
-			enableMetrics = false,
 			logger,
 			middleware = [],
+			onStart,
 			port,
 			routes = [],
 		} = config
 
 		this.#config = {
-			enableMetrics,
 			logger,
 			middleware,
+			onStart,
 			port,
 			routes,
 		}
@@ -114,21 +112,18 @@ export class API {
 	/**
 	 * Starts the Koa server.
 	 */
-	start() {
+	async start() {
 		const {
-			enableMetrics,
 			logger,
-			metricsPrefix,
+			onStart,
 			port = process.env.PORT ?? 3000,
 		} = this.#config
 
-		if (enableMetrics) {
-			promClient.collectDefaultMetrics({
-				prefix: metricsPrefix ?? '',
-			})
-		}
-
 		this.#client.listen(port)
+
+		if (onStart) {
+			await onStart(this)
+		}
 
 		logger.info(`API is ready; listening on port ${port}.`)
 	}

@@ -1,6 +1,6 @@
 // Module imports
+import { Histogram } from 'prom-client'
 import { parseATURL } from '@trezystudios/bsky-lib'
-import { promClient } from '@trezystudios/bsky-common'
 import { Route } from '@trezystudios/koa-api'
 import * as feedMap from '@trezystudios/bsky-feeds'
 
@@ -9,7 +9,7 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 // Constants
-const feedgenTimer = new promClient.Histogram({
+const feedgenTimer = new Histogram({
 	help: 'The time required to generate the feed response.',
 	name: `${process.env.METRICS_PREFIX}feedgen_timer`,
 })

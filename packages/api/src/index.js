@@ -6,6 +6,7 @@ import {
 	statusCodeGeneratorMiddleware,
 } from '@trezystudios/koa-api'
 import body from 'koa-body'
+import { collectDefaultMetrics } from 'prom-client'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
 import noTrailingSlash from 'koa-no-trailing-slash'
@@ -28,9 +29,7 @@ import { route as metricsRoute } from './routes/metrics.js'
 
 // Start the web server
 const api = new API({
-	enableMetrics: true,
 	logger,
-	metricsPrefix: process.env.METRICS_PREFIX,
 	middleware: [
 		metricsMiddleware(),
 		noTrailingSlash(),
@@ -47,6 +46,11 @@ const api = new API({
 		healthCheckRoute,
 		metricsRoute,
 	],
+
+	/** Collect default system metrics. */
+	onStart() {
+		collectDefaultMetrics({ prefix: process.env.METRICS_PREFIX })
+	},
 })
 
 api.start()
