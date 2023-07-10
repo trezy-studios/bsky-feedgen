@@ -988,6 +988,7 @@ __metadata:
     "@trezystudios/bsky-common": "workspace:*"
     "@trezystudios/bsky-feeds": "workspace:*"
     "@trezystudios/bsky-lib": "workspace:*"
+    "@trezystudios/koa-api": "workspace:*"
     "@types/koa": ^2.13.6
     "@types/koa-compress": ^4.0.3
     "@types/koa-router": ^7.4.4
@@ -1085,6 +1086,27 @@ __metadata:
     multiformats: ^9.9.0
     nodemon: ^2.0.22
     prom-client: ^14.2.0
+  languageName: unknown
+  linkType: soft
+
+"@trezystudios/koa-api@workspace:*, @trezystudios/koa-api@workspace:packages/koa-api":
+  version: 0.0.0-use.local
+  resolution: "@trezystudios/koa-api@workspace:packages/koa-api"
+  dependencies:
+    "@koa/cors": ^3.4.3
+    "@trezystudios/bsky-common": "workspace:*"
+    "@types/koa": ^2.13.6
+    "@types/koa-compress": ^4.0.3
+    "@types/koa-router": ^7.4.4
+    "@types/koa__cors": ^4.0.0
+    "@types/node": ^20.3.3
+    better-docs: ^2.7.2
+    dotenv: ^16.3.1
+    koa: ^2.14.2
+    koa-body: ^5.0.0
+    koa-compress: ^5.1.1
+    koa-no-trailing-slash: ^2.1.0
+    koa-router: ^12.0.0
   languageName: unknown
   linkType: soft
 

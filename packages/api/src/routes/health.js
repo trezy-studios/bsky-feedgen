@@ -1,6 +1,6 @@
 // Local imports
 import { bodyBuilder } from '../middleware/bodyBuilder.js'
-import { Route } from '../structures/Route.js'
+import { Route } from '@trezystudios/koa-api'
 
 
 

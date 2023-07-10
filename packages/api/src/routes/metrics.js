@@ -1,6 +1,6 @@
 // Local imports
 import { register } from 'prom-client'
-import { Route } from '../structures/Route.js'
+import { Route } from '@trezystudios/koa-api'
 
 
 

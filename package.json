@@ -5,6 +5,7 @@
     "packages/api",
     "packages/common",
     "packages/feeds",
+    "packages/koa-api",
     "packages/lib",
     "packages/scripts",
     "packages/sieve"
@@ -19,8 +20,9 @@
     "dev": "yarn dev:api && yarn dev:sieve",
     "generate-types:common": "yarn workspace @trezystudios/bsky-common generate-types",
     "generate-types:feeds": "yarn workspace @trezystudios/bsky-feeds generate-types",
+    "generate-types:koa-api": "yarn workspace @trezystudios/koa-api generate-types",
     "generate-types:lib": "yarn workspace @trezystudios/bsky-lib generate-types",
-    "generate-types": "yarn generate-types:common && yarn generate-types:feeds && yarn generate-types:lib",
+    "generate-types": "yarn generate-types:common && yarn generate-types:feeds && yarn generate-types:koa-api && yarn generate-types:lib",
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
     "lint:common": "yarn workspace @trezystudios/bsky-common eslint ./src/",
     "lint:lib": "yarn workspace @trezystudios/bsky-common eslint ./src/",

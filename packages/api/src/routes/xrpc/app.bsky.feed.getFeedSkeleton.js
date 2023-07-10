@@ -8,7 +8,7 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 // Local imports
-import { Route } from '../../structures/Route.js'
+import { Route } from '@trezystudios/koa-api'
 
 
 
