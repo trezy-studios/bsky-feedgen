@@ -1,14 +1,8 @@
 // Module imports
 import { parseATURL } from '@trezystudios/bsky-lib'
 import { promClient } from '@trezystudios/bsky-common'
-import * as feedMap from '@trezystudios/bsky-feeds'
-
-
-
-
-
-// Local imports
 import { Route } from '@trezystudios/koa-api'
+import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 

@@ -1,5 +1,10 @@
 // Module imports
-import { API } from '@trezystudios/koa-api'
+import {
+	API,
+	loggerMiddleware,
+	metricsMiddleware,
+	statusCodeGeneratorMiddleware,
+} from '@trezystudios/koa-api'
 import body from 'koa-body'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
@@ -15,10 +20,7 @@ import { route as didJSONRoute } from './routes/.well-known/did.json.js'
 import { route as getFeedSkeletonRoute } from './routes/xrpc/app.bsky.feed.getFeedSkeleton.js'
 import { route as healthCheckRoute } from './routes/health.js'
 import { logger } from './helpers/logger.js'
-import { loggerMiddleware } from './middleware/loggerMiddleware.js'
-import { metricsMiddleware } from './middleware/metricsMiddleware.js'
 import { route as metricsRoute } from './routes/metrics.js'
-import { statusCodeGenerator } from './middleware/statusCodeGenerator.js'
 
 
 
@@ -30,13 +32,13 @@ const api = new API({
 	logger,
 	metricsPrefix: process.env.METRICS_PREFIX,
 	middleware: [
-		metricsMiddleware,
+		metricsMiddleware(),
 		noTrailingSlash(),
 		compress(),
-		loggerMiddleware,
+		loggerMiddleware(logger),
 		cors(),
 		body(),
-		statusCodeGenerator,
+		statusCodeGeneratorMiddleware(),
 	],
 	routes: [
 		describeFeedGeneratorRoute,

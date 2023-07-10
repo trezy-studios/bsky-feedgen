@@ -16,7 +16,6 @@
     "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
     "@trezystudios/koa-api": "workspace:*",
-    "@types/koa-router": "^7.4.4",
     "dotenv": "^16.3.1",
     "koa": "^2.14.2",
     "koa-body": "^5.0.0",
@@ -27,6 +26,7 @@
   "devDependencies": {
     "@types/koa": "^2.13.6",
     "@types/koa-compress": "^4.0.3",
+    "@types/koa-router": "^7.4.4",
     "@types/koa__cors": "^4.0.0",
     "@types/node": "^20.3.3",
     "better-docs": "^2.7.2",

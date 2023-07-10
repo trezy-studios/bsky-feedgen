@@ -1,12 +1,6 @@
 // Module imports
-import * as feedMap from '@trezystudios/bsky-feeds'
-
-
-
-
-
-// Local imports
 import { Route } from '@trezystudios/koa-api'
+import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 

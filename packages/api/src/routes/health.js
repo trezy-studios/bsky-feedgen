@@ -1,6 +1,8 @@
-// Local imports
-import { bodyBuilder } from '../middleware/bodyBuilder.js'
-import { Route } from '@trezystudios/koa-api'
+// Module imports
+import {
+	bodyBuilderMiddleware,
+	Route,
+} from '@trezystudios/koa-api'
 
 
 
@@ -17,6 +19,6 @@ export const route = new Route({
 			status: 'healthy',
 		}
 	},
-	middlewares: [bodyBuilder],
+	middlewares: [bodyBuilderMiddleware()],
 	route: '/health',
 })
