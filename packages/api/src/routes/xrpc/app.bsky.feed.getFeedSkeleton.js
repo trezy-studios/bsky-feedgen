@@ -96,13 +96,10 @@ export const route = new Route({
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
-		const now = performance.now()
 		const endFeedgenTimer = feedgenTimer.startTimer()
 
 		// eslint-disable-next-line require-atomic-updates
 		context.body = await feedController.generateFeed(cursor, limit)
-
-		console.log('feedgenTime:', performance.now() - now)
 
 		endFeedgenTimer()
 	},

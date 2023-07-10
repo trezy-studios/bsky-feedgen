@@ -6,7 +6,6 @@ import {
 	statusCodeGeneratorMiddleware,
 } from '@trezystudios/koa-api'
 import body from 'koa-body'
-import { collectDefaultMetrics } from 'prom-client'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
 import noTrailingSlash from 'koa-no-trailing-slash'
@@ -19,6 +18,7 @@ import noTrailingSlash from 'koa-no-trailing-slash'
 import { route as describeFeedGeneratorRoute } from './routes/xrpc/app.bsky.feed.describeFeedGenerator.js'
 import { route as didJSONRoute } from './routes/.well-known/did.json.js'
 import { route as getFeedSkeletonRoute } from './routes/xrpc/app.bsky.feed.getFeedSkeleton.js'
+import { handleStart } from './helpers/handleStart.js'
 import { route as healthCheckRoute } from './routes/health.js'
 import { logger } from './helpers/logger.js'
 import { route as metricsRoute } from './routes/metrics.js'
@@ -39,6 +39,7 @@ const api = new API({
 		body(),
 		statusCodeGeneratorMiddleware(),
 	],
+	onStart: handleStart,
 	routes: [
 		describeFeedGeneratorRoute,
 		didJSONRoute,
@@ -46,11 +47,6 @@ const api = new API({
 		healthCheckRoute,
 		metricsRoute,
 	],
-
-	/** Collect default system metrics. */
-	onStart() {
-		collectDefaultMetrics({ prefix: process.env.METRICS_PREFIX })
-	},
 })
 
 api.start()
