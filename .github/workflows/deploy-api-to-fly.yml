@@ -8,6 +8,7 @@ on:
       - 'packages/common/**/*'
       - 'packages/feeds/**/*'
       - 'packages/lib/**/*'
+      - 'packages/koa-api/**/*'
 
 jobs:
   deploy:
