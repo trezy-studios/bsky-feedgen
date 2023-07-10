@@ -1,19 +1,16 @@
 // Module imports
-import {
-	Counter,
-	Histogram,
-} from 'prom-client'
+import { promClient } from '@trezystudios/bsky-common'
 
 
 
 
 
 // Constants
-const requestCounter = new Counter({
+const requestCounter = new promClient.Counter({
 	name: `${process.env.METRICS_PREFIX}request_count`,
 	help: 'The number of requests that have been made received.',
 })
-const responseTimer = new Histogram({
+const responseTimer = new promClient.Histogram({
 	name: `${process.env.METRICS_PREFIX}response_timer`,
 	help: 'The length of time required to generate a response.',
 })

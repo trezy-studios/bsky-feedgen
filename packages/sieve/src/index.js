@@ -1,12 +1,14 @@
 // Module imports
 import {
+	database,
+	promClient,
+} from '@trezystudios/bsky-common'
+import {
 	Firehose,
 	parseATURL,
 } from '@trezystudios/bsky-lib'
-import { database } from '@trezystudios/bsky-common'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import promClient from 'prom-client'
 import * as feedsMap from '@trezystudios/bsky-feeds'
 
 

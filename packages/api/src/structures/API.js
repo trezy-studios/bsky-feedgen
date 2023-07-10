@@ -1,11 +1,11 @@
 // Module imports
 import body from 'koa-body'
-import { collectDefaultMetrics } from 'prom-client'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
 import noTrailingSlash from 'koa-no-trailing-slash'
+import { promClient } from '@trezystudios/bsky-common'
 
 
 
@@ -52,7 +52,7 @@ class APIClass {
 	 * Creates a new API.
 	 */
 	constructor() {
-		collectDefaultMetrics({
+		promClient.collectDefaultMetrics({
 			prefix: process.env.METRICS_PREFIX,
 		})
 		this.#mountMiddleware()
