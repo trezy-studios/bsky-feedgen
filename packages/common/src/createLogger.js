@@ -12,7 +12,8 @@ const formatters = [
 	winston.format.json(),
 ]
 
-if (Number(process.env.PRETTY_LOGS)) {
+// eslint-disable-next-line no-extra-boolean-cast
+if (Boolean(process.env.PRETTY_LOGS)) {
 	formatters.push(winston.format.prettyPrint({ colorize: true }))
 }
 
