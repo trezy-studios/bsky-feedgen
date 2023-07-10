@@ -7,7 +7,7 @@ import { PrismaClient } from '@prisma/client'
 
 
 // Constants
-const prisma = new PrismaClient
+export const prisma = new PrismaClient
 
 
 
@@ -59,6 +59,22 @@ export function createOptOut(did) {
  */
 export function createSkeet(skeet) {
 	const feeds = { connect: skeet.feeds.map(rkey => ({ rkey })) }
+	const feedSkeet = {
+		connectOrCreate: skeet.feeds.map(rkey => ({
+			create: {
+				feed: {
+					connect: { rkey },
+				},
+			},
+			where: {
+				// eslint-disable-next-line camelcase
+				feedRkey_skeetURI: {
+					feedRkey: rkey,
+					skeetURI: skeet.uri,
+				},
+			},
+		})),
+	}
 
 	return prisma.skeet.upsert({
 		where: {
@@ -68,6 +84,7 @@ export function createSkeet(skeet) {
 			...skeet,
 			did: parseATURL(skeet.uri).did,
 			feeds,
+			feedSkeet,
 		},
 		update: { feeds },
 	})
@@ -138,7 +155,7 @@ export function getFeed(rkey, options) {
 
 	if (cursor) {
 		query.cursor = {
-			uri: Buffer.from(cursor, 'base64').toString('ascii')
+			uri: Buffer.from(cursor, 'base64').toString('ascii'),
 		}
 		query.skip = 1
 	}

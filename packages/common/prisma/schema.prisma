@@ -21,10 +21,22 @@ model Feed {
   description String
   name        String
   ownerDID    String
-  rkey        String  @id @unique
+  rkey        String      @id @unique
   skeets      Skeet[]
+  feedSkeet   FeedSkeet[]
 
   @@index([rkey])
+}
+
+model FeedSkeet {
+  feed     Feed   @relation(fields: [feedRkey], references: [rkey])
+  feedRkey String
+  skeet    Skeet  @relation(fields: [skeetURI], references: [uri])
+  skeetURI String
+
+  @@unique([feedRkey, skeetURI])
+  @@index([feedRkey])
+  @@index([skeetURI])
 }
 
 model FirehoseCursor {
@@ -41,10 +53,11 @@ model Skeet {
   cid         String
   did         String?
   feeds       Feed[]
-  indexedAt   DateTime? @default(now())
+  feedSkeet   FeedSkeet[]
+  indexedAt   DateTime?   @default(now())
   replyParent String?
   replyRoot   String?
-  uri         String       @id @unique
+  uri         String      @id @unique
 
   @@index([uri])
 }
