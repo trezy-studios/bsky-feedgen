@@ -14,6 +14,7 @@ model Block {
   rkey         String @id // rkey of the list item
 
   @@unique([listOwnerDID, rkey])
+  @@index([did])
 }
 
 model Feed {
@@ -22,6 +23,8 @@ model Feed {
   ownerDID    String
   rkey        String  @id @unique
   skeets      Skeet[]
+
+  @@index([rkey])
 }
 
 model FirehoseCursor {
@@ -30,6 +33,8 @@ model FirehoseCursor {
 
 model OptOut {
   did String @id @unique
+
+  @@index([did])
 }
 
 model Skeet {
@@ -39,5 +44,7 @@ model Skeet {
   indexedAt   DateTime? @default(now())
   replyParent String?
   replyRoot   String?
-  uri         String    @id @unique
+  uri         String       @id @unique
+
+  @@index([uri])
 }
