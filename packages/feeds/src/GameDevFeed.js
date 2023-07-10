@@ -2,6 +2,7 @@
 import {
 	database,
 	Feed,
+	promClient,
 } from '@trezystudios/bsky-common'
 
 
@@ -9,6 +10,11 @@ import {
 
 
 // Constants
+const metricsPrefix = 'game_dev_feed_'
+const feedRetrievalTimer = new promClient.Histogram({
+	help: 'The length of time it takes for the database to return the feed response.',
+	name: `${metricsPrefix}feed_retrieval_timer`,
+})
 const rootSkeets = [
 	// Trezy's intros thread
 	'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3ju2fo5erfr2a',
@@ -42,10 +48,14 @@ class GameDevFeedClass extends Feed {
 	async generateFeed(cursor, limit = 30) {
 		const result = {}
 
+		const endFeedRetrievalTimer = feedRetrievalTimer.startTimer()
+
 		const { skeets } = await database.getFeed(this.rkey, {
 			cursor,
 			limit,
 		})
+
+		endFeedRetrievalTimer()
 
 		result.feed = skeets.map(skeet => ({ post: skeet.uri }))
 
