@@ -158,34 +158,44 @@ export async function getCursor() {
  * }} options Pagination options.
  * @returns {Promise<{ skeets: { uri: string }[] }>} The skeets in the page.
  */
-export function getFeed(rkey, options) {
+export async function getFeed(rkey, options) {
 	const {
 		cursor,
 		limit = 30,
 	} = options ?? {}
 
-	const query = {
-		/** @type {import('@prisma/client').Prisma.SkeetOrderByWithRelationInput} */
-		orderBy: {
-			indexedAt: 'desc',
-		},
-		take: Math.max(Math.min(Number(limit), 100), 1),
-	}
+	const realLimit = Math.max(Math.min(Number(limit), 100), 1)
+
+	let query = null
 
 	if (cursor) {
-		query.cursor = {
-			uri: Buffer.from(cursor, 'base64').toString('ascii'),
-		}
-		query.skip = 1
+		const cursorURI = Buffer.from(cursor, 'base64').toString('ascii')
+		query = prisma.$queryRaw`
+			SELECT uri, indexedAt
+			FROM FeedSkeet
+			LEFT JOIN Skeet
+			ON Skeet.uri = FeedSkeet.skeetURI
+			WHERE
+				feedRkey = ${rkey}
+				AND Skeet.indexedAt <= (select Skeet.indexedAt from Skeet where Skeet.uri = ${cursorURI})
+			ORDER BY indexedAt
+			LIMIT 1, ${Number(realLimit)};
+		`
+	} else {
+		query = prisma.$queryRaw`
+			SELECT uri, indexedAt
+			FROM FeedSkeet
+			LEFT JOIN Skeet
+			ON Skeet.uri = FeedSkeet.skeetURI
+			WHERE feedRkey = ${rkey}
+			ORDER BY indexedAt desc
+			LIMIT ${Number(realLimit)};
+		`
 	}
 
-	return prisma.feed
-		.findUnique({
-			select: {
-				skeets: query,
-			},
-			where: { rkey },
-		})
+	const skeets = /** @type {{ uri: string }[]} */ (await query)
+
+	return { skeets }
 }
 
 /**

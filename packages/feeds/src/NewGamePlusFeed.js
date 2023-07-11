@@ -36,7 +36,7 @@ class NewGamePlusFeedClass extends Feed {
 
 		result.feed = skeets.map(skeet => ({ post: skeet.uri }))
 
-		if (skeets.length) {
+		if (skeets.length === limit) {
 			const lastSkeet = skeets.at(-1)
 
 			if (lastSkeet) {
