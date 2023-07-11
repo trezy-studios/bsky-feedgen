@@ -14,14 +14,17 @@ import { logger } from './logger.js'
 // Constants
 const errorCounter = new Counter({
 	help: 'The number of errors triggered by failed queries.',
+	labelNames: ['duration', 'params', 'query'],
 	name: `${process.env.METRICS_PREFIX}query_error_counter`,
 })
 const queryCounter = new Counter({
 	help: 'The number of queries being performed.',
+	labelNames: ['duration', 'params', 'query'],
 	name: `${process.env.METRICS_PREFIX}query_counter`,
 })
 const queryTimer = new Histogram({
 	help: 'The duration of a query.',
+	labelNames: ['duration', 'params', 'query'],
 	name: `${process.env.METRICS_PREFIX}query_timer`,
 })
 
