@@ -1,10 +1,13 @@
 // Module imports
 import {
+	createEventLogger,
+	database,
+} from '@trezystudios/bsky-common'
+import {
 	Firehose,
 	parseATURL,
 } from '@trezystudios/bsky-lib'
 import { collectDefaultMetrics } from 'prom-client'
-import { database } from '@trezystudios/bsky-common'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import * as feedsMap from '@trezystudios/bsky-feeds'
@@ -19,7 +22,6 @@ import {
 	blockListOwners,
 	blockListsMap,
 } from './data/blockLists.js'
-import { createEventLogger } from './createEventLogger.js'
 import { logger } from './logger.js'
 
 
