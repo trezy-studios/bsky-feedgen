@@ -1,0 +1,35 @@
+{
+  "name": "@trezystudios/bsky-mouth",
+  "version": "1.0.0",
+  "description": "Drinks from the bsky firehose and sends events into the queue.",
+  "main": "./src/index.js",
+  "repository": "git@github.com:trezy-studios/bsky-feedgen.git",
+  "author": "Trezy <t@trezy.codes>",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config src/index.js",
+    "start": "node -r dotenv/config src/index.js"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.4.3",
+    "@trezystudios/bsky-common": "workspace:*",
+    "@trezystudios/bsky-feeds": "workspace:*",
+    "@trezystudios/bsky-lib": "workspace:*",
+    "@trezystudios/koa-api": "workspace:*",
+    "amqplib": "^0.10.3",
+    "dotenv": "^16.3.1",
+    "koa-body": "^5.0.0",
+    "koa-compress": "^5.1.1",
+    "koa-no-trailing-slash": "^2.1.0",
+    "koa-router": "^12.0.0",
+    "prom-client": "^14.2.0"
+  },
+  "devDependencies": {
+    "@types/koa-router": "^7.4.4",
+    "@types/node": "^20.3.3",
+    "better-docs": "^2.7.2",
+    "nodemon": "^2.0.22"
+  },
+  "packageManager": "yarn@3.5.1"
+}

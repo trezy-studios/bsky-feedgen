@@ -1,0 +1,22 @@
+# fly.toml app configuration file generated for bsky-feedgen-sieve on 2023-07-05T17:09:50-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "bsky-feedgen-mouth"
+primary_region = "ord"
+
+[env]
+  BSKY_USERNAME="trezy.codes"
+  LOG_LEVEL="silly"
+  METRICS_PREFIX="bsky_feedgen_mouth_"
+  MQ_TIMEOUT=15000
+  MQ_URL="amqp://bsky-feedgen-rabbitmq.fly.dev"
+  PRETTY_LOGS=0
+
+[build]
+  dockerfile = "./Dockerfile"
+
+[metrics]
+  path = "/metrics"
+  port = 3000
