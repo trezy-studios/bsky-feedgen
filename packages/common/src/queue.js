@@ -13,8 +13,10 @@ const queueName = 'events'
 
 
 // Variables
-let mqConnection = null
-let queue = null
+export const state = {
+	channel: null,
+	connection: null,
+}
 
 
 
@@ -34,9 +36,13 @@ export async function assertMQ() {
 
 	while (!isConnected && !isTimedOut) {
 		try {
-			mqConnection = await amqp.connect(process.env.MQ_URL)
-			queue = await mqConnection.createChannel()
-			await queue.assertQueue(queueName)
+			state.connection = await amqp.connect(process.env.MQ_URL)
+
+			// eslint-disable-next-line require-atomic-updates
+			state.channel = await state.connection.createChannel()
+
+			await state.channel.assertQueue(queueName)
+
 			isConnected = true
 		} catch (error) {
 			const now = performance.now()
@@ -58,5 +64,5 @@ export async function assertMQ() {
  * @returns {boolean} Whether the data was sent successfully.
  */
 export function send(data) {
-	return queue.sendToQueue(queueName, data)
+	return state.channel.sendToQueue(queueName, data)
 }
