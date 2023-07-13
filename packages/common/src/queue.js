@@ -23,6 +23,17 @@ export const state = {
 
 
 /**
+ * Adds a consumer to handle events from the queue.
+ *
+ * @param {Function} consumer A function to be called for each event that is consumed.
+ */
+export function addConsumer(consumer) {
+	const { channel } = state
+
+	channel.consume(queueName, consumer)
+}
+
+/**
  * Polls the message queue until either it makes a connection, or it times out.
  *
  * @returns {Promise<boolean>} Whether a connection has been made successfully.
@@ -64,5 +75,7 @@ export async function assertMQ() {
  * @returns {boolean} Whether the data was sent successfully.
  */
 export function send(data) {
-	return state.channel.sendToQueue(queueName, data)
+	const { channel } = state
+
+	return channel.sendToQueue(queueName, data)
 }

@@ -1029,7 +1029,9 @@ __metadata:
     "@atproto/xrpc-server": ^0.2.0
     "@prisma/client": 4.16.2
     "@trezystudios/bsky-lib": "workspace:*"
+    "@types/amqplib": ^0.10.1
     "@types/node": ^20.3.3
+    amqplib: ^0.10.3
     better-docs: ^2.7.2
     dotenv: ^16.3.1
     multiformats: ^9.9.0
@@ -1080,9 +1082,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@trezystudios/bsky-mouth@workspace:packages/mouth":
+"@trezystudios/bsky-maw@workspace:packages/maw":
   version: 0.0.0-use.local
-  resolution: "@trezystudios/bsky-mouth@workspace:packages/mouth"
+  resolution: "@trezystudios/bsky-maw@workspace:packages/maw"
   dependencies:
     "@koa/cors": ^3.4.3
     "@trezystudios/bsky-common": "workspace:*"
@@ -1091,7 +1093,6 @@ __metadata:
     "@trezystudios/koa-api": "workspace:*"
     "@types/koa-router": ^7.4.4
     "@types/node": ^20.3.3
-    amqplib: ^0.10.3
     better-docs: ^2.7.2
     dotenv: ^16.3.1
     koa-body: ^5.0.0
@@ -1117,10 +1118,8 @@ __metadata:
     "@trezystudios/bsky-feeds": "workspace:*"
     "@trezystudios/bsky-lib": "workspace:*"
     "@trezystudios/koa-api": "workspace:*"
-    "@types/amqplib": ^0.10.1
     "@types/koa-router": ^7.4.4
     "@types/node": ^20.3.3
-    amqplib: ^0.10.3
     better-docs: ^2.7.2
     dotenv: ^16.3.1
     koa-body: ^5.0.0

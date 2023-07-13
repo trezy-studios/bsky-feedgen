@@ -3,13 +3,13 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "bsky-feedgen-mouth"
+app = "bsky-feedgen-maw"
 primary_region = "ord"
 
 [env]
   BSKY_USERNAME="trezy.codes"
   LOG_LEVEL="silly"
-  METRICS_PREFIX="bsky_feedgen_mouth_"
+  METRICS_PREFIX="bsky_feedgen_maw_"
   MQ_TIMEOUT=15000
   MQ_URL="amqp://bsky-feedgen-rabbitmq.fly.dev"
   PRETTY_LOGS=0

@@ -1,5 +1,5 @@
 {
-  "name": "@trezystudios/bsky-mouth",
+  "name": "@trezystudios/bsky-maw",
   "version": "1.0.0",
   "description": "Drinks from the bsky firehose and sends events into the queue.",
   "main": "./src/index.js",
@@ -17,7 +17,6 @@
     "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
     "@trezystudios/koa-api": "workspace:*",
-    "amqplib": "^0.10.3",
     "dotenv": "^16.3.1",
     "koa-body": "^5.0.0",
     "koa-compress": "^5.1.1",

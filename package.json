@@ -7,7 +7,7 @@
     "packages/feeds",
     "packages/koa-api",
     "packages/lib",
-    "packages/mouth",
+    "packages/maw",
     "packages/scripts",
     "packages/sieve"
   ],
@@ -17,9 +17,9 @@
     "build:sieve": "yarn build:common",
     "build": "yarn build:api && yarn build:common && yarn build:sieve",
     "dev:api": "yarn workspace @trezystudios/bsky-api dev",
-    "dev:mouth": "yarn workspace @trezystudios/bsky-mouth dev",
+    "dev:maw": "yarn workspace @trezystudios/bsky-maw dev",
     "dev:sieve": "yarn workspace @trezystudios/bsky-sieve dev",
-    "dev": "yarn dev:api && yarn dev:sieve && yarn dev:mouth",
+    "dev": "yarn dev:api && yarn dev:sieve && yarn dev:maw",
     "generate-types:common": "yarn workspace @trezystudios/bsky-common generate-types",
     "generate-types:feeds": "yarn workspace @trezystudios/bsky-feeds generate-types",
     "generate-types:koa-api": "yarn workspace @trezystudios/koa-api generate-types",
@@ -28,13 +28,13 @@
     "lint:api": "yarn workspace @trezystudios/bsky-api eslint ./src/",
     "lint:common": "yarn workspace @trezystudios/bsky-common eslint ./src/",
     "lint:lib": "yarn workspace @trezystudios/bsky-common eslint ./src/",
-    "lint:mouth": "yarn workspace @trezystudios/bsky-mouth eslint ./src/",
+    "lint:maw": "yarn workspace @trezystudios/bsky-maw eslint ./src/",
     "lint:sieve": "yarn workspace @trezystudios/bsky-sieve eslint ./src/",
-    "lint": "yarn lint:api && yarn lint:common && yarn lint:lib && yarn lint:mouth && yarn lint:sieve",
+    "lint": "yarn lint:api && yarn lint:common && yarn lint:lib && yarn lint:maw && yarn lint:sieve",
     "start:api": "yarn workspace @trezystudios/bsky-api start",
-    "start:mouth": "yarn workspace @trezystudios/bsky-mouth start",
+    "start:maw": "yarn workspace @trezystudios/bsky-maw start",
     "start:sieve": "yarn workspace @trezystudios/bsky-sieve start",
-    "start": "yarn start:api && yarn start:mouth && yarn start:sieve"
+    "start": "yarn start:api && yarn start:maw && yarn start:sieve"
   },
   "devDependencies": {
     "better-docs": "^2.7.2",
