@@ -57,13 +57,16 @@ export class Firehose extends EventEmitter {
 	/**
 	 * Creates an instance of Firehose.
 	 *
-	 * @param {API} [api] The API to use for managing connections and retrieving hydration data.
-	 * @param {FirehoseOptions} [options = {}] Options to configure the firehose.
+	 * @param {FirehoseOptions} [options] Options to configure the firehose.
 	 */
-	constructor(api, options = {}) {
+	constructor(options = {}) {
 		super()
 
-		this.#options = options
+		this.#options = {
+			autoHydrate: false,
+			autoParse: false,
+			...options,
+		}
 
 		addExtension({
 			Class: CID,
@@ -81,7 +84,7 @@ export class Firehose extends EventEmitter {
 			},
 		})
 
-		this.#api = api || new API
+		this.#api = options.api || new API
 	}
 
 
@@ -110,14 +113,16 @@ export class Firehose extends EventEmitter {
 	async #handleFirehoseMessage(data, _isBinary) {
 		this.emit(RAW_MESSAGE(), data)
 
-		const message = new FirehoseMessage(data, this)
+		if (this.#options.autoParse) {
+			const message = new FirehoseMessage(data, this)
 
-		try {
-			await message.parse()
+			try {
+				await message.parse()
 
-			this.emit(PARSED_MESSAGE(), message)
-		} catch (error) {
-			// console.log(error)
+				this.emit(PARSED_MESSAGE(), message)
+			} catch (error) {
+				// console.log(error)
+			}
 		}
 	}
 
@@ -143,7 +148,7 @@ export class Firehose extends EventEmitter {
 	 * @param {number} [options.cursor] A cursor if resuming the connection.
 	 * @param {string} [options.password] The password with which to authenticate. For now, this should be an app password.
 	 * @param {string} [options.username] The username with which to authenticate. This is the same as the user's handle.
-	*/
+	 */
 	async connect(options = {}) {
 		const {
 			cursor,
