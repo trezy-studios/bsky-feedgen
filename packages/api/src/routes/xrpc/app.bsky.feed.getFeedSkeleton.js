@@ -36,7 +36,7 @@ export const route = new Route({
 	 *
 	 * @param {import('koa').Context} context The request context.
 	 */
-	async handler(context) {
+	handler(context) {
 		const paramsToParse = [
 			'cursor',
 			'feed',
@@ -45,8 +45,8 @@ export const route = new Route({
 
 		/** @type {QueryParams} */
 		const {
-			cursor,
-			limit,
+			// cursor,
+			// limit,
 			feed,
 		} = paramsToParse.reduce((accumulator, param) => {
 			if (param in context.query) {
@@ -94,12 +94,26 @@ export const route = new Route({
 			return context
 		}
 
-		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
+		// const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
 		const endFeedgenTimer = feedgenTimer.startTimer()
 
 		// eslint-disable-next-line require-atomic-updates
-		context.body = await feedController.generateFeed(cursor, limit)
+		// context.body = await feedController.generateFeed(cursor, limit)
+		context.body = {
+			feed: [
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2evvctjvi2w' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2evwa6cjv2c' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2evx4l6jf2c' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2evy7hyto2x' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2evypahcv2j' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2ew2jwaan2c' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2ew34wbcc2j' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2ew3sau322j' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2ew52fekt2j' },
+				{ post: 'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3k2ew5vxxpf2b' },
+			],
+		}
 
 		endFeedgenTimer()
 	},
