@@ -3,7 +3,6 @@ import {
 	Firehose,
 	parseATURL,
 } from '@trezystudios/bsky-lib'
-import { collectDefaultMetrics } from 'prom-client'
 import { database } from '@trezystudios/bsky-common'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -448,8 +447,4 @@ export function start() {
 	firehose.on('app.bsky.graph.listitem::delete', handleListItemDelete)
 
 	connectFirehose()
-
-	collectDefaultMetrics({
-		labels: { job: 'sieve' },
-	})
 }
