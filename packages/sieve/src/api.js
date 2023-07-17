@@ -12,7 +12,7 @@ import noTrailingSlash from 'koa-no-trailing-slash'
 
 // Local imports
 import { route as healthRoute } from './apiRoutes/health.js'
-import { logger } from './logger.js'
+import { logger } from './helpers/logger.js'
 import { route as metricsRoute } from './apiRoutes/metrics.js'
 
 

@@ -6,6 +6,18 @@ import { PrismaClient } from '@prisma/client'
 
 
 
+// Types
+/**
+ * @typedef {object} Cursor
+ * @property {string} id The ID of the cursor.
+ * @property {number} seq The sequential ID of the most recent message parsed by this cursor's worker.
+ * @property {Date} updatedAt The timestamp at which this cursor was last updated.
+ */
+
+
+
+
+
 // Constants
 export const prisma = new PrismaClient({
 	log: [
@@ -33,6 +45,18 @@ export const prisma = new PrismaClient({
 
 
 /**
+ * Finds derelict cursors in the database and removes them.
+ *
+ * @returns {Promise<number>} The number of cursors that were deleted.
+ */
+export function cleanupCursors() {
+	return prisma.$executeRaw`
+		DELETE FROM FirehoseCursor
+		WHERE updatedAt < (NOW() - INTERVAL 1 MINUTE);
+	`
+}
+
+/**
  * Saves a block in the database.
  *
  * @param {{
@@ -49,6 +73,18 @@ export function createBlock(listItem) {
 			listOwnerDID: listItem.listOwner,
 			rkey: listItem.rkey,
 		},
+	})
+}
+
+/**
+ * Creates a new cursor.
+ *
+ * @param {number} seq The most recent `seq` field from a message.
+ * @returns {Promise<Cursor>} The updated cursor.
+ */
+export function createCursor(seq) {
+	return prisma.firehoseCursor.create({
+		data: { seq },
 	})
 }
 
@@ -143,8 +179,15 @@ export function deleteSkeet(skeetURI) {
  *
  * @returns {Promise<null | number>} The cursor.
  */
-export async function getCursor() {
-	const result = await prisma.firehoseCursor.findFirst()
+export async function getOldestCursor() {
+	/** @type {null | { seq: number }} */
+	const result = await prisma.$queryRaw`
+		SELECT seq
+		FROM FirehoseCursor
+		ORDER BY seq asc
+		LIMIT 1;
+	`
+
 	return result?.seq
 }
 
@@ -234,16 +277,16 @@ export function saveFeed(feed) {
 /**
  * Updates the cursor in the database.
  *
+ * @param {string} id The ID of the cursor for this worker.
  * @param {number} seq The most recent `seq` field from a message.
- * @returns {Promise<object>} The updagted cursor.
+ * @returns {Promise<Cursor>} The updated cursor.
  */
-export function updateCursor(seq) {
-	return prisma.$transaction([
-		prisma.firehoseCursor.deleteMany(),
-		prisma.firehoseCursor.create({
-			data: { seq },
-		}),
-	])
+export function updateCursor(id, seq) {
+	return /** @type {Promise<*>} */ (prisma.$executeRaw`
+		UPDATE FirehoseCursor
+		SET seq = ${seq}, updatedAt = NOW()
+		WHERE id = ${id};
+	`)
 }
 
 /**

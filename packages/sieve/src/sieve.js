@@ -1,6 +1,6 @@
-// // Module imports
+// Module imports
 import {
-	createEventLogger,
+	database,
 	queue,
 } from '@trezystudios/bsky-common'
 import { collectDefaultMetrics } from 'prom-client'
@@ -9,53 +9,24 @@ import { collectDefaultMetrics } from 'prom-client'
 
 
 
-// // Local imports
-import { logger } from './logger.js'
+// Local imports
+import { connectMQ } from './helpers/connectMQ.js'
+import { consumeEvent } from './helpers/consumeEvent.js'
+import { cursorUpdateTimer } from './helpers/cursorUpdateTimer.js'
 
 
 
 
-
-/**
- * Binds the event consumer to the queue.
- */
-function bindEventConsumer() {
-	const { channel } = queue.state
-
-	queue.addConsumer(event => {
-		if (event !== null) {
-			console.log('Received:', event.content.toString())
-			channel.ack(event)
-		} else {
-			console.log('Consumer cancelled by server')
-		}
-	})
-}
-
-/**
- * Attempts to establish a connection to the message queue.
- */
-async function connectMQ() {
-	const createEventLog = createEventLogger('connect mq')
-
-	logger.info(createEventLog({ message: 'attempting connection' }))
-
-	const isConnected = await queue.assertMQ()
-
-	if (isConnected) {
-		logger.info(createEventLog({ message: 'connection established' }))
-	} else {
-		logger.error(createEventLog({ message: 'connection failed' }))
-		process.exit(1)
-	}
-}
 
 /**
  * Starts the firehose consumer.
  */
 export async function start() {
 	await connectMQ()
-	bindEventConsumer()
+	queue.addConsumer(consumeEvent)
+
+	await database.cleanupCursors()
+	cursorUpdateTimer()
 
 	collectDefaultMetrics({
 		labels: { job: 'sieve' },
