@@ -1,6 +1,4 @@
 // Module imports
-import { addExtension } from 'cbor-x'
-import { CID } from 'multiformats'
 import { WebSocket } from 'ws'
 
 
@@ -68,22 +66,6 @@ export class Firehose extends EventEmitter {
 			...options,
 		}
 
-		addExtension({
-			Class: CID,
-			tag: 42,
-			// eslint-disable-next-line jsdoc/require-jsdoc
-			encode: () => {
-				throw new Error('cannot encode cids')
-			},
-			// eslint-disable-next-line jsdoc/require-jsdoc
-			decode: bytes => {
-				if (bytes[0] !== 0) {
-					throw new Error('invalid cid for cbor tag 42')
-				}
-				return CID.decode(bytes.subarray(1)) // ignore leading 0x00
-			},
-		})
-
 		this.#api = options.api || new API
 	}
 
@@ -117,11 +99,11 @@ export class Firehose extends EventEmitter {
 			const message = new FirehoseMessage(data, this)
 
 			try {
-				await message.parse()
+				await message.parseOperations()
 
 				this.emit(PARSED_MESSAGE(), message)
 			} catch (error) {
-				// console.log(error)
+				console.log('#handleFirehoseMessage', error)
 			}
 		}
 	}

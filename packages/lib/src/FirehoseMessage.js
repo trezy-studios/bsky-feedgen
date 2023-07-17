@@ -37,6 +37,9 @@ export class FirehoseMessage {
 	/** @type {CarReader} */
 	#car
 
+	/** @type {boolean} */
+	#carIsParsed = false
+
 	/** @type {DecodedMessage} */
 	#decodedMessage
 
@@ -46,11 +49,14 @@ export class FirehoseMessage {
 	/** @type {RawFirehoseMessageHeader} */
 	#header
 
-	/** @type {boolean} */
-	#isParsed = false
-
 	/** @type {MessageNamespace} */
 	#namespace
+
+	/** @type {FirehoseMessageOperation[]} */
+	#operations = []
+
+	/** @type {boolean} */
+	#operationsAreParsed = false
 
 	/** @type {RawData} */
 	#rawMessage
@@ -101,15 +107,14 @@ export class FirehoseMessage {
 	 * Parses the message as a commit.
 	 */
 	async #parseAsCommit() {
-		try {
-			this.#car = await CarReader.fromBytes(this.#blocks)
-		} catch (error) {
-			console.log(error, this.#body)
-		}
+		await this.#parseCAR()
 
-		for (const op of this.#operations) {
+		for (const op of this.#rawOperations) {
 			const operation = new FirehoseMessageOperation(op, this)
+
 			await operation.parse()
+
+			this.#operations.push(operation)
 		}
 	}
 
@@ -133,6 +138,26 @@ export class FirehoseMessage {
 	 */
 	async #parseAsTombstone() {}
 
+	/**
+	 * Parses the CAR file.
+	 *
+	 * @returns {Promise<CarReader>} The parsed CAR file.
+	 */
+	async #parseCAR() {
+		if (this.#carIsParsed) {
+			return
+		}
+
+		try {
+			this.#car = await CarReader.fromBytes(this.#blocks)
+		} catch (error) {
+			console.log('#parseAsCommit', error, this.#body)
+		}
+
+		this.#carIsParsed = true
+		return this.#car
+	}
+
 
 
 
@@ -142,10 +167,10 @@ export class FirehoseMessage {
 	\****************************************************************************/
 
 	/**
-	 * Parses the message content.
+	 * Parses the message's operations.
 	 */
-	async parse() {
-		if (this.#isParsed) {
+	async parseOperations() {
+		if (this.#operationsAreParsed) {
 			return
 		}
 
@@ -161,7 +186,7 @@ export class FirehoseMessage {
 			await this.#parseAsTombstone()
 		}
 
-		this.#isParsed = true
+		this.#operationsAreParsed = true
 	}
 
 
@@ -178,7 +203,7 @@ export class FirehoseMessage {
 	}
 
 	/** @returns {RawFirehoseMessageOp[]} All operations tied to this message. */
-	get #operations() {
+	get #rawOperations() {
 		return this.#body.ops
 	}
 
@@ -193,6 +218,11 @@ export class FirehoseMessage {
 	/** @returns {CarReader} The CAR file. */
 	get car() {
 		return this.#car
+	}
+
+	/** @returns {boolean} Whether the message's CAR file has been parsed. */
+	get carIsParsed() {
+		return this.#carIsParsed
 	}
 
 	/** @returns {CID} The cID of the message. */
@@ -235,11 +265,6 @@ export class FirehoseMessage {
 		return this.#header.t === '#migrate'
 	}
 
-	/** @returns {boolean} Whether the message has been parsed. */
-	get isParsed() {
-		return this.#isParsed
-	}
-
 	/** @returns {boolean} Whether the message requires a rebase. */
 	get isRebase() {
 		return this.#body.rebase
@@ -260,6 +285,16 @@ export class FirehoseMessage {
 		return this.#namespace
 	}
 
+	/** @returns {FirehoseMessageOperation[]} All parsed operations. */
+	get operations() {
+		return this.#operations
+	}
+
+	/** @returns {boolean} Whether the message's operations have been parsed. */
+	get operationsAreParsed() {
+		return this.#operationsAreParsed
+	}
+
 	/** @returns {CID} The cID of the previous message. */
 	get previousCID() {
 		return this.#body.prev
@@ -268,6 +303,11 @@ export class FirehoseMessage {
 	/** @returns {RawData} The raw message data. */
 	get rawMessage() {
 		return this.#rawMessage
+	}
+
+	/** @returns {RawFirehoseMessageOp[]} The raw message operations. */
+	get rawOperations() {
+		return this.#rawOperations
 	}
 
 	/** @returns {number} The sequential ID of the message. */

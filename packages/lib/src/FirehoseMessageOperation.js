@@ -74,15 +74,19 @@ export class FirehoseMessageOperation {
 		this.#operation = operation
 		this.#message = message
 
-		const { groups } = /^(?<namespaceString>\w+\.\w+\.\w+.\w+)\/(?<rkey>\w+)$/giu.exec(operation.path)
+		try {
+			const { groups } = /^(?<namespaceString>(?:\w+\.){3}\w+)\/(?<rkey>[-_~.%A-Za-z0-9]{1,512})$/giu.exec(operation.path)
 
-		const {
-			namespaceString,
-			rkey,
-		} = groups
+			const {
+				namespaceString,
+				rkey,
+			} = groups
 
-		this.#namespace = namespaceString.split('.')
-		this.#rkey = rkey
+			this.#namespace = namespaceString.split('.')
+			this.#rkey = rkey
+		} catch (error) {
+			console.log('new FirehoseMessageOperation', error)
+		}
 	}
 
 
@@ -231,11 +235,13 @@ export class FirehoseMessageOperation {
 	async #parseAppBskyFeedLikeNamespace() {
 		this.#entity = new AppBskyFeedLikeEvent(this)
 
-		if (this.#message.firehose.options.autoHydrate && ['create', 'update'].includes(this.action)) {
+		if (this.firehose?.options.autoHydrate && ['create', 'update'].includes(this.action)) {
 			await this.#entity.hydrate()
 		}
 
-		this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		if (this.firehose) {
+			this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		}
 
 		return this.#entity
 	}
@@ -248,7 +254,9 @@ export class FirehoseMessageOperation {
 	#parseAppBskyFeedPostNamespace() {
 		this.#entity = new AppBskyFeedPostEvent(this)
 
-		this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		if (this.firehose) {
+			this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		}
 
 		return this.#entity
 	}
@@ -313,7 +321,9 @@ export class FirehoseMessageOperation {
 	#parseAppBskyGraphListItemNamespace() {
 		this.#entity = new AppBskyGraphListItemEvent(this)
 
-		this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		if (this.firehose) {
+			this.firehose.emit(FIREHOSE_EVENT_ACTION(this.serialisedNamespace, this.action), this.#entity)
+		}
 
 		return this.#entity
 	}
@@ -515,6 +525,11 @@ export class FirehoseMessageOperation {
 	/** @returns {string} The dID of the repo this operation belongs to. */
 	get did() {
 		return this.#message.did
+	}
+
+	/** @returns {*} The entity represented by this operation. */
+	get entity() {
+		return this.#entity
 	}
 
 	/** @returns {Firehose} The firehose instance that owns the parent message. */
