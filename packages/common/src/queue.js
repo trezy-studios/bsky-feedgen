@@ -36,9 +36,10 @@ export function addConsumer(consumer) {
 /**
  * Polls the message queue until either it makes a connection, or it times out.
  *
+ * @param {number} [prefetch] The number of messages that will be dispatched at any time.
  * @returns {Promise<boolean>} Whether a connection has been made successfully.
  */
-export async function assertMQ() {
+export async function assertMQ(prefetch) {
 	const mqTimeout = Number(process.env.MQ_TIMEOUT ?? 15000)
 	const startedAt = performance.now()
 
@@ -53,6 +54,10 @@ export async function assertMQ() {
 			state.channel = await state.connection.createChannel()
 
 			await state.channel.assertQueue(queueName)
+
+			if (typeof prefetch !== 'undefined') {
+				state.channel.prefetch(prefetch)
+			}
 
 			isConnected = true
 		} catch (error) {
