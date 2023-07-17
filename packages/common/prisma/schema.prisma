@@ -40,7 +40,12 @@ model FeedSkeet {
 }
 
 model FirehoseCursor {
-  seq Int @id @unique
+  id        String?  @default(cuid())
+  seq       Int      @id @unique
+  updatedAt DateTime @default(now())
+
+  @@index([id])
+  @@index([updatedAt])
 }
 
 model OptOut {
