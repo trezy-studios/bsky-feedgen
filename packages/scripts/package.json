@@ -3,7 +3,9 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"addDIDsToSkeets": "node -r dotenv/config ./src/addDIDsToSkeets.js"
+		"addDIDsToSkeets": "node -r dotenv/config ./src/addDIDsToSkeets.js",
+		"implicitToExplicitFeedSkeetRelation": "node -r dotenv/config ./src/implicitToExplicitFeedSkeetRelation.js",
+		"syncBlockLists": "node -r dotenv/config ./src/syncBlockLists.js"
 	},
 	"dependencies": {
 		"@trezystudios/bsky-common": "workspace:*",
