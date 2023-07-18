@@ -3,7 +3,6 @@ import {
 	database,
 	queue,
 } from '@trezystudios/bsky-common'
-import { collectDefaultMetrics } from 'prom-client'
 
 
 
@@ -27,8 +26,4 @@ export async function start() {
 
 	await database.cleanupCursors()
 	cursorUpdateTimer()
-
-	collectDefaultMetrics({
-		labels: { job: 'sieve' },
-	})
 }
