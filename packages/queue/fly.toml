@@ -11,3 +11,7 @@ primary_region = "ord"
   internal_port = 15672
   min_machines_running = 1
   processes = ["app"]
+
+[metrics]
+  path = "/metrics"
+  port = 15692
