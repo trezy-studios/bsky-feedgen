@@ -99,7 +99,7 @@ export const route = new Route({
 		const endFeedgenTimer = feedgenTimer.startTimer()
 
 		// eslint-disable-next-line require-atomic-updates
-		context.body = await feedController.generateFeed(cursor, limit)
+		context.body = await feedController.generateFeed(cursor, Number(limit))
 
 		endFeedgenTimer()
 	},
