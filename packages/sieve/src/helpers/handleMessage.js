@@ -1,11 +1,5 @@
-// Module imports
-import { database } from '@trezystudios/bsky-common'
-
-
-
-
-
 // Local imports
+import { handleListItemOperation } from './handleListItemOperation.js'
 import { handleSkeetOperation } from './handleSkeetOperation.js'
 import { state } from '../data/state.js'
 
@@ -46,6 +40,10 @@ export async function handleMessage(message) {
 		switch (operation.serialisedNamespace) {
 			case 'app.bsky.feed.post':
 				handler = handleSkeetOperation
+				break
+
+			case 'app.bsky.graph.listitem':
+				handler = handleListItemOperation
 				break
 
 			default:

@@ -23,7 +23,7 @@ export async function connectMQ() {
 
 	logger.info(createEventLog({ message: 'attempting connection' }))
 
-	const isConnected = await queue.assertMQ(2)
+	const isConnected = await queue.assertMQ(1)
 
 	if (isConnected) {
 		logger.info(createEventLog({ message: 'connection established' }))
