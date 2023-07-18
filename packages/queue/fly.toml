@@ -2,4 +2,12 @@ app = "bsky-feedgen-rabbitmq"
 primary_region = "ord"
 
 [build]
-  image = "rabbitmq"
+  image = "rabbitmq:3-management"
+
+[http_service]
+  auto_stop_machines = false
+  auto_start_machines = false
+  force_https = true
+  internal_port = 15672
+  min_machines_running = 1
+  processes = ["app"]
