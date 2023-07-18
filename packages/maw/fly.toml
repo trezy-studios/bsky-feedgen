@@ -14,7 +14,6 @@ primary_region = "ord"
   METRICS_PREFIX = "bsky_feedgen_maw_"
   MQ_TIMEOUT = 15000
   MQ_URL = "amqp://bsky-feedgen-rabbitmq.internal"
-  PRETTY_LOGS = 0
 
 [http_service]
   auto_stop_machines = false

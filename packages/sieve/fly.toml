@@ -15,7 +15,6 @@ primary_region = "ord"
   MQ_PREFETCH_COUNT = 5
   MQ_TIMEOUT = 15000
   MQ_URL = "amqp://bsky-feedgen-rabbitmq.internal"
-  PRETTY_LOGS = 1
 
 [http_service]
   auto_stop_machines = false
