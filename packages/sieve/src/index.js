@@ -1,3 +1,10 @@
+// Module imports
+import { collectDefaultMetrics } from 'prom-client'
+
+
+
+
+
 // Local imports
 import { api } from './api.js'
 import { initialiseCIDParser } from '@trezystudios/bsky-lib'
@@ -15,3 +22,7 @@ sieve.start()
 
 // Start the sieve API
 api.start()
+
+collectDefaultMetrics({
+	labels: { job: 'sieve' },
+})

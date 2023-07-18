@@ -1,7 +1,6 @@
 // Module imports
 import { API } from '@trezystudios/koa-api'
 import body from 'koa-body'
-import { collectDefaultMetrics } from 'prom-client'
 import compress from 'koa-compress'
 import cors from '@koa/cors'
 import noTrailingSlash from 'koa-no-trailing-slash'
@@ -31,9 +30,4 @@ export const api = new API({
 		healthRoute,
 		metricsRoute,
 	],
-
-	/** Collect default system metrics. */
-	onStart() {
-		collectDefaultMetrics({ prefix: process.env.METRICS_PREFIX })
-	},
 })
