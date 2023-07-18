@@ -6,12 +6,24 @@
 app = "bsky-feedgen-sieve"
 primary_region = "ord"
 
-[env]
-  BSKY_USERNAME = "trezy.codes"
-  LOG_LEVEL = "silly"
-
 [build]
   dockerfile = "./Dockerfile"
+
+[env]
+  LOG_LEVEL = "silly"
+  METRICS_PREFIX = "bsky_feedgen_sieve_"
+  MQ_PREFETCH_COUNT = 5
+  MQ_TIMEOUT = 15000
+  MQ_URL = "amqp://bsky-feedgen-rabbitmq.internal"
+  PRETTY_LOGS = 1
+
+[http_service]
+  auto_stop_machines = false
+  auto_start_machines = false
+  force_https = true
+  internal_port = 3000
+  min_machines_running = 1
+  processes = ["app"]
 
 [metrics]
   path = "/metrics"
