@@ -14,7 +14,6 @@
   "dependencies": {
     "@koa/cors": "^3.4.3",
     "@trezystudios/bsky-common": "workspace:*",
-    "@trezystudios/bsky-feeds": "workspace:*",
     "@trezystudios/bsky-lib": "workspace:*",
     "@trezystudios/koa-api": "workspace:*",
     "dotenv": "^16.3.1",
