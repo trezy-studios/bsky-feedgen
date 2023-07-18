@@ -2,7 +2,7 @@ app = "bsky-feedgen-rabbitmq"
 primary_region = "ord"
 
 [build]
-  image = "rabbitmq:3-management"
+  dockerfile = "./Dockerfile"
 
 [http_service]
   auto_stop_machines = false
