@@ -1,20 +1,11 @@
 // Module imports
-import {
-	database,
-	Feed,
-} from '@trezystudios/bsky-common'
-import { Histogram } from 'prom-client'
+import { Feed } from '@trezystudios/bsky-common'
 
 
 
 
 
 // Constants
-const metricsPrefix = 'game_dev_feed_'
-const feedRetrievalTimer = new Histogram({
-	help: 'The length of time it takes for the database to return the feed response.',
-	name: `${metricsPrefix}feed_retrieval_timer`,
-})
 const rootSkeets = [
 	// Trezy's intros thread
 	'at://did:plc:4jrld6fwpnwqehtce56qshzv/app.bsky.feed.post/3ju2fo5erfr2a',
@@ -34,41 +25,6 @@ class GameDevFeedClass extends Feed {
 	/****************************************************************************\
 	 * Public instance methods
 	\****************************************************************************/
-
-	/**
-	 * Generates the feed response for the API.
-	 *
-	 * @param {string} [cursor] A cursor for pagination.
-	 * @param {number} [limit] The number of skeets per page. Min 1, max 100.
-	 * @returns {Promise<{
-	 * 	cursor: string,
-	 * 	feed: object[],
-	 * }>} The generated feed.
-	 */
-	async generateFeed(cursor, limit = 30) {
-		const result = {}
-
-		const endFeedRetrievalTimer = feedRetrievalTimer.startTimer()
-
-		const { skeets } = await database.getFeed(this.rkey, {
-			cursor,
-			limit,
-		})
-
-		endFeedRetrievalTimer()
-
-		result.feed = skeets.map(skeet => ({ post: skeet.uri }))
-
-		if (skeets.length === limit) {
-			const lastSkeet = skeets.at(-1)
-
-			if (lastSkeet) {
-				result.cursor = Buffer.from(lastSkeet.uri).toString('base64')
-			}
-		}
-
-		return result
-	}
 
 	/**
 	 * Tests a skeet to verify whether it's relevant for this feed.

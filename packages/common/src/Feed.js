@@ -1,3 +1,10 @@
+// Local imports
+import { getFeed } from './database.js'
+
+
+
+
+
 /**
  * @typedef {object} FeedObject
  * @property {string} [cursor] Pagination cursor.
@@ -106,12 +113,15 @@ export class Feed {
 	/**
 	 * Generate the feed.
 	 *
-	 * @param {string} [cursor] Pagination cursor.
-	 * @param {number} [limit] The maximum number of feed items to return.
-	 * @returns {Promise<FeedObject> | FeedObject} The feed.
+	 * @param {string} [cursor] A cursor for pagination.
+	 * @param {number} [limit] The number of skeets per page. Min 1, max 100.
+	 * @returns {Promise<FeedObject> | FeedObject} The generated feed.
 	 */
 	generateFeed(cursor, limit = 30) {
-		return { feed: [] }
+		return getFeed(this.rkey, {
+			cursor,
+			limit,
+		})
 	}
 
 	/**

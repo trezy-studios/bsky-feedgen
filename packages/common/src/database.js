@@ -199,7 +199,10 @@ export async function getOldestCursor() {
  * 	cursor: null | string,
  * 	limit: null | number,
  * }} options Pagination options.
- * @returns {Promise<{ skeets: { uri: string }[] }>} The skeets in the page.
+ * @returns {Promise<{
+ * 	cursor: string | undefined,
+ * 	feed: object[],
+ * }>} The generated feed.
  */
 export async function getFeed(rkey, options) {
 	const {
@@ -212,7 +215,10 @@ export async function getFeed(rkey, options) {
 	let query = null
 
 	if (cursor) {
-		const cursorURI = Buffer.from(cursor, 'base64').toString('ascii')
+		const cursorURI = Buffer
+			.from(cursor, 'base64')
+			.toString('ascii')
+
 		query = prisma.$queryRaw`
 			SELECT uri
 			FROM FeedSkeet
@@ -220,9 +226,13 @@ export async function getFeed(rkey, options) {
 			ON Skeet.uri = FeedSkeet.skeetURI
 			WHERE
 				feedRkey = ${rkey}
-				AND Skeet.indexedAt <= (select Skeet.indexedAt from Skeet where Skeet.uri = ${cursorURI})
+				AND Skeet.indexedAt < (
+					SELECT Skeet.indexedAt
+					FROM Skeet
+					WHERE Skeet.uri = ${cursorURI}
+				)
 			ORDER BY indexedAt
-			LIMIT 1, ${Number(realLimit)};
+			LIMIT ${Number(realLimit)};
 		`
 	} else {
 		query = prisma.$queryRaw`
@@ -238,7 +248,21 @@ export async function getFeed(rkey, options) {
 
 	const skeets = /** @type {{ uri: string }[]} */ (await query)
 
-	return { skeets }
+	const result = {
+		// eslint-disable-next-line no-undefined
+		cursor: undefined,
+		feed: skeets.map(skeet => ({ post: skeet.uri })),
+	}
+
+	if ((skeets.length > 0) && (skeets.length === limit)) {
+		const lastSkeet = skeets.at(-1)
+
+		result.cursor = Buffer
+			.from(lastSkeet.uri)
+			.toString('base64')
+	}
+
+	return result
 }
 
 /**
