@@ -5,6 +5,7 @@
 	"scripts": {
 		"addDIDsToSkeets": "node -r dotenv/config ./src/addDIDsToSkeets.js",
 		"implicitToExplicitFeedSkeetRelation": "node -r dotenv/config ./src/implicitToExplicitFeedSkeetRelation.js",
+		"publishFeeds": "node -r dotenv/config ./src/publishFeeds.js",
 		"syncBlockLists": "node -r dotenv/config ./src/syncBlockLists.js"
 	},
 	"dependencies": {
