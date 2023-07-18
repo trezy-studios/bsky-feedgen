@@ -52,11 +52,7 @@ async function connectFirehose() {
 		return
 	}
 
-	await firehose.connect({
-		cursor,
-		password: process.env.BSKY_APP_PASSWORD,
-		username: process.env.BSKY_USERNAME,
-	})
+	await firehose.connect({ cursor })
 }
 
 /**
