@@ -214,7 +214,7 @@ export async function getFeed(rkey, options) {
 	if (cursor) {
 		const cursorURI = Buffer.from(cursor, 'base64').toString('ascii')
 		query = prisma.$queryRaw`
-			SELECT uri, indexedAt
+			SELECT uri
 			FROM FeedSkeet
 			LEFT JOIN Skeet
 			ON Skeet.uri = FeedSkeet.skeetURI
@@ -226,7 +226,7 @@ export async function getFeed(rkey, options) {
 		`
 	} else {
 		query = prisma.$queryRaw`
-			SELECT uri, indexedAt
+			SELECT uri
 			FROM FeedSkeet
 			LEFT JOIN Skeet
 			ON Skeet.uri = FeedSkeet.skeetURI
