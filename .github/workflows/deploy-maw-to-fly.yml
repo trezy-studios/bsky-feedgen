@@ -1,0 +1,21 @@
+name: Deploy Maw to Fly.io
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/common/**/*'
+      - 'packages/lib/**/*'
+      - 'packages/koa-api/**/*'
+      - 'packages/maw/**/*'
+
+jobs:
+  deploy:
+    name: Deploy Maw
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --config ./packages/maw/fly.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_MAW }}

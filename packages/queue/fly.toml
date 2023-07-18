@@ -1,0 +1,5 @@
+app = "bsky-feedgen-rabbitmq"
+primary_region = "ord"
+
+[build]
+  image = "rabbitmq"
