@@ -226,13 +226,13 @@ export async function getFeed(rkey, options) {
 			ON Skeet.uri = FeedSkeet.skeetURI
 			WHERE
 				feedRkey = ${rkey}
-				AND Skeet.indexedAt < (
+				AND Skeet.indexedAt <= (
 					SELECT Skeet.indexedAt
 					FROM Skeet
 					WHERE Skeet.uri = ${cursorURI}
 				)
-			ORDER BY indexedAt
-			LIMIT ${Number(realLimit)};
+			ORDER BY indexedAt desc
+			LIMIT 1, ${Number(realLimit)};
 		`
 	} else {
 		query = prisma.$queryRaw`
