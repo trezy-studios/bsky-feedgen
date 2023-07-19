@@ -23,7 +23,7 @@ class ScreenshotSaturdayFeedClass extends Feed {
 	 * @returns {boolean} Whether the skeet is relevant.
 	 */
 	testSkeet(skeet) {
-		if (/#nofeed/giu.test(skeet.text)) {
+		if (/#(?:nofeed|noscreenshotsaturday|private)/giu.test(skeet.text)) {
 			return false
 		}
 
@@ -32,7 +32,18 @@ class ScreenshotSaturdayFeedClass extends Feed {
 }
 
 export const ScreenshotSaturdayFeed = new ScreenshotSaturdayFeedClass({
-	description: 'Every Saturday, game devs the world over post screenshots of their games! Give feedback and let them know how excited you are about them!',
+	description: `
+		Every Saturday, game devs post screenshots of their games. Check 'em out and let the devs know how excited you are!
+
+		Opt in with #ScreenshotSaturday
+		Opt out with #Private, #NoFeed, or #NoScreenshotSaturday.
+
+		Discuss at https://trezy.studio/discord.
+		Support the feed at https://ko-fi.com/trezycodes.
+	`
+		.split('\n')
+		.map(string => string.trim())
+		.join('\n'),
 	image: 'ScreenshotSaturdayFeed.png',
 	name: 'Screenshot Saturday',
 	ownerDID: 'did:web:bsky-feeds.trezy.studio',

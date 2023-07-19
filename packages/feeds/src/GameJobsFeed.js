@@ -23,7 +23,7 @@ class GameJobsFeedClass extends Feed {
 	 * @returns {boolean} Whether the skeet is relevant.
 	 */
 	testSkeet(skeet) {
-		if (/#(?:nofeed|private)/giu.test(skeet.text)) {
+		if (/#(?:nofeed|nogamejobsfeed|private)/giu.test(skeet.text)) {
 			return false
 		}
 
@@ -33,7 +33,22 @@ class GameJobsFeedClass extends Feed {
 }
 
 export const GameJobsFeed = new GameJobsFeedClass({
-	description: 'Hiring and Looking For Work posts from the games industry! Opt in with...\n- #GameJobs\n- #GameCareers\n- #GameDev + #Hiring\n- #GameDev + #NowHiring\n- #GameDev + #LookingForWork\n- #GameDev + #LFW\n\nOpt out with #NoFeed or #Private.\nDiscuss at https://trezy.studio/discord.\nSupport the feed at https://ko-fi.com/trezycodes.',
+	description: `
+		Hiring and looking for work posts from the games industry!
+
+		Opt in with...
+		- #GameJobs
+		- #GameCareers
+		- #GameDev + #Hiring, #LookingForWork, or #LFW
+
+		Opt out with #Private, #NoFeed, or #NoGameJobsFeed.
+
+		Discuss at https://trezy.studio/discord.
+		Support the feed at https://ko-fi.com/trezycodes.
+	`
+		.split('\n')
+		.map(string => string.trim())
+		.join('\n'),
 	image: 'GameJobsFeed.png',
 	name: 'Game Jobs & Careers',
 	ownerDID: 'did:web:bsky-feeds.trezy.studio',

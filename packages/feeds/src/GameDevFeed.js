@@ -36,7 +36,7 @@ class GameDevFeedClass extends Feed {
 	 * @returns {boolean} Whether the skeet is relevant.
 	 */
 	testSkeet(skeet) {
-		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
+		if (/#(?:nofeed|nogamedev|private)/giu.test(skeet.text)) {
 			return false
 		}
 
@@ -49,7 +49,18 @@ class GameDevFeedClass extends Feed {
 }
 
 export const GameDevFeed = new GameDevFeedClass({
-	description: 'Skeets about game development and design. Opt out with #nofeed or #nogamedev. Discuss at https://trezy.studio/discord.',
+	description: `
+		Posts about all aspects of game development.
+
+		Opt in with "game", followed by animation, art, audio, design, dev, jam, lighting, music, narrative, or writing.
+		Opt out with #Private, #NoFeed, or #NoGameDev.
+
+		Discuss at https://trezy.studio/discord.
+		Support the feed at https://ko-fi.com/trezycodes.
+	`
+		.split('\n')
+		.map(string => string.trim())
+		.join('\n'),
 	image: 'GameDevFeed.png',
 	name: 'Game Dev',
 	ownerDID: 'did:web:bsky-feeds.trezy.studio',
