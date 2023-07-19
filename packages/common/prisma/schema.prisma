@@ -18,7 +18,7 @@ model Block {
 }
 
 model Feed {
-  description String
+  description String      @db.Text
   name        String
   ownerDID    String
   rkey        String      @id @unique
