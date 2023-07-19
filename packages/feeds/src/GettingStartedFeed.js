@@ -72,9 +72,12 @@ class GettingStartedFeedClass extends Feed {
 		}
 
 		const lastSkeet = result.feed.at(-1)
-		result.cursor = Buffer
-			.from(lastSkeet.post)
-			.toString('base64')
+
+		if (lastSkeet.post !== feedItems.at(-1)) {
+			result.cursor = Buffer
+				.from(lastSkeet.post)
+				.toString('base64')
+		}
 
 		return result
 	}
