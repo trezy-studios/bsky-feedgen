@@ -23,7 +23,7 @@ class NewGamePlusFeedClass extends Feed {
 	 * @returns {boolean} Whether the skeet is relevant.
 	 */
 	testSkeet(skeet) {
-		if (/#(?:nofeed|nogamedev|idontwantto(?:be|get)fired)/giu.test(skeet.text)) {
+		if (/#(?:nofeed|nonewgameplus)/giu.test(skeet.text)) {
 			return false
 		}
 
@@ -33,7 +33,7 @@ class NewGamePlusFeedClass extends Feed {
 }
 
 export const NewGamePlusFeed = new NewGamePlusFeedClass({
-	description: 'Video game release and pre-release announcements! Opt out with #NoFeed or #NoNewGamePlus. Discuss at https://trezy.studio/discord.',
+	description: 'Video game release and pre-release announcements!\n\nOpt in with 🆕🎮, 🆕🕹️, or 🆕👾.\nOpt out with #NoFeed or #NoNewGamePlus.\n\nDiscuss at https://trezy.studio/discord.\nSupport the feed at https://ko-fi.com/trezycodes.',
 	image: 'NewGamePlusFeed.png',
 	name: 'New Game +',
 	ownerDID: 'did:web:bsky-feeds.trezy.studio',
