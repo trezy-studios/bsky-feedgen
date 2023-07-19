@@ -1,6 +1,7 @@
 export { GameDevFeed } from './GameDevFeed.js'
 export { GameJobsFeed } from './GameJobsFeed.js'
 export { GameNewsFeed } from './GameNewsFeed.js'
+export { GettingStartedFeed } from './GettingStartedFeed.js'
 export { NewGamePlusFeed } from './NewGamePlusFeed.js'
 export { ScreenshotSaturdayFeed } from './ScreenshotSaturdayFeed.js'
 export { WishlistWednesdayFeed } from './WishlistWednesdayFeed.js'
