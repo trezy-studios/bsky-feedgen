@@ -18,10 +18,14 @@ const bskyAgent = api.agent
 
 let feedIndex = 0
 
-try {
-	while (feedIndex < feeds.length) {
+while (feedIndex < feeds.length) {
+	try {
 		const feed = feeds[feedIndex]
 		const feedImagePath = path.resolve('../', 'feeds', 'images', feed.image)
+
+		console.log('Publishing feed...')
+		console.log(`\t${feed.name} (${feed.rkey})`)
+		console.log(`\t${feed.description.replace(/\n/gu, '\n\t')}`)
 
 		let encoding
 
@@ -33,28 +37,51 @@ try {
 			throw new Error('expected png or jpeg')
 		}
 
-		// eslint-disable-next-line security/detect-non-literal-fs-filename
-		const image = await fs.readFile(feedImagePath)
-		const blobRes = await bskyAgent.api.com.atproto.repo.uploadBlob(image, { encoding })
-		const avatarRef = blobRes.data.blob
+		let image = null
+		let blobRes = null
+		let avatarRef = null
 
-		await bskyAgent.api.com.atproto.repo.putRecord({
-			repo: bskyAgent.session?.did ?? '',
-			collection: 'app.bsky.feed.generator',
-			rkey: feed.rkey,
-			record: {
-				avatar: avatarRef,
-				createdAt: (new Date).toISOString(),
-				description: feed.description,
-				did: feed.ownerDID,
-				displayName: feed.name,
-			},
-		})
+		try {
+			// eslint-disable-next-line security/detect-non-literal-fs-filename
+			image = await fs.readFile(feedImagePath)
+		} catch (error) {
+			throw new Error('Failed to load image.')
+		}
 
-		await database.saveFeed(feed)
+		try {
+			blobRes = await bskyAgent.api.com.atproto.repo.uploadBlob(image, { encoding })
+			avatarRef = blobRes.data.blob
+		} catch (error) {
+			throw new Error('Failed to upload image to bsky.')
+		}
+
+		try {
+			await bskyAgent.api.com.atproto.repo.putRecord({
+				repo: bskyAgent.session?.did ?? '',
+				collection: 'app.bsky.feed.generator',
+				rkey: feed.rkey,
+				record: {
+					avatar: avatarRef,
+					createdAt: (new Date).toISOString(),
+					description: feed.description,
+					did: feed.ownerDID,
+					displayName: feed.name,
+				},
+			})
+		} catch (error) {
+			throw new Error('Failed to push feed to bsky.')
+		}
+
+		try {
+			await database.saveFeed(feed)
+		} catch (error) {
+			throw new Error('Failed to save feed to the database.')
+		}
+
+		console.log('Done.')
 
 		feedIndex += 1
+	} catch (error) {
+		console.log(error)
 	}
-} catch (error) {
-	console.log(error)
 }
