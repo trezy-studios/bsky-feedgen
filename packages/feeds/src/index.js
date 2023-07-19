@@ -1,4 +1,5 @@
 export { GameDevFeed } from './GameDevFeed.js'
+export { GameJobsFeed } from './GameJobsFeed.js'
 export { GameNewsFeed } from './GameNewsFeed.js'
 export { NewGamePlusFeed } from './NewGamePlusFeed.js'
 export { ScreenshotSaturdayFeed } from './ScreenshotSaturdayFeed.js'
