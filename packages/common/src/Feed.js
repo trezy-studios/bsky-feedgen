@@ -1,5 +1,5 @@
 // Local imports
-import { getFeed } from './database.js'
+import { prisma } from './database.js'
 
 
 
@@ -22,7 +22,7 @@ import { getFeed } from './database.js'
 export class Feed {
 
 	/****************************************************************************\
-	 * Constructor
+	 * Private instance properties
 	\****************************************************************************/
 
 	/** @type {string} */
@@ -115,13 +115,66 @@ export class Feed {
 	 *
 	 * @param {string} [cursor] A cursor for pagination.
 	 * @param {number} [limit] The number of skeets per page. Min 1, max 100.
-	 * @returns {Promise<FeedObject> | FeedObject} The generated feed.
+	 * @returns {Promise<FeedObject>} The generated feed.
 	 */
-	generateFeed(cursor, limit = 30) {
-		return getFeed(this.rkey, {
-			cursor,
-			limit,
-		})
+	async generateFeed(cursor, limit = 30) {
+		const realLimit = Math.max(Math.min(Number(limit), 100), 1)
+
+		/** @type {FeedObject | null} */
+		let result = null
+
+		if (cursor) {
+			const cursorURI = Buffer
+				.from(cursor, 'base64')
+				.toString('ascii')
+
+			/** @type {FeedObject} */
+			result = {
+				feed: /** @type {*} */ await prisma
+					.$queryRaw`
+						SELECT Skeet.uri post
+						FROM FeedSkeet
+						LEFT JOIN Skeet ON Skeet.uri = FeedSkeet.skeetURI
+						LEFT JOIN Block ON Block.did = Skeet.did
+						WHERE
+							FeedSkeet.feedRkey = ${this.rkey}
+							AND Block.did IS NULL
+							AND Skeet.indexedAt <= (
+								SELECT Skeet.indexedAt
+								FROM Skeet
+								WHERE Skeet.uri = ${cursorURI}
+							)
+						ORDER BY indexedAt desc
+						LIMIT 1, ${realLimit};
+					`,
+			}
+		} else {
+			/** @type {FeedObject} */
+			result = {
+				feed: /** @type {*} */ await prisma
+					.$queryRaw`
+						SELECT Skeet.uri post
+						FROM FeedSkeet
+						LEFT JOIN Skeet ON Skeet.uri = FeedSkeet.skeetURI
+						LEFT JOIN Block ON Block.did = Skeet.did
+						WHERE
+							FeedSkeet.feedRkey = ${this.rkey}
+							AND Block.did IS NULL
+						ORDER BY indexedAt desc
+						LIMIT 1, ${realLimit};
+					`,
+			}
+		}
+
+		if (result.feed.length === realLimit) {
+			const lastSkeet = result.feed.at(-1)
+
+			result.cursor = Buffer
+				.from(lastSkeet.post)
+				.toString('base64')
+		}
+
+		return result
 	}
 
 	/**
