@@ -40,7 +40,7 @@ class GameDevFeedClass extends Feed {
 			return false
 		}
 
-		if (/games?\s?(?:animation|art|audio|design|dev|jam|lighting|music|narr?ative|writing)|indie\s?dev\s?hour|screenshot\s?saturday|trailer\s?tuesday|unity\s?1\s?week|wishlist\s?wednesday/giu.test(skeet.text)) {
+		if (/games?\s?(?:animation|art|audio|design|dev|engine|jam|lighting|music|narr?ative|writing)|indie\s?dev\s?hour|screenshot\s?saturday|trailer\s?tuesday|unity\s?1\s?week|wishlist\s?wednesday/giu.test(skeet.text)) {
 			return true
 		}
 
