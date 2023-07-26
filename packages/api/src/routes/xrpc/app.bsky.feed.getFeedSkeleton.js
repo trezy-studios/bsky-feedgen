@@ -27,6 +27,7 @@ const feedScrollCounter = new Counter({
 })
 const feedgenTimer = new Histogram({
 	help: 'The time required to generate the feed response.',
+	labelNames: ['rkey'],
 	name: `${process.env.METRICS_PREFIX}feedgen_timer`,
 })
 
@@ -121,7 +122,7 @@ export const route = new Route({
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
-		const endFeedgenTimer = feedgenTimer.startTimer()
+		const endFeedgenTimer = feedgenTimer.startTimer({ rkey: parsedATURL.rkey })
 
 		// eslint-disable-next-line require-atomic-updates
 		context.body = await feedController.generateFeed(cursor, Number(limit))
