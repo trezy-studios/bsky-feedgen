@@ -2,6 +2,7 @@
 import {
 	Counter,
 	Histogram,
+	Summary,
 } from 'prom-client'
 import { parseATURL } from '@trezystudios/bsky-lib'
 import { Route } from '@trezystudios/koa-api'
@@ -12,6 +13,11 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 // Constants
+const feedPageSizeSummary = new Summary({
+	help: 'Tracks size of pages being requested.',
+	labelNames: ['rkey'],
+	name: `${process.env.METRICS_PREFIX}feedgen_page_size`,
+})
 const feedLoadCounter = new Counter({
 	help: 'Each time a feed is loaded.',
 	labelNames: ['rkey'],
@@ -19,10 +25,7 @@ const feedLoadCounter = new Counter({
 })
 const feedScrollCounter = new Counter({
 	help: 'Each time a feed is scrolled.',
-	labelNames: [
-		'cursor',
-		'rkey',
-	],
+	labelNames: ['rkey'],
 	name: `${process.env.METRICS_PREFIX}feedgen_scrolled`,
 })
 const feedgenTimer = new Histogram({
@@ -112,13 +115,12 @@ export const route = new Route({
 		}
 
 		if (cursor) {
-			feedScrollCounter.inc({
-				cursor,
-				rkey: parsedATURL.rkey,
-			})
+			feedScrollCounter.inc({ rkey: parsedATURL.rkey })
 		} else {
 			feedLoadCounter.inc({ rkey: parsedATURL.rkey })
 		}
+
+		feedPageSizeSummary.observe({ rkey: parsedATURL.rkey }, limit)
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
