@@ -70,10 +70,15 @@ export const route = new Route({
 			feed,
 		} = paramsToParse.reduce((accumulator, param) => {
 			if (param in context.query) {
+				/** @type {string | string[] | number} */
 				let value = context.query[param]
 
 				if (Array.isArray(value)) {
 					value = value.at(-1)
+				}
+
+				if (!isNaN(Number(value))) {
+					value = Number(value)
 				}
 
 				accumulator[param] = value
@@ -127,7 +132,7 @@ export const route = new Route({
 		const endFeedgenTimer = feedgenTimer.startTimer({ rkey: parsedATURL.rkey })
 
 		// eslint-disable-next-line require-atomic-updates
-		context.body = await feedController.generateFeed(cursor, Number(limit))
+		context.body = await feedController.generateFeed(cursor, limit)
 
 		endFeedgenTimer()
 	},
