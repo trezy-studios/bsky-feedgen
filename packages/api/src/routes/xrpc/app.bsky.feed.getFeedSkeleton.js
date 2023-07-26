@@ -1,5 +1,8 @@
 // Module imports
-import { Histogram } from 'prom-client'
+import {
+	Counter,
+	Histogram,
+} from 'prom-client'
 import { parseATURL } from '@trezystudios/bsky-lib'
 import { Route } from '@trezystudios/koa-api'
 import * as feedMap from '@trezystudios/bsky-feeds'
@@ -9,6 +12,19 @@ import * as feedMap from '@trezystudios/bsky-feeds'
 
 
 // Constants
+const feedLoadCounter = new Counter({
+	help: 'Each time a feed is loaded.',
+	labelNames: ['rkey'],
+	name: `${process.env.METRICS_PREFIX}feedgen_loaded`,
+})
+const feedScrollCounter = new Counter({
+	help: 'Each time a feed is scrolled.',
+	labelNames: [
+		'cursor',
+		'rkey',
+	],
+	name: `${process.env.METRICS_PREFIX}feedgen_scrolled`,
+})
 const feedgenTimer = new Histogram({
 	help: 'The time required to generate the feed response.',
 	name: `${process.env.METRICS_PREFIX}feedgen_timer`,
@@ -92,6 +108,15 @@ export const route = new Route({
 			context.status = 400
 			context.body = { errors }
 			return context
+		}
+
+		if (cursor) {
+			feedScrollCounter.inc({
+				cursor,
+				rkey: parsedATURL.rkey,
+			})
+		} else {
+			feedLoadCounter.inc({ rkey: parsedATURL.rkey })
 		}
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
