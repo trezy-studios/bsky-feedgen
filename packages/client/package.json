@@ -1,0 +1,30 @@
+{
+  "name": "@trezystudios/bsky-client",
+  "description": "An ATProto client.",
+  "version": "1.0.0",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^13.4.12",
+    "prom-client": "^14.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.64.1"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^13.4.12",
+    "@types/node": "20.4.4",
+    "@types/react": "18.2.16",
+    "better-docs": "^2.7.2",
+    "eslint": "8.45.0",
+    "eslint-config-next": "13.4.12",
+    "typescript": "5.1.6"
+  },
+  "packageManager": "yarn@3.5.1"
+}
