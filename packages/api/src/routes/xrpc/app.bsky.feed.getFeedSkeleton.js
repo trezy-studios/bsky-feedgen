@@ -34,6 +34,9 @@ const feedgenTimer = new Histogram({
 	name: `${process.env.METRICS_PREFIX}feedgen_timer`,
 })
 
+const feeds = Object.values(feedMap)
+const feedKeys = feeds.map(({ rkey }) => rkey)
+
 
 
 
@@ -77,7 +80,7 @@ export const route = new Route({
 					value = value.at(-1)
 				}
 
-				if (!isNaN(Number(value))) {
+				if ((typeof value !== 'undefined') && !isNaN(Number(value))) {
 					value = Number(value)
 				}
 
@@ -96,21 +99,18 @@ export const route = new Route({
 
 		if (!parsedATURL) {
 			errors.push(`Unprocessable feed URI: ${feed}`)
-		}
+		} else {
+			if (parsedATURL.nsid !== 'app.bsky.feed.generator') {
+				errors.push(`Invalid namespace: ${parsedATURL.nsid}`)
+			}
 
-		if (parsedATURL.nsid !== 'app.bsky.feed.generator') {
-			errors.push(`Invalid namespace: ${parsedATURL.nsid}`)
-		}
+			if (parsedATURL.did !== process.env.OWNER_DID) {
+				errors.push(`Invalid DID: ${parsedATURL.did}`)
+			}
 
-		if (parsedATURL.did !== process.env.OWNER_DID) {
-			errors.push(`Invalid DID: ${parsedATURL.did}`)
-		}
-
-		const feeds = Object.values(feedMap)
-		const feedKeys = feeds.map(({ rkey }) => rkey)
-
-		if (!feedKeys.includes(parsedATURL.rkey)) {
-			errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
+			if (!feedKeys.includes(parsedATURL.rkey)) {
+				errors.push(`Invalid feed record: ${parsedATURL.rkey}`)
+			}
 		}
 
 		if (errors.length) {
@@ -125,7 +125,9 @@ export const route = new Route({
 			feedLoadCounter.inc({ rkey: parsedATURL.rkey })
 		}
 
-		feedPageSizeSummary.observe({ rkey: parsedATURL.rkey }, limit)
+		if (limit) {
+			feedPageSizeSummary.observe({ rkey: parsedATURL.rkey }, limit)
+		}
 
 		const feedController = feeds.find(({ rkey }) => rkey === parsedATURL.rkey)
 
