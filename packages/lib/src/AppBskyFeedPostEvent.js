@@ -39,6 +39,13 @@ export class AppBskyFeedPostEvent extends BaseFirehoseEvent {
 	 */
 	async hydrate() {}
 
+	/**
+	 * Generates rich text facets for the skeet text.
+	 */
+	async getRichText() {
+		await this.#skeet.getRichText()
+	}
+
 
 
 
@@ -70,6 +77,11 @@ export class AppBskyFeedPostEvent extends BaseFirehoseEvent {
 	/** @returns {string} The URI of the root skeet. */
 	get replyRoot() {
 		return this.operation.record?.root?.uri
+	}
+
+	/** @returns {*} Rich text facets. */
+	get richText() {
+		return this.#skeet.richText
 	}
 
 	/** @returns {Skeet} The associated skeet. */

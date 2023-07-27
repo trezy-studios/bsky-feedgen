@@ -37,6 +37,9 @@ export class Skeet {
 		},
 	}
 
+	/** @type {import('@atproto/api').RichText} */
+	#richText
+
 	/** @type {Promise<Skeet>} */
 	#hydrationPromise
 
@@ -144,6 +147,21 @@ export class Skeet {
 	\****************************************************************************/
 
 	/**
+	 * Generates facets for rich text within the skeet.
+	 *
+	 * @param {boolean} [shouldResolve] Whether to resolve facets against the PDS.
+	 */
+	async getRichText(shouldResolve = true) {
+		this.#richText = new bsky.RichText({ text: this.text })
+
+		if (shouldResolve) {
+			await this.#richText.detectFacets(this.agent)
+		} else {
+			this.#richText.detectFacetsWithoutResolution()
+		}
+	}
+
+	/**
 	 * Hydrates a skeet with facets and other related data.
 	 *
 	 * @returns {Promise<Skeet>} The hydrated skeet.
@@ -201,15 +219,14 @@ export class Skeet {
 	 *
 	 * @param {string} body The body to be set.
 	 */
-	setBody(body) {
+	async setBody(body) {
 		this.#data.value.text = body
 
-		const richText = new bsky.RichText({ text: body })
-		richText.detectFacets(this.agent)
+		await this.getRichText()
 
 		this.#markdown = ''
 
-		for (const segment of richText.segments()) {
+		for (const segment of this.#richText.segments()) {
 			if (segment.isLink()) {
 				this.#markdown += `[${segment.text}](${segment.link?.uri})`
 			} else if (segment.isMention()) {
@@ -274,6 +291,11 @@ export class Skeet {
 	/** @returns {string} The DID of the author of this skeet. */
 	get did() {
 		return this.#params.did
+	}
+
+	/** @returns {undefined | import('@atproto/api').RichText} Rich text data for the skeet. */
+	get richText() {
+		return this.#richText
 	}
 
 	/** @returns {string} The body of this skeet with markdown formatting. */
