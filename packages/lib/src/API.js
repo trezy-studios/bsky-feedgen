@@ -68,7 +68,7 @@ export class API {
 	 * @returns {Skeet} The new skeet.
 	 */
 	createSkeet(properties) {
-		return Skeet.getByRkey(properties?.rkey) ?? new Skeet({
+		return new Skeet({
 			agent: this.#agent,
 			...properties,
 		})
@@ -82,7 +82,7 @@ export class API {
 	 * @returns {User} The user.
 	 */
 	createUser(properties) {
-		return User.getByDID(properties.did) ?? new User({
+		return new User({
 			agent: this.#agent,
 			...properties,
 		})

@@ -3,38 +3,6 @@
  */
 export class User {
 	/****************************************************************************\
-	 * Public static properties
-	\****************************************************************************/
-
-	/** @type {Set<User>} */
-	static collection = new Set
-
-	/** @type {Map<string, User>} */
-	static collectionByDID = new Map
-
-
-
-
-
-	/****************************************************************************\
-	 * Public static methods
-	\****************************************************************************/
-
-	/**
-	 * Attempts to retrieve a user from the cache based on their dID.
-	 *
-	 * @param {string} did The dID of the user.
-	 * @returns {User} The cached user.
-	 */
-	static getByDID(did) {
-		return User.collectionByDID.get(did)
-	}
-
-
-
-
-
-	/****************************************************************************\
 	 * Private instance properties
 	\****************************************************************************/
 
@@ -86,8 +54,6 @@ export class User {
 		}
 
 		this.#params = params
-
-		this.#addToCollections()
 	}
 
 
@@ -97,14 +63,6 @@ export class User {
 	/****************************************************************************\
 	 * Private instance methods
 	\****************************************************************************/
-
-	/**
-	 * Adds this skeet to the appropriate collections.
-	 */
-	#addToCollections() {
-		User.collection.add(this)
-		User.collectionByDID.set(this.did, this)
-	}
 
 	/**
 	 * Hydrates a user with their repo and profile data.

@@ -18,71 +18,6 @@ import { User } from './User.js'
  */
 export class Skeet {
 	/****************************************************************************\
-	 * Public static properties
-	\****************************************************************************/
-
-	/** @type {Set<Skeet>} */
-	static collection = new Set
-
-	/** @type {Map<string, Skeet>} */
-	static collectionByCID = new Map
-
-	/** @type {Map<string, Set<Skeet>>} */
-	static collectionByDID = new Map
-
-	/** @type {Map<string, Skeet>} */
-	static collectionByRkey = new Map
-
-
-
-
-
-	/****************************************************************************\
-	 * Public static methods
-	\****************************************************************************/
-
-	/**
-	 * Attempts to retrieve a skeet from the cache based on its CID.
-	 *
-	 * @param {string} cid The cID of the skeet.
-	 * @returns {Skeet} The cached skeet.
-	 */
-	static getByCID(cid) {
-		return Skeet.collectionByCID.get(cid)
-	}
-
-	/**
-	 * Attempts to retrieve a user's skeets from the cache.
-	 *
-	 * @param {string} did The dID of the skeet's author.
-	 * @returns {Set<Skeet>} All skeets cached by the user.
-	 */
-	static getByDID(did) {
-		let didSet = Skeet.collectionByDID.get(did)
-
-		if (!didSet) {
-			didSet = new Set
-			Skeet.collectionByDID.set(did, didSet)
-		}
-
-		return didSet
-	}
-
-	/**
-	 * Attempts to retrieve a skeet from the cache based on its rkey.
-	 *
-	 * @param {string} rkey The rKey of the skeet.
-	 * @returns {Skeet} The cached skeet.
-	 */
-	static getByRkey(rkey) {
-		return Skeet.collectionByRkey.get(rkey)
-	}
-
-
-
-
-
-	/****************************************************************************\
 	 * Private instance properties
 	\****************************************************************************/
 
@@ -168,7 +103,6 @@ export class Skeet {
 				throw new Error('rkey is required')
 			}
 
-			this.#addToCollections()
 			this.#isPublished = true
 		}
 	}
@@ -180,24 +114,6 @@ export class Skeet {
 	/****************************************************************************\
 	 * Private instance methods
 	\****************************************************************************/
-
-	/**
-	 * Adds this skeet to the appropriate collections.
-	 */
-	#addToCollections() {
-		Skeet.collection.add(this)
-		Skeet.collectionByCID.set(this.cid, this)
-		Skeet.collectionByRkey.set(this.rkey, this)
-
-		let didSet = Skeet.collectionByDID.get(this.did)
-
-		if (!didSet) {
-			didSet = new Set
-			Skeet.collectionByDID.set(this.did, didSet)
-		}
-
-		didSet.add(this)
-	}
 
 	/**
 	 * Hydrates a skeet with facets and other related data.
@@ -281,7 +197,7 @@ export class Skeet {
 	}
 
 	/**
-	 * Updates the body ni all relevant fields.
+	 * Updates the body in all relevant fields.
 	 *
 	 * @param {string} body The body to be set.
 	 */
