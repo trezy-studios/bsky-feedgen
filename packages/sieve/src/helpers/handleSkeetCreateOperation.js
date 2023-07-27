@@ -32,6 +32,8 @@ const feeds = Object.values(feedsMap)
 export async function handleSkeetCreateOperation(skeet) {
 	const createEventLog = createEventLogger('skeet created')
 
+	await skeet.getRichText()
+
 	logger.debug(createEventLog({
 		message: 'skeet received',
 		uri: skeet.uri,
