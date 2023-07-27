@@ -1,6 +1,5 @@
 // Local imports
 import { BaseFirehoseEvent } from './BaseFirehoseEvent.js'
-import { parseATURL } from './index.js'
 import { Skeet } from './Skeet.js'
 import { User } from './User.js'
 
