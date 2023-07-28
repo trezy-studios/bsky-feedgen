@@ -32,7 +32,7 @@ const feeds = Object.values(feedsMap)
 export async function handleSkeetCreateOperation(skeet) {
 	const createEventLog = createEventLogger('skeet created')
 
-	await skeet.getRichText()
+	await skeet.skeet.hydrate()
 
 	logger.debug(createEventLog({
 		message: 'skeet received',

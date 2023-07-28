@@ -29,18 +29,31 @@ class GameDevFeedClass extends Feed {
 	/**
 	 * Tests a skeet to verify whether it's relevant for this feed.
 	 *
-	 * @param {{
-	 * 	text: string,
-	 * 	replyParent: string,
-	 * }} skeet The skeet to test.
+	 * @param {import('@trezystudios/bsky-lib').AppBskyFeedPostEvent} skeet The skeet to test.
 	 * @returns {boolean} Whether the skeet is relevant.
 	 */
 	testSkeet(skeet) {
-		if (/#(?:nofeed|nogamedev|private)/giu.test(skeet.text)) {
+		let parsedSkeet = skeet.text
+
+		if (Array.isArray(skeet.skeet.facets)) {
+			const facets = [...skeet.skeet.facets].reverse()
+
+			facets.forEach(facet => {
+				if (facet.features[0]['$type'] !== 'app.bsky.richtext.facet#mention') {
+					return
+				}
+
+				const characterArray = parsedSkeet.split('')
+				characterArray.splice(facet.index.byteStart, facet.index.byteEnd)
+				parsedSkeet = characterArray.join('')
+			})
+		}
+
+		if (/#(?:nofeed|nogamedev|private)/giu.test(parsedSkeet)) {
 			return false
 		}
 
-		if (/games?\s?(?:animation|art|audio|design|dev|engine|jam|lighting|music|narr?ative|writing)|indie\s?dev\s?hour|screenshot\s?saturday|trailer\s?tuesday|unity\s?1\s?week|wishlist\s?wednesday/giu.test(skeet.text)) {
+		if (/games?\s?(?:animation|art|audio|design|dev|engine|jam|lighting|music|narr?ative|writing)|indie\s?dev\s?hour|screenshot\s?saturday|trailer\s?tuesday|unity\s?1\s?week|wishlist\s?wednesday/giu.test(parsedSkeet)) {
 			return true
 		}
 

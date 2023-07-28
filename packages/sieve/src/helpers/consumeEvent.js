@@ -31,7 +31,7 @@ export async function consumeEvent(event) {
 	logger.debug(createEventLog({ message: 'received message' }))
 
 	if (event !== null) {
-		const message = new FirehoseMessage(event.content, { agent: state.agent })
+		const message = new FirehoseMessage(event.content, { agent: state.bskyAgent })
 
 		try {
 			logger.info(createEventLog({

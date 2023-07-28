@@ -31,6 +31,32 @@ export class AppBskyFeedPostEvent extends BaseFirehoseEvent {
 
 
 	/****************************************************************************\
+	 * Constructor
+	\****************************************************************************/
+
+	/**
+	 * Creates a new skeet event.
+	 *
+	 * @param {import('./FirehoseMessageOperation.js').FirehoseMessageOperation} operation The parent operation.
+	 */
+	constructor(operation) {
+		super(operation)
+
+		if (operation.action !== 'delete') {
+			this.#skeet = new Skeet({
+				agent: operation.agent,
+				cid: operation.cid.toString(),
+				did: operation.did,
+				rkey: operation.rkey,
+			})
+		}
+	}
+
+
+
+
+
+	/****************************************************************************\
 	 * Public instance methods
 	\****************************************************************************/
 
@@ -38,13 +64,6 @@ export class AppBskyFeedPostEvent extends BaseFirehoseEvent {
 	 * Hydrates the event.
 	 */
 	async hydrate() {}
-
-	/**
-	 * Generates rich text facets for the skeet text.
-	 */
-	async getRichText() {
-		await this.#skeet.getRichText()
-	}
 
 
 

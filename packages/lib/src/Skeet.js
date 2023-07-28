@@ -70,7 +70,7 @@ export class Skeet {
 	 * Creates a new skeet.
 	 *
 	 * @param {object} params Parameters required for creating a skeet.
-	 * @param {import('@atproto/api').BskyAgent} params.agent bsky agent.
+	 * @param {import('@atproto/api').BskyAgent} [params.agent] bsky agent.
 	 * @param {string} [params.body] The CID of the skeet.
 	 * @param {string} [params.cid] The CID of the skeet.
 	 * @param {string} [params.did] The DID of the author of the skeet.
@@ -78,16 +78,11 @@ export class Skeet {
 	 */
 	constructor(params) {
 		const {
-			agent,
 			body,
 			cid,
 			did,
 			rkey,
 		} = params
-
-		if (!agent) {
-			throw new Error('agent is required')
-		}
 
 		this.#params = params
 
@@ -105,7 +100,9 @@ export class Skeet {
 			if (!rkey) {
 				throw new Error('rkey is required')
 			}
+		}
 
+		if (cid && did && rkey) {
 			this.#isPublished = true
 		}
 	}
@@ -124,10 +121,14 @@ export class Skeet {
 	 * @returns {Promise} A promise which resolves when the skeet has been hydrated.
 	 */
 	async #hydrate() {
-		this.#author = new User({
-			agent: this.agent,
-			did: this.did,
-		})
+		if (!this.agent) {
+			throw new Error('can\'t hydrate without an agent.')
+		}
+
+		// this.#author = new User({
+		// 	agent: this.agent,
+		// 	did: this.did,
+		// })
 
 		this.#data = await this.agent.getPost({
 			cid: this.cid,
@@ -135,7 +136,7 @@ export class Skeet {
 			rkey: this.rkey,
 		})
 
-		await this.#author.hydrate()
+		// await this.#author.hydrate()
 	}
 
 
@@ -151,8 +152,19 @@ export class Skeet {
 	 *
 	 * @param {boolean} [shouldResolve] Whether to resolve facets against the PDS.
 	 */
-	async getRichText(shouldResolve = true) {
+	async getRichText(shouldResolve = false) {
+		if (shouldResolve && !this.agent) {
+			throw new Error('can\'t resolve rich text facets without an agent.')
+		}
+
 		this.#richText = new bsky.RichText({ text: this.text })
+
+		if (this.did === 'did:plc:4jrld6fwpnwqehtce56qshzv') {
+			console.log({
+				text: this.text,
+				richText: this.#richText,
+			})
+		}
 
 		if (shouldResolve) {
 			await this.#richText.detectFacets(this.agent)
@@ -193,6 +205,10 @@ export class Skeet {
 	 * @returns {Promise<Skeet>} Returns itself for chaining.
 	 */
 	async publish() {
+		if (!this.agent) {
+			throw new Error('can\'t publish without an agent.')
+		}
+
 		const response = await this.agent.post({
 			createdAt: (new Date).toISOString(),
 			text: this.text,
@@ -291,6 +307,11 @@ export class Skeet {
 	/** @returns {string} The DID of the author of this skeet. */
 	get did() {
 		return this.#params.did
+	}
+
+	/** @returns {import('@atproto/api').Facet[]} Facets. */
+	get facets() {
+		return this.#data?.value?.facets
 	}
 
 	/** @returns {undefined | import('@atproto/api').RichText} Rich text data for the skeet. */

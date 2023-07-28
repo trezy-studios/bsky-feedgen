@@ -75,7 +75,8 @@ export class FirehoseMessageOperation {
 		this.#message = message
 
 		try {
-			const { groups } = /^(?<namespaceString>(?:\w+\.){3}\w+)\/(?<rkey>[-_~.%A-Za-z0-9]{1,512})$/giu.exec(operation.path)
+			// eslint-disable-next-line security/detect-unsafe-regex
+			const { groups } = /^(?<namespaceString>(?:\w+\.){3}\w+)\/(?<rkey>[-_~.%a-z\d]{1,512})$/giu.exec(operation.path)
 
 			const {
 				namespaceString,
@@ -507,12 +508,17 @@ export class FirehoseMessageOperation {
 		return this.#operation.action
 	}
 
+	/** @returns {import('@atproto/api').BskyAgent} The agent to be used for resolving PDS data. */
+	get agent() {
+		return this.#message.agent
+	}
+
 	/** @returns {string} The text of the skeet. */
 	get body() {
 		return this.#record.text
 	}
 
-	/** @returns {CarReader} The cID of the message. */
+	/** @returns {CarReader} The message archive. */
 	get car() {
 		return this.#message.car
 	}
