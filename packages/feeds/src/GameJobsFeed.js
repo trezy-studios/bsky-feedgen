@@ -27,7 +27,7 @@ class GameJobsFeedClass extends Feed {
 			return false
 		}
 
-		return /#games?(?:jobs?|careers?)/giu.test(skeet.text)
+		return /#games?(?:dev)?(?:jobs?|careers?)/giu.test(skeet.text)
 			|| (/games?dev/giu.test(skeet.text) && /#(?:(?:now)?hiring|lookingforwork|lfw)/giu.test(skeet.text))
 	}
 }
