@@ -35,6 +35,11 @@ class GameDevFeedClass extends Feed {
 	testSkeet(skeet) {
 		let parsedSkeet = skeet.text
 
+		// Ignore replise from @gamedevlist.bsky.social
+		if ((skeet.skeet.did === 'did:plc:g4h5n5dl6jaed2m6ufekxe45') && skeet.replyRoot) {
+			return false
+		}
+
 		if (Array.isArray(skeet.skeet.facets)) {
 			const facets = [...skeet.skeet.facets].reverse()
 
