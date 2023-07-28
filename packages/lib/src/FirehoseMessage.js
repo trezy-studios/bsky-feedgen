@@ -31,6 +31,9 @@ export class FirehoseMessage {
 	 * Private instance properties
 	\****************************************************************************/
 
+	/** @type {import('@atproto/api').BskyAgent} */
+	#agent
+
 	/** @type {RawFirehoseMessage} */
 	#body
 
@@ -73,9 +76,17 @@ export class FirehoseMessage {
 	 * Creates a new instance of a firehose message.
 	 *
 	 * @param {RawData} data The message data.
-	 * @param {Firehose} firehose The firehose instance that owns this message.
+	 * @param {object} config All config.
+	 * @param {import('@atproto/api').BskyAgent} [config.agent] The agent to use for resolving PDs data.
+	 * @param {Firehose} [config.firehose] The firehose instance that owns this message.
 	 */
-	constructor(data, firehose) {
+	constructor(data, config) {
+		const {
+			agent,
+			firehose,
+		} = config
+
+		this.#agent = agent
 		this.#firehose = firehose
 		this.#rawMessage = data
 
@@ -214,6 +225,11 @@ export class FirehoseMessage {
 	/****************************************************************************\
 	 * Public instance getters/setters
 	\****************************************************************************/
+
+	/** @returns {import('@atproto/api').BskyAgent} The agent to use for resolving PDS data. */
+	get agent() {
+		return this.#agent ?? this.#firehose?.api.agent
+	}
 
 	/** @returns {CarReader} The CAR file. */
 	get car() {

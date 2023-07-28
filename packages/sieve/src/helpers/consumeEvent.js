@@ -9,9 +9,10 @@ import { FirehoseMessage } from '@trezystudios/bsky-lib'
 
 
 
-// // Local imports
+// Local imports
 import { handleMessage } from './handleMessage.js'
 import { logger } from './logger.js'
+import { state } from '../data/state.js'
 
 
 
@@ -30,7 +31,7 @@ export async function consumeEvent(event) {
 	logger.debug(createEventLog({ message: 'received message' }))
 
 	if (event !== null) {
-		const message = new FirehoseMessage(event.content, this)
+		const message = new FirehoseMessage(event.content, { agent: state.agent })
 
 		try {
 			logger.info(createEventLog({

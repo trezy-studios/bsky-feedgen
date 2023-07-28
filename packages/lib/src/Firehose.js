@@ -96,7 +96,7 @@ export class Firehose extends EventEmitter {
 		this.emit(RAW_MESSAGE(), data)
 
 		if (this.#options.autoParse) {
-			const message = new FirehoseMessage(data, this)
+			const message = new FirehoseMessage(data, { firehose: this })
 
 			try {
 				await message.parseOperations()
