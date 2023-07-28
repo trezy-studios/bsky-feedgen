@@ -10,6 +10,7 @@ primary_region = "ord"
   dockerfile = "./Dockerfile"
 
 [env]
+  BSKY_SERVICE_URL = "bsky.social"
   LOG_LEVEL = "silly"
   METRICS_PREFIX = "bsky_feedgen_sieve_"
   MQ_PREFETCH_COUNT = 5
