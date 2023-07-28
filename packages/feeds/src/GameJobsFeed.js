@@ -27,7 +27,8 @@ class GameJobsFeedClass extends Feed {
 			return false
 		}
 
-		return /#games?(?:dev)?(?:jobs?|careers?)/giu.test(skeet.text)
+		// eslint-disable-next-line security/detect-unsafe-regex
+		return /#games?(?:animation|art|audio|design|dev(?:elopment)?|engine|jam|lighting|music|narr?ative|writing)?(?:jobs?|careers?)/giu.test(skeet.text)
 			|| (/games?dev/giu.test(skeet.text) && /#(?:(?:now)?hiring|lookingforwork|lfw)/giu.test(skeet.text))
 	}
 }
