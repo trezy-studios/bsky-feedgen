@@ -49,7 +49,8 @@ class GameDevFeedClass extends Feed {
 				}
 
 				const characterArray = parsedSkeet.split('')
-				characterArray.splice(facet.index.byteStart, facet.index.byteEnd)
+				const facetLength = facet.index.byteEnd - facet.index.byteStart
+				characterArray.splice(facet.index.byteStart, facetLength)
 				parsedSkeet = characterArray.join('')
 			})
 		}

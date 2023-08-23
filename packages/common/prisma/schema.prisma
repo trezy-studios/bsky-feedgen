@@ -22,7 +22,6 @@ model Feed {
   name        String
   ownerDID    String
   rkey        String      @id @unique
-  skeets      Skeet[]
   feedSkeet   FeedSkeet[]
 
   @@index([rkey])
@@ -57,7 +56,6 @@ model OptOut {
 model Skeet {
   cid         String
   did         String?
-  feeds       Feed[]
   feedSkeet   FeedSkeet[]
   indexedAt   DateTime?   @default(now())
   replyParent String?
