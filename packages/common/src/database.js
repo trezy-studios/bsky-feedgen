@@ -135,9 +135,12 @@ export function createSkeet(skeet) {
 			uri: skeet.uri,
 		},
 		create: {
-			...skeet,
+			cid: skeet.cid,
 			did: parseATURL(skeet.uri).did,
 			feedSkeet,
+			replyParent: skeet.replyParent,
+			replyRoot: skeet.replyRoot,
+			uri: skeet.uri,
 		},
 		update: { feedSkeet },
 	})
