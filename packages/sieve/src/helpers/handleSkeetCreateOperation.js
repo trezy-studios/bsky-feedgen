@@ -72,6 +72,7 @@ export async function handleSkeetCreateOperation(skeet) {
 		await database.createSkeet({
 			cid: skeet.cid.toString(),
 			feeds: relevantFeeds,
+			indexedAt: skeet.operation.record.createdAt,
 			replyParent: skeet.replyParent,
 			replyRoot: skeet.replyRoot,
 			uri: skeet.uri,

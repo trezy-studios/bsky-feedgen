@@ -528,6 +528,11 @@ export class FirehoseMessageOperation {
 		return this.#operation.cid
 	}
 
+	/** @returns {string} The date string representing when the operation was created. */
+	get createdAt() {
+		return this.#record.createdAt
+	}
+
 	/** @returns {string} The dID of the repo this operation belongs to. */
 	get did() {
 		return this.#message.did

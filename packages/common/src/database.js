@@ -106,6 +106,7 @@ export function createOptOut(did) {
  * @param {{
  *	cid: string,
  *	feeds: string[],
+ *	indexedAt: string,
  *	replyParent: string,
  *	replyRoot: string,
  *	uri: string,
@@ -138,6 +139,7 @@ export function createSkeet(skeet) {
 			cid: skeet.cid,
 			did: parseATURL(skeet.uri).did,
 			feedSkeet,
+			indexedAt: skeet.indexedAt,
 			replyParent: skeet.replyParent,
 			replyRoot: skeet.replyRoot,
 			uri: skeet.uri,
