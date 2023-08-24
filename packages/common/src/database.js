@@ -113,7 +113,6 @@ export function createOptOut(did) {
  * @returns {Promise<object>} The newly created skeet.
  */
 export function createSkeet(skeet) {
-	const feeds = { connect: skeet.feeds.map(rkey => ({ rkey })) }
 	const feedSkeet = {
 		connectOrCreate: skeet.feeds.map(rkey => ({
 			create: {
@@ -138,10 +137,9 @@ export function createSkeet(skeet) {
 		create: {
 			...skeet,
 			did: parseATURL(skeet.uri).did,
-			feeds,
 			feedSkeet,
 		},
-		update: { feeds },
+		update: { feedSkeet },
 	})
 }
 
