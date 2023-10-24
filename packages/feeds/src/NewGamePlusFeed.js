@@ -28,7 +28,7 @@ class NewGamePlusFeedClass extends Feed {
 		}
 
 		// eslint-disable-next-line optimize-regex/optimize-regex, no-misleading-character-class
-		return /🆕[🎮🕹️👾]/giu.test(skeet.text)
+		return /🆕(?:🎮|🕹️|👾)/giu.test(skeet.text)
 	}
 }
 
